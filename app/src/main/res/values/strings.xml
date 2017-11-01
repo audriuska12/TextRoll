@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">TextRoll</string>
+    <string name="lblNewGame">New Game</string>
+    <string name="lblStart">Start Game</string>
+    <string name="lblCancel">Cancel</string>
+    <string name="lblMainMenu">Main Menu</string>
+    <string name="lblGo">Go</string>
+    <string name="lblFlee">Flee</string>
+    <string name="lblFight">Fight</string>
+</resources>
