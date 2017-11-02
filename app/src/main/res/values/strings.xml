@@ -8,4 +8,9 @@
     <string name="lblFlee">Flee</string>
     <string name="lblFight">Fight</string>
     <string name="lblNoFight">Encounter chain complete!</string>
+    <string name="lblLogin">Login</string>
+    <string name="lblRegister">Register</string>
+    <string name="lblLia">Logged in as:</string>
+    <string name="lblLogout">Log Out</string>
+    <string name="lblQuit">Quit</string>
 </resources>

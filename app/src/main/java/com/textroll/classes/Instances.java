@@ -1,5 +1,6 @@
 package com.textroll.classes;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.textroll.mechanics.EncounterChain;
 import com.textroll.mechanics.Enemy;
 import com.textroll.mechanics.Player;
@@ -14,4 +15,5 @@ public class Instances {
     public static Random rng = new Random();
     public static TurnManager turnManager;
     public static EncounterChain encounters;
+    public static FirebaseUser user;
 }
