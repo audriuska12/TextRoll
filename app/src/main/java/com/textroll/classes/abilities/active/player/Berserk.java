@@ -1,15 +1,11 @@
-package com.textroll.classes.Abilities.Active.Player;
+package com.textroll.classes.abilities.active.player;
 
-import com.textroll.classes.Action;
-import com.textroll.classes.ActiveAbility;
-import com.textroll.classes.Actor;
-import com.textroll.classes.Cooldown;
-import com.textroll.classes.Effect;
+import com.textroll.mechanics.Action;
+import com.textroll.mechanics.ActiveAbility;
+import com.textroll.mechanics.Actor;
+import com.textroll.mechanics.Cooldown;
+import com.textroll.mechanics.Effect;
 import com.textroll.classes.Instances;
-
-/**
- * Created by audri on 2017-10-30.
- */
 
 public class Berserk extends ActiveAbility {
     public Berserk(Actor actor){
@@ -27,11 +23,10 @@ class BerserkAction extends Action implements Cooldown{
         this.actor = actor;
     }
     @Override
-    public boolean execute() {
+    public void execute() {
         BerserkEffect effect = new BerserkEffect();
         effect.apply(actor);
         setRemainingCooldown(4);
-        return true;
     }
 
     @Override

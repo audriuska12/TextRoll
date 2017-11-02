@@ -1,8 +1,4 @@
-package com.textroll.classes;
-
-/**
- * Created by audri on 2017-10-20.
- */
+package com.textroll.mechanics;
 
 public class Attribute {
     private int baseValue;
@@ -24,22 +20,13 @@ public class Attribute {
         this.baseValue = baseValue;
     }
 
-    public void setBonus(int bonus){
-        this.bonus= bonus;
-    }
-
-    public void setMultiplier(double multiplier){
-        this.multiplier = multiplier;
-    }
-
     public int ModifyBase(int change){
         baseValue = Math.min(baseValue+change, 0);
         return baseValue;
     }
 
-    public int modifyBonus(int change){
+    public void modifyBonus(int change) {
         bonus +=change;
-        return bonus;
     }
 
     public double modifyMultiplier(double change){
@@ -55,8 +42,16 @@ public class Attribute {
         return bonus;
     }
 
+    public void setBonus(int bonus) {
+        this.bonus = bonus;
+    }
+
     public double getMultiplier(){
         return multiplier;
+    }
+
+    public void setMultiplier(double multiplier) {
+        this.multiplier = multiplier;
     }
 
     public int getEffectiveValue(){

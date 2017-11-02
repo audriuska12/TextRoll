@@ -1,13 +1,13 @@
-package com.textroll.classes;
-
-/**
- * Created by audri on 2017-10-22.
- */
+package com.textroll.mechanics;
 
 public interface Ability {
-    void setCurrentRank(int rank);
     void setMaxRank(int rank);
+
     void changeRank(int change);
+
     int getCurrentRank();
+
+    void setCurrentRank(int rank);
+
     int getMaximumRank();
 }

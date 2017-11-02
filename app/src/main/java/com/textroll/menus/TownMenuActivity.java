@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
+import com.textroll.classes.Instances;
 import com.textroll.textroll.R;
 
 public class TownMenuActivity extends AppCompatActivity {
@@ -13,6 +15,17 @@ public class TownMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_town_menu);
+        if (!Instances.encounters.hasCurrentEncounter()) {
+            Button btn = (Button) findViewById(R.id.buttonFight);
+            btn.setClickable(false);
+            btn.setAlpha(.5f);
+            btn.setText(R.string.lblNoFight);
+        } else {
+            Button btn = (Button) findViewById(R.id.buttonFight);
+            btn.setClickable(true);
+            btn.setAlpha(1f);
+            btn.setText(R.string.lblFight);
+        }
     }
 
     @Override

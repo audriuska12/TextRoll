@@ -15,7 +15,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.textroll.classes.*;
-import com.textroll.classes.Actor;
+import com.textroll.mechanics.Actor;
+import com.textroll.mechanics.Action;
+import com.textroll.mechanics.Enemy;
 import com.textroll.textroll.R;
 
 import java.util.ArrayList;
@@ -43,8 +45,7 @@ public class CombatActivity extends AppCompatActivity {
         buttons = new ArrayList<>();
         addCharacterDisplay((LinearLayout) findViewById(R.id.linearLayoutParty), pc);
         enemies = new ArrayList<>();
-        enemies.add(new Enemy("Enemy 1"));
-        enemies.add(new Enemy("Enemy 2"));
+        enemies.addAll(Instances.encounters.getCurrentEncounter().getEnemies());
         for (Enemy e : enemies) {
             addCharacterDisplay((LinearLayout) findViewById(R.id.linearLayoutEnemies), e);
         }
@@ -73,9 +74,11 @@ public class CombatActivity extends AppCompatActivity {
                 Instances.pc.updateAvailableActions(target);
                 ArrayList<Action> actions = new ArrayList<>();
                 for (Action a : Instances.pc.getActions()) {
-                    if(a.validForTarget(Instances.pc, target))actions.add(a);
+                    if (a.validForTarget(Instances.pc, target)) {
+                        actions.add(a);
+                    }
                 }
-                ArrayAdapter<Action> adapter = new ArrayAdapter<Action>(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, actions);
+                ArrayAdapter<Action> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, actions);
                 adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
                 actionSelect.setAdapter(adapter);
             }

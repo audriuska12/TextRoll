@@ -7,4 +7,5 @@
     <string name="lblGo">Go</string>
     <string name="lblFlee">Flee</string>
     <string name="lblFight">Fight</string>
+    <string name="lblNoFight">Encounter chain complete!</string>
 </resources>

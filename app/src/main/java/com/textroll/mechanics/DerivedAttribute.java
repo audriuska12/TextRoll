@@ -1,12 +1,7 @@
-package com.textroll.classes;
+package com.textroll.mechanics;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 
-/**
- * Created by audri on 2017-10-21.
- */
 
 public class DerivedAttribute {
     private ArrayList<Attribute> baseAttributes;
@@ -29,14 +24,6 @@ public class DerivedAttribute {
 
     public void setBase(int baseValue){
         this.baseValue = baseValue;
-    }
-
-    public void setBonus(int bonus){
-        this.bonus= bonus;
-    }
-
-    public void setMultiplier(double multiplier){
-        this.multiplier = multiplier;
     }
 
     public int ModifyBase(int change){
@@ -62,8 +49,16 @@ public class DerivedAttribute {
         return bonus;
     }
 
+    public void setBonus(int bonus) {
+        this.bonus = bonus;
+    }
+
     public double getMultiplier(){
         return multiplier;
+    }
+
+    public void setMultiplier(double multiplier) {
+        this.multiplier = multiplier;
     }
 
     public int getEffectiveValue(){

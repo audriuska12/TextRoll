@@ -1,18 +1,9 @@
-package com.textroll.classes;
-
-/**
- * Created by audri on 2017-10-22.
- */
+package com.textroll.mechanics;
 
 public abstract class ActiveAbility implements Ability {
     int currentRank;
     int maxRank;
     Action action;
-
-    @Override
-    public void setCurrentRank(int rank) {
-        if(rank >= 0 && rank <= maxRank) this.currentRank = rank;
-    }
 
     @Override
     public void setMaxRank(int rank) {
@@ -28,6 +19,11 @@ public abstract class ActiveAbility implements Ability {
     @Override
     public int getCurrentRank() {
         return currentRank;
+    }
+
+    @Override
+    public void setCurrentRank(int rank) {
+        if (rank >= 0 && rank <= maxRank) this.currentRank = rank;
     }
 
     @Override

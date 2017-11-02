@@ -1,8 +1,5 @@
-package com.textroll.classes;
+package com.textroll.mechanics;
 
-/**
- * Created by audri on 2017-10-30.
- */
 
 public interface Cooldown {
     int getRemainingCooldown();

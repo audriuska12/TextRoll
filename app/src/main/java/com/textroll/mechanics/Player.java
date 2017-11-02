@@ -1,13 +1,7 @@
-package com.textroll.classes;
+package com.textroll.mechanics;
 
-import com.textroll.classes.Abilities.Active.Generic.BasicAttack;
-import com.textroll.classes.Abilities.Active.Player.Berserk;
-
-import java.util.ArrayList;
-
-/**
- * Created by audri on 2017-09-23.
- */
+import com.textroll.classes.abilities.active.generic.BasicAttack;
+import com.textroll.classes.abilities.active.player.Berserk;
 
 public class Player extends Actor {
 
@@ -17,6 +11,7 @@ public class Player extends Actor {
         super(name);
         attributes.getStrength().setBase(10);
         attributes.getEndurance().setBase(10);
+        addAbility(new BasicAttack(this));
         addAbility(new Berserk(this));
         refresh();
     }

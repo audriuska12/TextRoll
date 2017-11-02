@@ -1,14 +1,8 @@
-package com.textroll.classes;
+package com.textroll.mechanics;
 
-import com.textroll.classes.Abilities.Active.Generic.BasicAttack;
+import com.textroll.classes.Instances;
 
-import java.util.ArrayList;
-
-/**
- * Created by audri on 2017-09-23.
- */
-
-public class Enemy extends Actor {
+public abstract class Enemy extends Actor {
     public Enemy(String name){
         super(name);
         refresh();

@@ -1,15 +1,11 @@
-package com.textroll.classes.Abilities.Active.Generic;
+package com.textroll.classes.abilities.active.generic;
 
-import com.textroll.classes.Action;
-import com.textroll.classes.ActiveAbility;
-import com.textroll.classes.Actor;
-import com.textroll.classes.Enemy;
+import com.textroll.mechanics.Action;
+import com.textroll.mechanics.ActiveAbility;
+import com.textroll.mechanics.Actor;
+import com.textroll.mechanics.Enemy;
 import com.textroll.classes.Instances;
-import com.textroll.classes.Player;
-
-/**
- * Created by audri on 2017-10-22.
- */
+import com.textroll.mechanics.Player;
 
 public class BasicAttack extends ActiveAbility {
     public BasicAttack(Actor actor){
@@ -25,11 +21,10 @@ class BasicAttackAction extends Action{
         this.user = actor;
     }
 
-    public boolean execute(){
+    public void execute() {
         int dmgDealt = user.getAttributes().getStrength().getEffectiveValue();
         target.takeDamage(dmgDealt);
         Instances.turnManager.log(String.format("%s dealt %d damage to %s! \n", user.getName(), dmgDealt, target.getName()));
-        return true;
     }
 
     @Override

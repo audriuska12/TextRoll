@@ -1,14 +1,15 @@
-package com.textroll.classes;
+package com.textroll.mechanics;
 
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
-/**
- * Created by audri on 2017-10-06.
- */
-
 public class ActorUIContainer {
+    RelativeLayout layout;
+    ProgressBar healthBar;
+    Button button;
+    int id;
+
     public RelativeLayout getLayout() {
         return layout;
     }
@@ -33,10 +34,6 @@ public class ActorUIContainer {
         this.button = button;
     }
 
-    RelativeLayout layout;
-    ProgressBar healthBar;
-    Button button;
-
     public int getId() {
         return id;
     }
@@ -44,6 +41,4 @@ public class ActorUIContainer {
     public void setId(int id) {
         this.id = id;
     }
-
-    int id;
 }

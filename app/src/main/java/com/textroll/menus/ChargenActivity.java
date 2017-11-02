@@ -6,7 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.textroll.classes.Instances;
-import com.textroll.classes.Player;
+import com.textroll.classes.encounters.intro.IntroEncounterChain;
+import com.textroll.mechanics.Player;
 import com.textroll.textroll.R;
 
 public class ChargenActivity extends AppCompatActivity {
@@ -32,6 +33,7 @@ public class ChargenActivity extends AppCompatActivity {
 
     public void startGameActivity(View view){
         Instances.pc = new Player("Player");
+        Instances.encounters = new IntroEncounterChain();
         Intent intent = new Intent(this, TownMenuActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

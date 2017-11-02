@@ -1,18 +1,29 @@
-package com.textroll.classes;
+package com.textroll.mechanics;
 
-import com.textroll.classes.Abilities.Active.Generic.BasicAttack;
+import com.textroll.classes.Instances;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
-/**
- * Created by audri on 2017-09-23.
- */
 
 public abstract class Actor {
 
     protected ArrayList<ActiveAbility> abilities;
     protected ArrayList<Action> actions;
+    protected ArrayList<Action> availableActions;
+    protected AttributeContainer attributes;
+    private int currentHealth;
+    private ArrayList<Effect> effects;
+    private ActorUIContainer ui;
+    private String name;
+    public Actor(String name){
+        this.setAttributes(new AttributeContainer());
+        this.abilities = new ArrayList<>();
+        this.actions = new ArrayList<>();
+        this.availableActions = new ArrayList<>();
+        this.effects = new ArrayList<>();
+        this.setName(name);
+        this.setUi(new ActorUIContainer());
+        this.refresh();
+    }
 
     public ArrayList<Action> getAvailableActions() {
         return availableActions;
@@ -22,24 +33,6 @@ public abstract class Actor {
         this.availableActions = availableActions;
     }
 
-    protected ArrayList<Action> availableActions;
-    protected AttributeContainer attributes;
-    private int currentHealth;
-    private ArrayList<Effect> effects;
-    private ActorUIContainer ui;
-    private String name;
-
-    public Actor(String name){
-        this.setAttributes(new AttributeContainer());
-        this.abilities = new ArrayList<>();
-        this.actions = new ArrayList<>();
-        this.availableActions = new ArrayList<>();
-        this.effects = new ArrayList<>();
-        addAbility(new BasicAttack(this));
-        this.setName(name);
-        this.setUi(new ActorUIContainer());
-        this.refresh();
-    }
     public ArrayList<Effect> getEffects() {
         return effects;
     }
@@ -59,6 +52,11 @@ public abstract class Actor {
     public void addAbility(ActiveAbility ability){
         abilities.add(ability);
         actions.add(ability.getAction());
+    }
+
+    public void removeAbility(ActiveAbility ability) {
+        actions.remove(ability.getAction());
+        abilities.remove(ability);
     }
 
     public ArrayList<Action> getActions() {
@@ -114,6 +112,9 @@ public abstract class Actor {
     }
 
     public void refresh() {
+        for (Effect e : effects) {
+            e.remove();
+        }
         currentHealth = getMaximumHealth();
     }
 
@@ -138,6 +139,8 @@ public abstract class Actor {
         }
     }
 
+    public void startCombat() {
+    }
     public void startTurn(){
         for(Effect e: effects){
             e.onTurnStart();

@@ -1,13 +1,12 @@
 package com.textroll.classes;
 
+import com.textroll.mechanics.Action;
+import com.textroll.mechanics.Actor;
+import com.textroll.mechanics.Enemy;
 import com.textroll.menus.CombatActivity;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
-/**
- * Created by audri on 2017-09-29.
- */
 
 public class TurnManager implements Runnable{
     private ArrayList<Actor> characters;
@@ -17,10 +16,8 @@ public class TurnManager implements Runnable{
     private Actor current;
     public TurnManager(Collection<? extends Actor> characters, CombatActivity combat){
         currentActor = 0;
-        this.characters = new ArrayList<Actor>();
-        for(Actor c: characters){
-            this.characters.add(c);
-        }
+        this.characters = new ArrayList<>();
+        this.characters.addAll(characters);
         this.combat = combat;
     }
 
@@ -42,7 +39,7 @@ public class TurnManager implements Runnable{
                     synchronized (this){
                         try {
                             wait();
-                            } catch (InterruptedException e) {
+                        } catch (InterruptedException ignored) {
                         }
                     }
                 }
@@ -63,6 +60,7 @@ public class TurnManager implements Runnable{
         if(!isKilled) {
             if (playerIsAlive()) {
                 log("You win! \n");
+                Instances.encounters.next();
             } else {
                 log("You lose... \n");
             }
