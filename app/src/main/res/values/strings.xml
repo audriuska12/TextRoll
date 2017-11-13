@@ -13,4 +13,6 @@
     <string name="lblLia">Logged in as:</string>
     <string name="lblLogout">Log Out</string>
     <string name="lblQuit">Quit</string>
+    <string name="lblCDN">Choose Display Name</string>
+    <string name="lblSelect">Select</string>
 </resources>

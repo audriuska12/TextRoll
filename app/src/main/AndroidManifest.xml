@@ -43,7 +43,8 @@
             android:name="com.textroll.menus.CombatActivity"
             android:parentActivityName="com.textroll.menus.TownMenuActivity"
             android:screenOrientation="portrait" />
-        <activity android:name="com.textroll.menus.LoginActivity"></activity>
+        <activity android:name="com.textroll.menus.LoginActivity" />
+        <activity android:name="com.textroll.menus.DisplayNameActivity"></activity>
     </application>
 
 </manifest>
