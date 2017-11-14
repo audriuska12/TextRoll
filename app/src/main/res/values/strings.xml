@@ -15,4 +15,5 @@
     <string name="lblQuit">Quit</string>
     <string name="lblCDN">Choose Display Name</string>
     <string name="lblSelect">Select</string>
+    <string name="lblLoadingData">Loading...</string>
 </resources>

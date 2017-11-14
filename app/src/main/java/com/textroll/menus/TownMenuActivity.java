@@ -6,7 +6,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.textroll.classes.Instances;
+import com.textroll.classes.encounters.intro.IntroEncounterChain;
+import com.textroll.mechanics.Player;
 import com.textroll.textroll.R;
 
 public class TownMenuActivity extends AppCompatActivity {
@@ -16,12 +21,12 @@ public class TownMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_town_menu);
         if (!Instances.encounters.hasCurrentEncounter()) {
-            Button btn = (Button) findViewById(R.id.buttonFight);
+            Button btn = findViewById(R.id.buttonFight);
             btn.setClickable(false);
             btn.setAlpha(.5f);
             btn.setText(R.string.lblNoFight);
         } else {
-            Button btn = (Button) findViewById(R.id.buttonFight);
+            Button btn = findViewById(R.id.buttonFight);
             btn.setClickable(true);
             btn.setAlpha(1f);
             btn.setText(R.string.lblFight);

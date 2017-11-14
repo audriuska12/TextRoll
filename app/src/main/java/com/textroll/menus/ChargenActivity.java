@@ -1,10 +1,18 @@
 package com.textroll.menus;
 
+import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.textroll.classes.Instances;
 import com.textroll.classes.encounters.intro.IntroEncounterChain;
 import com.textroll.mechanics.Player;
@@ -16,6 +24,7 @@ public class ChargenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chargen);
+        Instances.mDatabase.keepSynced(true);
     }
 
     @Override
@@ -32,10 +41,21 @@ public class ChargenActivity extends AppCompatActivity {
     }
 
     public void startGameActivity(View view){
-        Instances.pc = new Player("Player");
-        Instances.encounters = new IntroEncounterChain();
-        Intent intent = new Intent(this, TownMenuActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child("1").child("name").addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Instances.pc = new Player(dataSnapshot.getValue().toString());
+                        Instances.encounters = new IntroEncounterChain();
+                        Intent intent = new Intent(getApplicationContext(), TownMenuActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 }
