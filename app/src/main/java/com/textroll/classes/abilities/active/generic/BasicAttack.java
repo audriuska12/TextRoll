@@ -1,5 +1,6 @@
 package com.textroll.classes.abilities.active.generic;
 
+import com.google.firebase.database.DatabaseReference;
 import com.textroll.mechanics.Action;
 import com.textroll.mechanics.ActiveAbility;
 import com.textroll.mechanics.Actor;
@@ -8,10 +9,14 @@ import com.textroll.classes.Instances;
 import com.textroll.mechanics.Player;
 
 public class BasicAttack extends ActiveAbility {
-    public BasicAttack(Actor actor){
-        this.setMaxRank(1);
-        this.setCurrentRank(1);
+
+    public BasicAttack(Actor actor, int maxRank, int currentRank) {
+        super(actor, maxRank, currentRank);
         this.setAction(new BasicAttackAction(actor));
+    }
+
+    public String getFirebaseName() {
+        return "Basic Attack";
     }
 }
 

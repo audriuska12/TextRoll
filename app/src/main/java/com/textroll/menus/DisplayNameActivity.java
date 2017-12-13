@@ -19,12 +19,12 @@ public class DisplayNameActivity extends AppCompatActivity {
 
     public void selectName(View view) {
         String name = ((TextView) findViewById(R.id.editTextCDN)).getText().toString();
-        if (name.matches("^[A-Z][a-z]{3,15}$")) {
+        if (name.matches("^[A-Za-z ]{3,15}$")) {
             Instances.mDatabase.child("users").child(Instances.user.getUid()).child("displayName").setValue(name);
             setResult(RESULT_OK);
             finish();
         } else {
-            Toast.makeText(this, "Name must start with a capital letter and be 4-16 letters long", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Name must be letters and spaces, 3-15 letters long", Toast.LENGTH_SHORT).show();
         }
     }
 }

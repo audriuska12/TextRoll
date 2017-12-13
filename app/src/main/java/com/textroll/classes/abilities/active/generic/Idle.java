@@ -1,15 +1,20 @@
 package com.textroll.classes.abilities.active.generic;
 
+import com.google.firebase.database.DatabaseReference;
 import com.textroll.classes.Instances;
 import com.textroll.mechanics.Action;
 import com.textroll.mechanics.ActiveAbility;
 import com.textroll.mechanics.Actor;
 
 public class Idle extends ActiveAbility {
-    public Idle(Actor actor) {
-        this.setMaxRank(1);
-        this.setCurrentRank(1);
+    public Idle(Actor actor, int maxRank, int currentRank) {
+        super(actor, maxRank, currentRank);
         this.setAction(new IdleAction(actor));
+    }
+
+    @Override
+    public String getFirebaseName() {
+        return "Idle";
     }
 }
 

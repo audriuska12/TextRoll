@@ -1,10 +1,16 @@
 package com.textroll.mechanics;
 
 public abstract class ActiveAbility implements Ability {
+    Actor actor;
     int currentRank;
     int maxRank;
     Action action;
 
+    public ActiveAbility(Actor actor, int maxRank, int currentRank) {
+        this.actor = actor;
+        this.maxRank = maxRank;
+        this.currentRank = currentRank;
+    }
     @Override
     public void setMaxRank(int rank) {
         if(rank > 0)this.maxRank = rank;

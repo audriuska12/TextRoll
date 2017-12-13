@@ -1,5 +1,6 @@
 package com.textroll.classes.abilities.active.player;
 
+import com.google.firebase.database.DatabaseReference;
 import com.textroll.mechanics.Action;
 import com.textroll.mechanics.ActiveAbility;
 import com.textroll.mechanics.Actor;
@@ -8,23 +9,30 @@ import com.textroll.mechanics.Effect;
 import com.textroll.classes.Instances;
 
 public class Berserk extends ActiveAbility {
-    public Berserk(Actor actor){
-        this.setMaxRank(1);
-        this.setCurrentRank(1);
-        this.setAction(new BerserkAction(actor));
+    public Berserk(Actor actor, int maxRank, int currentRank) {
+        super(actor, maxRank, currentRank);
+        this.setAction(new BerserkAction(this, actor));
+    }
+
+    @Override
+    public String getFirebaseName() {
+        return "Berserk";
     }
 }
 
 class BerserkAction extends Action implements Cooldown{
 
     private Actor actor;
+    private ActiveAbility ability;
     private int cooldown = 0;
-    public BerserkAction(Actor actor){
+
+    public BerserkAction(ActiveAbility ability, Actor actor) {
+        this.ability = ability;
         this.actor = actor;
     }
     @Override
     public void execute() {
-        BerserkEffect effect = new BerserkEffect();
+        BerserkEffect effect = new BerserkEffect(5 * ability.getCurrentRank(), ability.getCurrentRank() / 2 + 2);
         effect.apply(actor);
         setRemainingCooldown(4);
     }
@@ -67,13 +75,18 @@ class BerserkEffect extends Effect{
 
     Actor actor;
     int duration;
+    int power;
+
+    public BerserkEffect(int power, int duration) {
+        this.duration = duration;
+        this.power = power;
+    }
     @Override
     public void apply(Actor target) {
         actor = target;
-        duration = 3;
-        actor.getAttributes().getStrength().modifyBonus(10);
+        actor.getAttributes().getStrength().modifyBonus(power);
         actor.getEffects().add(this);
-        Instances.turnManager.log(String.format("%s enrages and gains 10 strength!\n", actor.getName()));
+        Instances.turnManager.log(String.format("%s enrages for %d turns and gains %d strength!\n", actor.getName(), duration, power));
     }
 
     @Override

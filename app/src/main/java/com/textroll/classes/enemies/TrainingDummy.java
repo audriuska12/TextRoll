@@ -9,7 +9,7 @@ public class TrainingDummy extends Enemy {
         super("Training Dummy");
         this.abilities.clear();
 
-        this.addAbility(new Idle(this));
+        this.addAbility(new Idle(this, 1, 1));
         this.updateAvailableActions(this);
     }
 

@@ -1,5 +1,8 @@
 package com.textroll.mechanics;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.ArrayList;
 
 
@@ -45,5 +48,22 @@ public class AttributeContainer {
 
     public DerivedAttribute getMaxHealth() {
         return maxHealth;
+    }
+
+    public void getFromSnapshot(DataSnapshot snapshot) {
+        DataSnapshot snap = snapshot.child("attributes");
+        this.strength.setBase(Integer.valueOf((String) snap.child("str").getValue()));
+        this.speed.setBase(Integer.valueOf((String) snap.child("spd").getValue()));
+        this.endurance.setBase(Integer.valueOf((String) snap.child("end").getValue()));
+        this.intelligence.setBase(Integer.valueOf((String) snap.child("int").getValue()));
+        this.magic.setBase(Integer.valueOf((String) snap.child("mag").getValue()));
+    }
+
+    public void recordToFirebase(DatabaseReference attributes) {
+        attributes.child("str").setValue(String.valueOf(this.strength.getBaseValue()));
+        attributes.child("spd").setValue(String.valueOf(this.speed.getBaseValue()));
+        attributes.child("end").setValue(String.valueOf(this.endurance.getBaseValue()));
+        attributes.child("int").setValue(String.valueOf(this.intelligence.getBaseValue()));
+        attributes.child("mag").setValue(String.valueOf(this.magic.getBaseValue()));
     }
 }

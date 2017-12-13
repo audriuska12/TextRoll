@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,6 +41,10 @@ public class TownMenuActivity extends AppCompatActivity {
         finish();
     }
 
+    public void saveCharacter(View view) {
+        Instances.pc.saveToFirebase();
+        Toast.makeText(this, "Saving character...", Toast.LENGTH_SHORT);
+    }
 
     public void combatActivity(View view){
         Intent intent = new Intent(this, CombatActivity.class);

@@ -1,6 +1,15 @@
 package com.textroll.mechanics;
 
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.textroll.classes.Instances;
+import com.textroll.menus.CharSelectActivity;
+import com.textroll.textroll.R;
 
 import java.util.ArrayList;
 
@@ -10,11 +19,13 @@ public abstract class Actor {
     protected ArrayList<Action> actions;
     protected ArrayList<Action> availableActions;
     protected AttributeContainer attributes;
-    private int currentHealth;
-    private ArrayList<Effect> effects;
-    private ActorUIContainer ui;
-    private String name;
-    public Actor(String name){
+    protected int currentHealth;
+    protected ArrayList<Effect> effects;
+    protected ActorUIContainer ui;
+    protected String name;
+    protected String firebaseKey;
+
+    public Actor(String name) {
         this.setAttributes(new AttributeContainer());
         this.abilities = new ArrayList<>();
         this.actions = new ArrayList<>();
@@ -23,6 +34,33 @@ public abstract class Actor {
         this.setName(name);
         this.setUi(new ActorUIContainer());
         this.refresh();
+    }
+
+    public Actor(DataSnapshot snapshot) {
+        this((String) snapshot.child("name").getValue());
+        this.firebaseKey = snapshot.getKey();
+        attributes.getFromSnapshot(snapshot);
+        AbilityDao.getFromSnapshot(this);
+        this.firebaseKey = snapshot.getKey();
+        this.refresh();
+    }
+
+    public String getFirebaseKey() {
+        return firebaseKey;
+    }
+
+    public void setFirebaseKey(String firebaseKey) {
+        this.firebaseKey = firebaseKey;
+    }
+
+    public void saveToFirebase() {
+        if (firebaseKey == null || firebaseKey == "") {
+            firebaseKey = Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").push().getKey();
+        }
+        Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(firebaseKey).child("name").setValue(name);
+        DatabaseReference ref = Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(firebaseKey);
+        attributes.recordToFirebase(ref.child("attributes"));
+        AbilityDao.recordToFirebase(this, ref.child("abilities"));
     }
 
     public ArrayList<Action> getAvailableActions() {
@@ -49,7 +87,7 @@ public abstract class Actor {
         this.abilities = abilities;
     }
 
-    public void addAbility(ActiveAbility ability){
+    public void addAbility(ActiveAbility ability) {
         abilities.add(ability);
         actions.add(ability.getAction());
     }
@@ -130,7 +168,7 @@ public abstract class Actor {
     public void updateAvailableActions(Actor target) {
         availableActions.clear();
         if (target != null) {
-            for (Action action: actions) {
+            for (Action action : actions) {
                 if (action.isAvailable(this, target)) {
                     action.setTarget(target);
                     availableActions.add(action);
@@ -141,20 +179,26 @@ public abstract class Actor {
 
     public void startCombat() {
     }
-    public void startTurn(){
-        for(Effect e: effects){
+
+    public void startTurn() {
+        for (Effect e : effects) {
             e.onTurnStart();
         }
-        for(Action a: actions){
-            if(a instanceof Cooldown){
+        for (Action a : actions) {
+            if (a instanceof Cooldown) {
                 ((Cooldown) a).coolDown();
             }
         }
     }
 
-    public void endTurn(){
-        for(Effect e: effects){
+    public void endTurn() {
+        for (Effect e : effects) {
             e.onTurnEnd();
         }
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

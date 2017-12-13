@@ -7,12 +7,12 @@
     tools:context="com.textroll.menus.MainActivity">
 
     <Button
-        android:id="@+id/buttonNewGame"
+        android:id="@+id/buttonPlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:onClick="startNewGameP"
-        android:text="@string/lblNewGame"
+        android:onClick="goToCharSelect"
+        android:text="@string/lblPlay"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

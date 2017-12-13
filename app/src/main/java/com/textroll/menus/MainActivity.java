@@ -36,6 +36,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (Instances.user == null) {
+            goToLogin();
+        } else {
+            updateNameTag();
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int returnCode, Intent data) {
         if (requestCode == 1) {
             if (returnCode == RESULT_CANCELED) {
@@ -62,8 +72,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, DisplayNameActivity.class);
         startActivityForResult(intent, 2);
     }
-    public void startNewGameP(View view){
-        Intent intent = new Intent(this, ChargenActivity.class);
+
+    public void goToCharSelect(View view) {
+        Intent intent = new Intent(this, CharSelectActivity.class);
         startActivity(intent);
     }
 

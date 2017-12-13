@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">TextRoll</string>
-    <string name="lblNewGame">New Game</string>
+    <string name="lblPlay">Play</string>
     <string name="lblStart">Start Game</string>
     <string name="lblCancel">Cancel</string>
     <string name="lblMainMenu">Main Menu</string>
@@ -16,4 +16,10 @@
     <string name="lblCDN">Choose Display Name</string>
     <string name="lblSelect">Select</string>
     <string name="lblLoadingData">Loading...</string>
+    <string name="title_activity_char_select">CharSelectActivity</string>
+    <string name="lblBack">Back</string>
+    <string name="lblNewCharacter">Create New Character</string>
+    <string name="lblSelectExisting">Select existing character:</string>
+    <string name="lblSaveChar">Save Character</string>
+    <string name="lblEntCharName">Enter character name:</string>
 </resources>
