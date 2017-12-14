@@ -18,6 +18,11 @@ public class Berserk extends ActiveAbility {
     public String getFirebaseName() {
         return "Berserk";
     }
+
+    @Override
+    public String getStatName() {
+        return String.format("Berserk (%d)", getCurrentRank());
+    }
 }
 
 class BerserkAction extends Action implements Cooldown{

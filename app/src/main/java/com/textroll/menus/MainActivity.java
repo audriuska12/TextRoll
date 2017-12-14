@@ -74,6 +74,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToCharSelect(View view) {
+        if (Instances.abilitySnap == null) {
+            Instances.mDatabase.child("abilities").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Instances.abilitySnap = dataSnapshot;
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
         Intent intent = new Intent(this, CharSelectActivity.class);
         startActivity(intent);
     }

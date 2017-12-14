@@ -22,43 +22,24 @@ import java.lang.reflect.InvocationTargetException;
  */
 
 public class AbilityDao {
-    public static void getFromSnapshot(final Actor actor) {
-        Instances.mDatabase.child("abilities").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snap) {
-                final DataSnapshot abilitiesList = snap;
-                Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(actor.getFirebaseKey()).child("abilities").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot ability : dataSnapshot.getChildren()) {
-                            String name = (String) ability.child("class").getValue();
-                            int rank = Integer.valueOf((String) ability.child("rank").getValue());
-                            try {
-                                Class c = Class.forName(name);
-                                Constructor<?> con = c.getConstructor(Actor.class, Integer.TYPE, Integer.TYPE);
-                                String nameRef = name.replace('.', '_');
-                                int maxRank = Integer.valueOf((String) (abilitiesList.child(nameRef).child("maxRank").getValue()));
-                                ActiveAbility abl = (ActiveAbility) con.newInstance(actor, maxRank, rank);
-                                actor.addAbility(abl);
-                            } catch (Exception e) {
+    public static void getFromSnapshot(final Actor actor, DataSnapshot dataSnapshot) {
 
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        for (DataSnapshot ability : dataSnapshot.child("abilities").getChildren()) {
+            String name = (String) ability.child("class").getValue();
+            int rank = Integer.valueOf((String) ability.child("rank").getValue());
+            try {
+                Class c = Class.forName(name);
+                Constructor<?> con = c.getConstructor(Actor.class, Integer.TYPE, Integer.TYPE);
+                String nameRef = name.replace('.', '_');
+                int maxRank = Integer.valueOf((String) (Instances.abilitySnap.child(nameRef).child("maxRank").getValue()));
+                ActiveAbility abl = (ActiveAbility) con.newInstance(actor, maxRank, rank);
+                actor.addAbility(abl);
+            } catch (Exception e) {
 
             }
-        });
+        }
     }
+
 
     public static void recordToFirebase(Actor actor, DatabaseReference abilitiesRef) {
         abilitiesRef.setValue(null, new AbilityCleanListener(actor, abilitiesRef));

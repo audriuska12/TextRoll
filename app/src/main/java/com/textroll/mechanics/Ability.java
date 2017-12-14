@@ -1,7 +1,5 @@
 package com.textroll.mechanics;
 
-import com.google.firebase.database.DatabaseReference;
-
 public interface Ability {
 
     void setMaxRank(int rank);
@@ -15,4 +13,6 @@ public interface Ability {
     int getMaximumRank();
 
     String getFirebaseName();
+
+    String getStatName();
 }

@@ -23,6 +23,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
+        android:alpha="0.5"
+        android:clickable="false"
         android:onClick="startGameActivity"
         android:text="@string/lblStart"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -35,7 +37,7 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:text="@string/lblName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -54,5 +56,229 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutChargenAttributesOuter"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextCharName">
+
+        <LinearLayout
+            android:id="@+id/linearLayoutChargenPoints"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewChargenAvailablePoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/lblAvailablePoints" />
+
+            <TextView
+                android:id="@+id/textViewChargenAvailablePointsCount"
+                android:layout_width="72dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="TextView" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="48dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewChargenStr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/lblStr" />
+
+            <Button
+                android:id="@+id/buttonChargenStrDec"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="0"
+                android:background="@android:color/transparent"
+                android:text="&lt;" />
+
+            <TextView
+                android:id="@+id/textViewChargenStrVal"
+                android:layout_width="72dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:textAlignment="center" />
+
+            <Button
+                android:id="@+id/buttonChargenStrInc"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="0"
+                android:background="@android:color/transparent"
+                android:text="&gt;" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewChargenSpd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/lblSpd" />
+
+            <Button
+                android:id="@+id/buttonChargenSpdDec"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="0"
+                android:background="@android:color/transparent"
+                android:text="&lt;" />
+
+            <TextView
+                android:id="@+id/textViewChargenSpdVal"
+                android:layout_width="72dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:textAlignment="center" />
+
+            <Button
+                android:id="@+id/buttonChargenSpdInc"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="0"
+                android:background="@android:color/transparent"
+                android:text="&gt;" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewChargenEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/lblEnd" />
+
+            <Button
+                android:id="@+id/buttonChargenEndDec"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="0"
+                android:background="@android:color/transparent"
+                android:text="&lt;" />
+
+            <TextView
+                android:id="@+id/textViewChargenEndVal"
+                android:layout_width="72dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:textAlignment="center" />
+
+            <Button
+                android:id="@+id/buttonChargenEndInc"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="0"
+                android:background="@android:color/transparent"
+                android:text="&gt;" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewChargenInt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/lblInt" />
+
+            <Button
+                android:id="@+id/buttonChargenIntDec"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="0"
+                android:background="@android:color/transparent"
+                android:text="&lt;" />
+
+            <TextView
+                android:id="@+id/textViewChargenIntVal"
+                android:layout_width="72dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:textAlignment="center" />
+
+            <Button
+                android:id="@+id/buttonChargenIntInc"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="0"
+                android:background="@android:color/transparent"
+                android:text="&gt;" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewChargenMag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/lblMag" />
+
+            <Button
+                android:id="@+id/buttonChargenMagDec"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="0"
+                android:background="@android:color/transparent"
+                android:text="&lt;" />
+
+            <TextView
+                android:id="@+id/textViewChargenMagVal"
+                android:layout_width="72dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:textAlignment="center" />
+
+            <Button
+                android:id="@+id/buttonChargenMagInc"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_weight="0"
+                android:background="@android:color/transparent"
+                android:text="&gt;" />
+        </LinearLayout>
+
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

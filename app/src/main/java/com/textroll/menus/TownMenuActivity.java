@@ -21,6 +21,7 @@ public class TownMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_town_menu);
+        Instances.pc.refresh();
         if (!Instances.encounters.hasCurrentEncounter()) {
             Button btn = findViewById(R.id.buttonFight);
             btn.setClickable(false);
@@ -43,7 +44,7 @@ public class TownMenuActivity extends AppCompatActivity {
 
     public void saveCharacter(View view) {
         Instances.pc.saveToFirebase();
-        Toast.makeText(this, "Saving character...", Toast.LENGTH_SHORT);
+        Toast.makeText(this, "Saving character...", Toast.LENGTH_SHORT).show();
     }
 
     public void combatActivity(View view){

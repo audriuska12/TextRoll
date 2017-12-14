@@ -3,6 +3,7 @@ package com.textroll.mechanics;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,8 +41,7 @@ public abstract class Actor {
         this((String) snapshot.child("name").getValue());
         this.firebaseKey = snapshot.getKey();
         attributes.getFromSnapshot(snapshot);
-        AbilityDao.getFromSnapshot(this);
-        this.firebaseKey = snapshot.getKey();
+        AbilityDao.getFromSnapshot(this, snapshot);
         this.refresh();
     }
 

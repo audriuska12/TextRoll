@@ -1,6 +1,7 @@
 package com.textroll.classes;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.textroll.mechanics.EncounterChain;
@@ -19,4 +20,5 @@ public class Instances {
     public static EncounterChain encounters;
     public static FirebaseUser user;
     public static DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    public static DataSnapshot abilitySnap;
 }

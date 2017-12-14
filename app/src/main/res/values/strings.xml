@@ -22,4 +22,15 @@
     <string name="lblSelectExisting">Select existing character:</string>
     <string name="lblSaveChar">Save Character</string>
     <string name="lblEntCharName">Enter character name:</string>
+    <string name="lblActiveAbilities">Abilities</string>
+    <string name="lblPassiveAbilities">Passives</string>
+    <string name="lblAttributes">Attributes</string>
+    <string name="lblInventory">Inventory</string>
+    <string name="lblStr">Strength</string>
+    <string name="lblSpd">Speed</string>
+    <string name="lblEnd">Endurance</string>
+    <string name="lblInt">Intelligence</string>
+    <string name="lblMag">Magic</string>
+    <string name="lblName">Name</string>
+    <string name="lblAvailablePoints">Available Points</string>
 </resources>

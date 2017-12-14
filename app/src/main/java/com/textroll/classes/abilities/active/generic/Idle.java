@@ -16,6 +16,11 @@ public class Idle extends ActiveAbility {
     public String getFirebaseName() {
         return "Idle";
     }
+
+    @Override
+    public String getStatName() {
+        return "Idle";
+    }
 }
 
 class IdleAction extends Action {

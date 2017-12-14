@@ -18,6 +18,11 @@ public class BasicAttack extends ActiveAbility {
     public String getFirebaseName() {
         return "Basic Attack";
     }
+
+    @Override
+    public String getStatName() {
+        return "Basic Attack";
+    }
 }
 
 class BasicAttackAction extends Action{
