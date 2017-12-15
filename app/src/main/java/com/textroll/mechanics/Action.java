@@ -1,5 +1,10 @@
 package com.textroll.mechanics;
 
+import com.textroll.classes.Instances;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Action {
     protected Actor user;
     protected Actor target;
@@ -8,6 +13,20 @@ public abstract class Action {
     }
 
     public abstract void execute();
-    public abstract boolean isAvailable(Actor actor, Actor target);
+
+    public abstract boolean isAvailable();
     public abstract boolean validForTarget(Actor actor, Actor target);
+
+    public abstract int getPriority();
+
+    public List<Actor> getAvailableTargets() {
+        ArrayList<Actor> targets = new ArrayList<>();
+        ArrayList<Actor> actors = new ArrayList<>();
+        actors.add(Instances.pc);
+        actors.addAll(Instances.enemies);
+        for (Actor t : actors) {
+            if (validForTarget(user, t)) targets.add(t);
+        }
+        return targets;
+    }
 }

@@ -33,4 +33,10 @@
     <string name="lblMag">Magic</string>
     <string name="lblName">Name</string>
     <string name="lblAvailablePoints">Available Points</string>
+    <string name="lblLoadEncChain">Loading encounters...</string>
+    <string name="lblDelete">Delete</string>
+    <string name="lblVictory">Victory!</string>
+    <string name="lblDefeat">Defeat...</string>
+    <string name="lblCP">Character Points</string>
+    <string name="lblGold">Gold</string>
 </resources>

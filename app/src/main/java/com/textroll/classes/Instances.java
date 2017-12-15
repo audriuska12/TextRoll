@@ -7,6 +7,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.textroll.mechanics.EncounterChain;
 import com.textroll.mechanics.Enemy;
 import com.textroll.mechanics.Player;
+import com.textroll.mechanics.QuestLog;
 
 import java.util.List;
 import java.util.Random;
@@ -21,4 +22,6 @@ public class Instances {
     public static FirebaseUser user;
     public static DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     public static DataSnapshot abilitySnap;
+    public static DataSnapshot enemySnap;
+    public static QuestLog questLog;
 }

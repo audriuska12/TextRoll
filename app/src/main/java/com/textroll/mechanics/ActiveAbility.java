@@ -1,10 +1,10 @@
 package com.textroll.mechanics;
 
 public abstract class ActiveAbility implements Ability {
-    Actor actor;
-    int currentRank;
-    int maxRank;
-    Action action;
+    protected Actor actor;
+    protected int currentRank;
+    protected int maxRank;
+    protected Action action;
 
     public ActiveAbility(Actor actor, int maxRank, int currentRank) {
         this.actor = actor;

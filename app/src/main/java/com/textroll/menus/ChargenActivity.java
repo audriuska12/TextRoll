@@ -1,24 +1,20 @@
 package com.textroll.menus;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.textroll.classes.Instances;
-import com.textroll.classes.encounters.intro.IntroEncounterChain;
 import com.textroll.mechanics.AttributeContainer;
+import com.textroll.mechanics.EncounterChain;
 import com.textroll.mechanics.Player;
 import com.textroll.textroll.R;
 
@@ -226,7 +222,17 @@ public class ChargenActivity extends AppCompatActivity {
             attributes.getEndurance().setBase(end);
             attributes.getIntelligence().setBase(intl);
             attributes.getMagic().setBase(mag);
-            Instances.encounters = new IntroEncounterChain();
+            Instances.mDatabase.child("encounterChains").child("Intro").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Instances.encounters = new EncounterChain(dataSnapshot);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
             Intent intent = new Intent(getApplicationContext(), TownMenuActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

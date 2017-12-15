@@ -71,7 +71,7 @@ public class CombatActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Instances.pc.updateAvailableActions(target);
+                Instances.pc.updateAvailableActions();
                 ArrayList<Action> actions = new ArrayList<>();
                 for (Action a : Instances.pc.getActions()) {
                     if (a.validForTarget(Instances.pc, target)) {
@@ -109,6 +109,11 @@ public class CombatActivity extends AppCompatActivity {
     public void goToTown(View view) {
         turnManager.kill();
         pc.refresh();
+        try {
+            Instances.encounters.getCurrentEncounter().reset();
+        } catch (IndexOutOfBoundsException e) {
+            Instances.pc.getQuests().get(Instances.encounters.getKey()).completed = true;
+        }
         Intent intent = new Intent(this, TownMenuActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
@@ -118,15 +123,6 @@ public class CombatActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         goToTown(null);
-    }
-
-    public void startExitTimer() {
-        Timer t = new Timer();
-        t.schedule(new TimerTask() {
-            public void run() {
-                goToTown(null);
-            }
-        }, 1000);
     }
 
     public void refreshHealthBars() {
@@ -188,6 +184,24 @@ public class CombatActivity extends AppCompatActivity {
         layout.addView(group, params);
     }
 
+    public void win() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ((Button) findViewById(R.id.buttonEndCombat)).setText(R.string.lblVictory);
+            }
+        });
+    }
+
+    public void lose() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ((Button) findViewById(R.id.buttonEndCombat)).setText(R.string.lblDefeat);
+            }
+        });
+    }
+
     private class TargetButtonListener implements View.OnClickListener {
 
         Actor actor;
@@ -215,7 +229,9 @@ public class CombatActivity extends AppCompatActivity {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
             Button btn = (Button)findViewById(R.id.buttonGo);
-            if (((Action)(adapterView.getSelectedItem())).isAvailable(Instances.pc, target)){
+            Action action = ((Action) (adapterView.getSelectedItem()));
+            if (action.isAvailable() && action.validForTarget(Instances.pc, target)) {
+                action.setTarget(target);
                 btn.setClickable(true);
                 btn.setAlpha(1f);
             } else {

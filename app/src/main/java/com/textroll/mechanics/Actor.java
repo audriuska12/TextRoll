@@ -1,16 +1,8 @@
 package com.textroll.mechanics;
 
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 import com.textroll.classes.Instances;
-import com.textroll.menus.CharSelectActivity;
-import com.textroll.textroll.R;
 
 import java.util.ArrayList;
 
@@ -25,6 +17,7 @@ public abstract class Actor {
     protected ActorUIContainer ui;
     protected String name;
     protected String firebaseKey;
+    protected int energy = 0;
 
     public Actor(String name) {
         this.setAttributes(new AttributeContainer());
@@ -43,6 +36,18 @@ public abstract class Actor {
         attributes.getFromSnapshot(snapshot);
         AbilityDao.getFromSnapshot(this, snapshot);
         this.refresh();
+    }
+
+    public int getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
+    }
+
+    public void addEnergy(int energy) {
+        this.energy += energy;
     }
 
     public String getFirebaseKey() {
@@ -153,7 +158,13 @@ public abstract class Actor {
         for (Effect e : effects) {
             e.remove();
         }
+        for (Action a : actions) {
+            if (a instanceof Cooldown) {
+                ((Cooldown) a).setRemainingCooldown(0);
+            }
+        }
         currentHealth = getMaximumHealth();
+        energy = 0;
     }
 
     public void takeDamage(int damage) {
@@ -165,17 +176,15 @@ public abstract class Actor {
 
     public abstract Action takeAction();
 
-    public void updateAvailableActions(Actor target) {
+    public void updateAvailableActions() {
         availableActions.clear();
-        if (target != null) {
-            for (Action action : actions) {
-                if (action.isAvailable(this, target)) {
-                    action.setTarget(target);
+        for (Action action : actions) {
+            if (action.isAvailable()) {
+                action.setTarget(null);
                     availableActions.add(action);
                 }
             }
         }
-    }
 
     public void startCombat() {
     }

@@ -11,11 +11,16 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.textroll.classes.Instances;
+import com.textroll.mechanics.QuestLog;
 import com.textroll.textroll.R;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private Timer timerAuthVerifier;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,24 +32,29 @@ public class MainActivity extends AppCompatActivity {
             mAuth = FirebaseAuth.getInstance();
             Instances.user = mAuth.getCurrentUser();
             setContentView(R.layout.activity_main);
-            if (Instances.user == null) {
-                goToLogin();
-            } else {
-                updateNameTag();
-            }
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        timerAuthVerifier = new Timer();
+        timerAuthVerifier.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                verifyAuth();
+            }
+        }, 0, 25);
+    }
+
+    private void verifyAuth() {
         if (Instances.user == null) {
             goToLogin();
         } else {
+            timerAuthVerifier.cancel();
             updateNameTag();
         }
     }
-
     @Override
     protected void onActivityResult(int requestCode, int returnCode, Intent data) {
         if (requestCode == 1) {
@@ -64,21 +74,50 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToLogin() {
+        timerAuthVerifier.cancel();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivityForResult(intent, 1);
     }
 
     public void goToDisplayNameSelect() {
+        timerAuthVerifier.cancel();
         Intent intent = new Intent(this, DisplayNameActivity.class);
         startActivityForResult(intent, 2);
     }
 
     public void goToCharSelect(View view) {
+        timerAuthVerifier.cancel();
         if (Instances.abilitySnap == null) {
             Instances.mDatabase.child("abilities").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Instances.abilitySnap = dataSnapshot;
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+        if (Instances.enemySnap == null) {
+            Instances.mDatabase.child("enemies").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Instances.enemySnap = dataSnapshot;
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+        if (Instances.questLog == null) {
+            Instances.mDatabase.child("encounterChains").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Instances.questLog = new QuestLog(dataSnapshot, "Intro");
                 }
 
                 @Override

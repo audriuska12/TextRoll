@@ -1,6 +1,5 @@
-package com.textroll.classes.abilities.active.generic;
+package com.textroll.classes.abilities.active;
 
-import com.google.firebase.database.DatabaseReference;
 import com.textroll.classes.Instances;
 import com.textroll.mechanics.Action;
 import com.textroll.mechanics.ActiveAbility;
@@ -24,24 +23,33 @@ public class Idle extends ActiveAbility {
 }
 
 class IdleAction extends Action {
-    private Actor actor;
 
     public IdleAction(Actor actor) {
-        this.actor = actor;
+        this.user = actor;
     }
 
     @Override
     public void execute() {
-        Instances.turnManager.log(String.format("%s idles.\n", actor.getName()));
+        Instances.turnManager.log(String.format("%s idles.\n", user.getName()));
     }
 
     @Override
-    public boolean isAvailable(Actor actor, Actor target) {
+    public boolean isAvailable() {
         return true;
     }
 
     @Override
     public boolean validForTarget(Actor actor, Actor target) {
-        return true;
+        return actor == target;
+    }
+
+    @Override
+    public int getPriority() {
+        return -1;
+    }
+
+    @Override
+    public String toString() {
+        return "Idle";
     }
 }

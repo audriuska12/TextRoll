@@ -1,6 +1,5 @@
-package com.textroll.classes.abilities.active.generic;
+package com.textroll.classes.abilities.active;
 
-import com.google.firebase.database.DatabaseReference;
 import com.textroll.mechanics.Action;
 import com.textroll.mechanics.ActiveAbility;
 import com.textroll.mechanics.Actor;
@@ -38,8 +37,8 @@ class BasicAttackAction extends Action{
     }
 
     @Override
-    public boolean isAvailable(Actor actor, Actor target) {
-        return validForTarget(actor, target);
+    public boolean isAvailable() {
+        return true;
     }
 
     @Override
@@ -47,6 +46,10 @@ class BasicAttackAction extends Action{
         return((actor instanceof Player && target instanceof Enemy)||(actor instanceof Enemy && target instanceof Player));
     }
 
+    @Override
+    public int getPriority() {
+        return user.getAttributes().getStrength().getEffectiveValue();
+    }
     @Override
     public String toString(){
         return "Basic Attack";

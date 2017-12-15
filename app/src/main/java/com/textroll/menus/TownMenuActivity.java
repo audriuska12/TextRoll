@@ -7,36 +7,61 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.textroll.classes.Instances;
-import com.textroll.classes.encounters.intro.IntroEncounterChain;
-import com.textroll.mechanics.Player;
 import com.textroll.textroll.R;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class TownMenuActivity extends AppCompatActivity {
 
+    Timer timerUpdate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_town_menu);
         Instances.pc.refresh();
-        if (!Instances.encounters.hasCurrentEncounter()) {
-            Button btn = findViewById(R.id.buttonFight);
-            btn.setClickable(false);
-            btn.setAlpha(.5f);
-            btn.setText(R.string.lblNoFight);
-        } else {
-            Button btn = findViewById(R.id.buttonFight);
-            btn.setClickable(true);
-            btn.setAlpha(1f);
-            btn.setText(R.string.lblFight);
-        }
+    }
+
+    protected void onResume() {
+        super.onResume();
+        timerUpdate = new Timer();
+        timerUpdate.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                updateData();
+            }
+        }, 0, 25);
+    }
+
+    private void updateData() {
+        runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        Button btn = findViewById(R.id.buttonFight);
+                        if (Instances.encounters == null) {
+                            btn.setClickable(false);
+                            btn.setAlpha(.5f);
+                            btn.setText(R.string.lblLoadEncChain);
+                        } else if (!Instances.encounters.hasCurrentEncounter()) {
+                            btn.setClickable(false);
+                            btn.setAlpha(.5f);
+                            btn.setText(R.string.lblNoFight);
+                            timerUpdate.cancel();
+                        } else {
+                            btn.setClickable(true);
+                            btn.setAlpha(1f);
+                            btn.setText(R.string.lblFight);
+                            timerUpdate.cancel();
+                        }
+                    }
+                });
     }
 
     @Override
     public void onBackPressed(){
+        timerUpdate.cancel();
         super.onBackPressed();
         mainMenuActivity(null);
         finish();
@@ -48,12 +73,14 @@ public class TownMenuActivity extends AppCompatActivity {
     }
 
     public void combatActivity(View view){
+        timerUpdate.cancel();
         Intent intent = new Intent(this, CombatActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
     public void mainMenuActivity(View view){
+        timerUpdate.cancel();
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

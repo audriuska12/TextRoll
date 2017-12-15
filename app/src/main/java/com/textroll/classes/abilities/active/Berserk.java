@@ -1,6 +1,5 @@
-package com.textroll.classes.abilities.active.player;
+package com.textroll.classes.abilities.active;
 
-import com.google.firebase.database.DatabaseReference;
 import com.textroll.mechanics.Action;
 import com.textroll.mechanics.ActiveAbility;
 import com.textroll.mechanics.Actor;
@@ -21,30 +20,29 @@ public class Berserk extends ActiveAbility {
 
     @Override
     public String getStatName() {
-        return String.format("Berserk (%d)", getCurrentRank());
+        return String.format("Berserk (%d/%d)", getCurrentRank(), getMaximumRank());
     }
 }
 
 class BerserkAction extends Action implements Cooldown{
 
-    private Actor actor;
     private ActiveAbility ability;
     private int cooldown = 0;
 
     public BerserkAction(ActiveAbility ability, Actor actor) {
         this.ability = ability;
-        this.actor = actor;
+        this.user = actor;
     }
     @Override
     public void execute() {
         BerserkEffect effect = new BerserkEffect(5 * ability.getCurrentRank(), ability.getCurrentRank() / 2 + 2);
-        effect.apply(actor);
+        effect.apply(user);
         setRemainingCooldown(4);
     }
 
     @Override
-    public boolean isAvailable(Actor actor, Actor target) {
-        return (cooldown == 0 && validForTarget(actor, target));
+    public boolean isAvailable() {
+        return (cooldown == 0);
     }
 
     @Override
@@ -65,6 +63,13 @@ class BerserkAction extends Action implements Cooldown{
     @Override
     public void coolDown() {
         if(cooldown > 0) cooldown--;
+    }
+
+    @Override
+    public int getPriority() {
+        if (user.getCurrentHealth() < user.getMaximumHealth() / 2) {
+            return user.getAttributes().getStrength().getEffectiveValue() + 5 * this.ability.getCurrentRank();
+        } else return 1;
     }
 
     @Override
@@ -96,7 +101,7 @@ class BerserkEffect extends Effect{
 
     @Override
     public void remove() {
-        actor.getAttributes().getStrength().modifyBonus(-10);
+        actor.getAttributes().getStrength().modifyBonus(-power);
         actor.getEffects().remove(this);
         Instances.turnManager.log(String.format("%s stops raging.\n", actor.getName()));
     }
