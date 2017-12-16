@@ -1,20 +1,19 @@
 package com.textroll.menus;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.textroll.classes.Instances;
-import com.textroll.mechanics.ActiveAbility;
+import com.textroll.mechanics.Ability;
+import com.textroll.mechanics.AbilityNode;
 import com.textroll.mechanics.Attribute;
 import com.textroll.mechanics.Player;
 import com.textroll.textroll.R;
@@ -23,10 +22,11 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.List;
 
 public class CharEditActivity extends AppCompatActivity {
     private Player modified;
+    private Ability selectedAbility;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +83,9 @@ public class CharEditActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.textViewCharEditEndVal)).setText(String.valueOf(modified.getAttributes().getEndurance().getBaseValue()));
         ((TextView) findViewById(R.id.textViewCharEditIntVal)).setText(String.valueOf(modified.getAttributes().getIntelligence().getBaseValue()));
         ((TextView) findViewById(R.id.textViewCharEditMagVal)).setText(String.valueOf(modified.getAttributes().getMagic().getBaseValue()));
-        AbilityArrayAdapter abilitiesAv = new AbilityArrayAdapter(CharEditActivity.this, android.R.layout.simple_list_item_1, modified.getAbilities());
+        AbilityArrayAdapter abilitiesPc = new AbilityArrayAdapter(CharEditActivity.this, android.R.layout.simple_list_item_1, modified.getAbilities());
+        ((ListView) findViewById(R.id.listViewCharEditAbilitiesPc)).setAdapter(abilitiesPc);
+        AbilityArrayAdapter<Ability> abilitiesAv = new AbilityArrayAdapter<>(CharEditActivity.this, android.R.layout.simple_list_item_1, Instances.abilityMap.getAvailableAbilities(modified));
         ((ListView) findViewById(R.id.listViewCharEditAbilitiesAvailable)).setAdapter(abilitiesAv);
     }
 
@@ -151,6 +153,66 @@ public class CharEditActivity extends AppCompatActivity {
                     mag.modifyBase(1);
                     updateViews();
                 }
+            }
+        });
+
+        ((ListView) (findViewById(R.id.listViewCharEditAbilitiesPc))).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                ((TextView) (findViewById(R.id.textViewCharEditDescVal))).setText(Instances.abilityMap.getAbilities().get(adapterView.getItemAtPosition(i).getClass().getSimpleName()).getDescription());
+                ((ViewSwitcher) (findViewById(R.id.viewSwitcherCharEditPU))).setDisplayedChild(1);
+                selectedAbility = (Ability) adapterView.getItemAtPosition(i);
+                AbilityNode node = Instances.abilityMap.getAbilities().get(selectedAbility.getClass().getSimpleName());
+                ((TextView) (findViewById((R.id.textViewCharEditCostVal)))).setText(String.valueOf(node.getBaseCost() + selectedAbility.getCurrentRank() * node.getCostPerRank()));
+                Button upgradeButton = findViewById(R.id.buttonCharEditUpgrade);
+                if (selectedAbility.getCurrentRank() < selectedAbility.getMaximumRank()) {
+                    upgradeButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            AbilityNode node = Instances.abilityMap.getAbilities().get(selectedAbility.getClass().getSimpleName());
+                            if (modified.getCharacterPoints() >= node.getBaseCost() + selectedAbility.getCurrentRank() * node.getCostPerRank()) {
+                                modified.setCharacterPoints(modified.getCharacterPoints() - (node.getBaseCost() + selectedAbility.getCurrentRank() * node.getCostPerRank()));
+                                selectedAbility.setCurrentRank(selectedAbility.getCurrentRank() + 1);
+                                updateViews();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Not enough points!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                    upgradeButton.setClickable(true);
+                    upgradeButton.setAlpha(1);
+                } else {
+                    upgradeButton.setClickable(false);
+                    upgradeButton.setAlpha(0.5f);
+                }
+                findViewById(R.id.constraintLayoutCharEditAbilityInfo).setVisibility(View.VISIBLE);
+            }
+        });
+
+        ((ListView) (findViewById(R.id.listViewCharEditAbilitiesAvailable))).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                ((TextView) (findViewById(R.id.textViewCharEditDescVal))).setText(Instances.abilityMap.getAbilities().get(adapterView.getItemAtPosition(i).getClass().getSimpleName()).getDescription());
+                ((ViewSwitcher) (findViewById(R.id.viewSwitcherCharEditPU))).setDisplayedChild(0);
+                selectedAbility = (Ability) adapterView.getItemAtPosition(i);
+                AbilityNode node = Instances.abilityMap.getAbilities().get(selectedAbility.getClass().getSimpleName());
+                ((TextView) (findViewById((R.id.textViewCharEditCostVal)))).setText(String.valueOf(node.getBaseCost()));
+                Button purchaseButton = findViewById(R.id.buttonCharEditPurchase);
+                purchaseButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AbilityNode node = Instances.abilityMap.getAbilities().get(selectedAbility.getClass().getSimpleName());
+                        if (modified.getCharacterPoints() >= node.getBaseCost()) {
+                            modified.addAbility(selectedAbility);
+                            modified.setCharacterPoints(modified.getCharacterPoints() - node.getBaseCost());
+                            findViewById(R.id.constraintLayoutCharEditAbilityInfo).setVisibility(View.VISIBLE);
+                            updateViews();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Not enough points!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                findViewById(R.id.constraintLayoutCharEditAbilityInfo).setVisibility(View.VISIBLE);
             }
         });
     }

@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.textroll.mechanics.AbilityMap;
 import com.textroll.mechanics.EncounterChain;
 import com.textroll.mechanics.Enemy;
 import com.textroll.mechanics.Player;
@@ -24,4 +25,5 @@ public class Instances {
     public static DataSnapshot abilitySnap;
     public static DataSnapshot enemySnap;
     public static QuestLog questLog;
+    public static AbilityMap abilityMap;
 }

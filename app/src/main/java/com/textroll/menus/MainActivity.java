@@ -11,6 +11,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.textroll.classes.Instances;
+import com.textroll.mechanics.AbilityMap;
 import com.textroll.mechanics.QuestLog;
 import com.textroll.textroll.R;
 
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Instances.abilitySnap = dataSnapshot;
+                    Instances.abilityMap = new AbilityMap(Instances.abilitySnap, "Idle");
                 }
 
                 @Override

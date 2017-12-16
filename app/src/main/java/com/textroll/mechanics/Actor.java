@@ -93,9 +93,11 @@ public abstract class Actor implements Serializable {
         this.abilities = abilities;
     }
 
-    public void addAbility(ActiveAbility ability) {
-        abilities.add(ability);
-        actions.add(ability.getAction());
+    public void addAbility(Ability ability) {
+        if (ability instanceof ActiveAbility) {
+            abilities.add((ActiveAbility) ability);
+            actions.add(((ActiveAbility) ability).getAction());
+        }
     }
 
     public void removeAbility(ActiveAbility ability) {
@@ -172,7 +174,6 @@ public abstract class Actor implements Serializable {
         if (damage > 0) {
             currentHealth -= damage;
         }
-        if (isDead()) Instances.turnManager.processDeath(this);
     }
 
     public abstract Action takeAction();

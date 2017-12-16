@@ -22,8 +22,6 @@ import com.textroll.mechanics.Enemy;
 import com.textroll.textroll.R;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static com.textroll.classes.Instances.pc;
 import static com.textroll.classes.Instances.turnManager;
@@ -57,7 +55,7 @@ public class CombatActivity extends AppCompatActivity {
         characters.addAll(enemies);
         actionSelect = (Spinner) findViewById(R.id.spinnerActionSelect);
         actionSelect.setOnItemSelectedListener(new ActionSelectListener());
-        refreshHealthBars();
+        refreshViews();
         deselectTarget();
         turnManager = new TurnManager(characters, this);
         new Thread(turnManager).start();
@@ -126,7 +124,7 @@ public class CombatActivity extends AppCompatActivity {
         goToTown(null);
     }
 
-    public void refreshHealthBars() {
+    public void refreshViews() {
         for (Actor c : characters) {
             c.getUi().getHealthBar().setMax(c.getMaximumHealth());
             c.getUi().getHealthBar().setProgress(c.getCurrentHealth());

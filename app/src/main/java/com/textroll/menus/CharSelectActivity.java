@@ -19,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.textroll.classes.Instances;
+import com.textroll.mechanics.Ability;
 import com.textroll.mechanics.ActiveAbility;
 import com.textroll.mechanics.EncounterChain;
 import com.textroll.mechanics.Player;
@@ -141,7 +142,7 @@ public class CharSelectActivity extends AppCompatActivity {
     }
 }
 
-class AbilityArrayAdapter<T extends ActiveAbility> extends ArrayAdapter {
+class AbilityArrayAdapter<T extends Ability> extends ArrayAdapter {
     public AbilityArrayAdapter(@NonNull Context context, int resource, List<T> abilities) {
         super(context, resource, abilities);
     }

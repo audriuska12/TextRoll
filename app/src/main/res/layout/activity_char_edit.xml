@@ -208,6 +208,97 @@
                     android:minWidth="0dp"
                     android:text="+" />
             </LinearLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayoutCharEditAbilityInfo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible">
+
+                <TextView
+                    android:id="@+id/textViewCharEditDescLbl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/lblDesc"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textViewCharEditCostVal"
+                    android:layout_width="36dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textViewCharEditCostLbl"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:gravity="end"
+                    android:text="@string/lblCost"
+                    android:textAlignment="textEnd"
+                    app:layout_constraintEnd_toStartOf="@+id/textViewCharEditCostVal"
+                    app:layout_constraintStart_toEndOf="@+id/textViewCharEditDescLbl"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ViewSwitcher
+                    android:id="@+id/viewSwitcherCharEditPU"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent">
+
+                    <LinearLayout
+                        android:id="@+id/viewSwitcherCharEditP"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <Button
+                            android:id="@+id/buttonCharEditPurchase"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lblPurchase" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/viewSwitcherCharEditU"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <Button
+                            android:id="@+id/buttonCharEditUpgrade"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lblUpgrade" />
+                    </LinearLayout>
+                </ViewSwitcher>
+
+                <TextView
+                    android:id="@+id/textViewCharEditDescVal"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:scrollbars="vertical"
+                    app:layout_constraintBottom_toTopOf="@+id/viewSwitcherCharEditPU"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewCharEditCostLbl" />
+
+            </android.support.constraint.ConstraintLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -217,11 +308,24 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textViewCharEditAbilities"
+                android:id="@+id/textViewCharEditAbilitiesPc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:text="@string/lblActiveAbilities" />
+
+            <ListView
+                android:id="@+id/listViewCharEditAbilitiesPc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5" />
+
+            <TextView
+                android:id="@+id/textViewCharEditAbilities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="@string/lblAvailable" />
 
             <ListView
                 android:id="@+id/listViewCharEditAbilitiesAvailable"

@@ -40,4 +40,9 @@
     <string name="lblCP">Character Points</string>
     <string name="lblGold">Gold</string>
     <string name="lblCharMenu">Character Menu</string>
+    <string name="lblAvailable">Available</string>
+    <string name="lblDesc">Description</string>
+    <string name="lblCost">Cost</string>
+    <string name="lblPurchase">Purchase</string>
+    <string name="lblUpgrade">Upgrade</string>
 </resources>

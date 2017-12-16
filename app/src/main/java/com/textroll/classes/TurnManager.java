@@ -9,16 +9,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class TurnManager implements Runnable {
-    private ArrayList<Actor> characters;
+    private ArrayList<Actor> actors;
     private CombatActivity combat;
     private boolean isKilled;
     private Actor current;
 
     public TurnManager(Collection<? extends Actor> characters, CombatActivity combat) {
-        this.characters = new ArrayList<>();
-        this.characters.addAll(characters);
+        this.actors = new ArrayList<>();
+        this.actors.addAll(characters);
         this.combat = combat;
-        this.current = this.characters.get(0);
+        this.current = this.actors.get(0);
     }
 
     public void kill() {
@@ -33,17 +33,37 @@ public class TurnManager implements Runnable {
     public void run() {
         while (!isKilled && fightOngoing()) {
             int maxEnergy = 0;
-            for (int i = 0; i < characters.size(); i++) {
-                Actor tmp = characters.get(i);
+            for (int i = 0; i < actors.size(); i++) {
+                Actor tmp = actors.get(i);
                 tmp.addEnergy(tmp.getAttributes().getSpeed().getEffectiveValue());
                 if (tmp.getEnergy() > maxEnergy) {
                     maxEnergy = tmp.getEnergy();
                     current = tmp;
                 }
             }
+            combat.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    combat.refreshViews();
+                }
+            });
             current.startTurn();
+            checkForDeaths();
+            combat.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    combat.refreshViews();
+                }
+            });
+            if (current.isDead()) continue;
             if (current == Instances.pc) {
                 combat.PlayerTurnStart();
+                combat.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        combat.refreshViews();
+                    }
+                });
                 synchronized (this) {
                     try {
                         wait();
@@ -54,12 +74,21 @@ public class TurnManager implements Runnable {
             Action action = current.takeAction();
             if (action != null) {
                 action.execute();
-                current.endTurn();
-                current.setEnergy(0);
+                checkForDeaths();
                 combat.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        combat.refreshHealthBars();
+                        combat.refreshViews();
+                    }
+                });
+                if (current.isDead()) continue;
+                current.endTurn();
+                current.setEnergy(0);
+                checkForDeaths();
+                combat.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        combat.refreshViews();
                     }
                 });
             }
@@ -87,6 +116,15 @@ public class TurnManager implements Runnable {
                 combat.log(text);
             }
         });
+    }
+
+    private void checkForDeaths() {
+        for (Actor actor : actors) {
+            if (actor.isDead()) {
+                actors.remove(actor);
+                processDeath(actor);
+            }
+        }
     }
 
     public boolean fightOngoing() {
