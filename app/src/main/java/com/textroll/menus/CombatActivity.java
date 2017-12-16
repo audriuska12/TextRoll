@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.textroll.classes.*;
 import com.textroll.mechanics.Actor;
 import com.textroll.mechanics.Action;
+import com.textroll.mechanics.ActorUIContainer;
 import com.textroll.mechanics.Enemy;
 import com.textroll.textroll.R;
 
@@ -155,6 +156,7 @@ public class CombatActivity extends AppCompatActivity {
     }
 
     private void addCharacterDisplay(LinearLayout layout, Actor actor) {
+        actor.setUi(new ActorUIContainer());
         RelativeLayout group = new RelativeLayout(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         group.setLayoutParams(params);

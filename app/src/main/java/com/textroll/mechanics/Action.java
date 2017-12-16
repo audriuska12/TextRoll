@@ -2,10 +2,11 @@ package com.textroll.mechanics;
 
 import com.textroll.classes.Instances;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Action {
+public abstract class Action implements Serializable {
     protected Actor user;
     protected Actor target;
     public void setTarget(Actor target){

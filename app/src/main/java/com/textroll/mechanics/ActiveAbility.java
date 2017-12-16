@@ -1,6 +1,8 @@
 package com.textroll.mechanics;
 
-public abstract class ActiveAbility implements Ability {
+import java.io.Serializable;
+
+public abstract class ActiveAbility implements Ability, Serializable {
     protected Actor actor;
     protected int currentRank;
     protected int maxRank;

@@ -3,10 +3,11 @@ package com.textroll.mechanics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class AttributeContainer {
+public class AttributeContainer implements Serializable {
     private Attribute strength;
     private Attribute speed;
     private Attribute endurance;

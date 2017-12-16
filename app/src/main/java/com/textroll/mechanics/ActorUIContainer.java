@@ -4,6 +4,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import java.io.Serializable;
+
 public class ActorUIContainer {
     RelativeLayout layout;
     ProgressBar healthBar;

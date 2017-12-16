@@ -53,6 +53,12 @@ public class TownMenuActivity extends AppCompatActivity {
                             btn.setClickable(true);
                             btn.setAlpha(1f);
                             btn.setText(R.string.lblFight);
+                            btn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    combatActivity(view);
+                                }
+                            });
                             timerUpdate.cancel();
                         }
                     }
@@ -77,6 +83,7 @@ public class TownMenuActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CombatActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+        finish();
     }
 
     public void mainMenuActivity(View view){
@@ -84,5 +91,14 @@ public class TownMenuActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+        finish();
+    }
+
+    public void charEditActivity(View view) {
+        timerUpdate.cancel();
+        Intent intent = new Intent(this, CharEditActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 }

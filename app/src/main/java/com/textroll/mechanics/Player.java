@@ -6,6 +6,7 @@ import com.textroll.classes.Instances;
 import com.textroll.classes.abilities.active.BasicAttack;
 import com.textroll.classes.abilities.active.Idle;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

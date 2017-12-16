@@ -4,9 +4,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.textroll.classes.Instances;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class Actor {
+public abstract class Actor implements Serializable {
 
     protected ArrayList<ActiveAbility> abilities;
     protected ArrayList<Action> actions;
@@ -14,7 +15,7 @@ public abstract class Actor {
     protected AttributeContainer attributes;
     protected int currentHealth;
     protected ArrayList<Effect> effects;
-    protected ActorUIContainer ui;
+    protected transient ActorUIContainer ui;
     protected String name;
     protected String firebaseKey;
     protected int energy = 0;

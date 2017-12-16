@@ -1,5 +1,6 @@
 package com.textroll.mechanics;
 
+
 public interface Ability {
 
     void setMaxRank(int rank);

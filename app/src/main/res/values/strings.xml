@@ -39,4 +39,5 @@
     <string name="lblDefeat">Defeat...</string>
     <string name="lblCP">Character Points</string>
     <string name="lblGold">Gold</string>
+    <string name="lblCharMenu">Character Menu</string>
 </resources>

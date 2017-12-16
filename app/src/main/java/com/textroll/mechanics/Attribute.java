@@ -1,6 +1,8 @@
 package com.textroll.mechanics;
 
-public class Attribute {
+import java.io.Serializable;
+
+public class Attribute implements Serializable {
     private int baseValue;
     private int bonus;
     private double multiplier;
@@ -20,8 +22,8 @@ public class Attribute {
         this.baseValue = baseValue;
     }
 
-    public int ModifyBase(int change){
-        baseValue = Math.min(baseValue+change, 0);
+    public int modifyBase(int change) {
+        baseValue = Math.max(baseValue + change, 0);
         return baseValue;
     }
 

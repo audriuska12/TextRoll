@@ -1,9 +1,10 @@
 package com.textroll.mechanics;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class DerivedAttribute {
+public class DerivedAttribute implements Serializable {
     private ArrayList<Attribute> baseAttributes;
     private ArrayList<Double> multipliers;
     private int baseValue;
