@@ -17,8 +17,10 @@ public class Player extends Actor {
     private int characterPoints;
     private int gold = 0;
     private HashMap<String, QuestEntry> quests;
+    private String currentQuestKey;
+    private int currentQuestEncounterId;
 
-    public Player(String name){
+    public Player(String name) {
         super(name);
         addAbility(new BasicAttack(this, 1, 1));
         this.addAbility(new Idle(this, 1, 1));
@@ -33,10 +35,12 @@ public class Player extends Actor {
         this.quests = new HashMap<>();
         for (DataSnapshot snapQuest : snapshot.child("log").getChildren()) {
             QuestEntry q = new QuestEntry();
-            q.key = (String) snapQuest.getKey();
+            q.key = snapQuest.getKey();
             q.completed = (Integer.valueOf((String) snapQuest.child("completed").getValue()) == 1);
             quests.put(q.key, q);
         }
+        this.currentQuestKey = (snapshot.child("currentQuestKey").exists()) ? (String) snapshot.child("currentQuestKey").getValue() : null;
+        this.currentQuestEncounterId = (snapshot.child("currentQuestEncounterId").exists()) ? Integer.valueOf((String) snapshot.child("currentQuestEncounterId").getValue()) : 0;
     }
 
     public int getCharacterPoints() {
@@ -59,7 +63,7 @@ public class Player extends Actor {
         return false;
     }
 
-    public void setNextAction(Action action){
+    public void setNextAction(Action action) {
         this.nextAction = action;
     }
 
@@ -72,6 +76,13 @@ public class Player extends Actor {
             QuestEntry q = qe.getValue();
             DatabaseReference ref = Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(firebaseKey).child("log").child(q.key);
             ref.child("completed").setValue(String.valueOf((q.completed) ? 1 : 0));
+        }
+        if (currentQuestKey == null) {
+            Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(firebaseKey).child("currentQuestKey").setValue(null);
+            Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(firebaseKey).child("currentQuestEncounterId").setValue(null);
+        } else {
+            Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(firebaseKey).child("currentQuestKey").setValue(this.currentQuestKey);
+            Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(firebaseKey).child("currentQuestEncounterId").setValue(String.valueOf(currentQuestEncounterId));
         }
     }
 
@@ -112,5 +123,21 @@ public class Player extends Actor {
 
     public void setQuests(HashMap<String, QuestEntry> quests) {
         this.quests = quests;
+    }
+
+    public String getCurrentQuestKey() {
+        return currentQuestKey;
+    }
+
+    public void setCurrentQuestKey(String currentQuestKey) {
+        this.currentQuestKey = currentQuestKey;
+    }
+
+    public int getCurrentQuestEncounterId() {
+        return currentQuestEncounterId;
+    }
+
+    public void setCurrentQuestEncounterId(int currentQuestEncounterId) {
+        this.currentQuestEncounterId = currentQuestEncounterId;
     }
 }

@@ -45,4 +45,5 @@
     <string name="lblCost">Cost</string>
     <string name="lblPurchase">Purchase</string>
     <string name="lblUpgrade">Upgrade</string>
+    <string name="lblSelectQuest">Select Quest</string>
 </resources>

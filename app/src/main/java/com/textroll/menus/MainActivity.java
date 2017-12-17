@@ -21,7 +21,6 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private Timer timerAuthVerifier;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,55 +38,36 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        timerAuthVerifier = new Timer();
-        timerAuthVerifier.scheduleAtFixedRate(new TimerTask() {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 verifyAuth();
             }
-        }, 0, 25);
+        }, 100);
     }
 
     private void verifyAuth() {
         if (Instances.user == null) {
             goToLogin();
-        } else {
-            timerAuthVerifier.cancel();
-            updateNameTag();
         }
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int returnCode, Intent data) {
-        if (requestCode == 1) {
-            if (returnCode == RESULT_CANCELED) {
-                goToLogin();
-            } else {
-                updateNameTag();
-            }
-        }
-        if (requestCode == 2) {
-            if (returnCode == RESULT_CANCELED) {
-                goToDisplayNameSelect();
-            } else {
-                updateNameTag();
-            }
-        }
+        updateNameTag();
     }
 
+
     public void goToLogin() {
-        timerAuthVerifier.cancel();
         Intent intent = new Intent(this, LoginActivity.class);
-        startActivityForResult(intent, 1);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     public void goToDisplayNameSelect() {
-        timerAuthVerifier.cancel();
         Intent intent = new Intent(this, DisplayNameActivity.class);
-        startActivityForResult(intent, 2);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     public void goToCharSelect(View view) {
-        timerAuthVerifier.cancel();
         if (Instances.abilitySnap == null) {
             Instances.mDatabase.child("abilities").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -134,27 +114,51 @@ public class MainActivity extends AppCompatActivity {
 
     public void logout(View view) {
         mAuth.signOut();
+        Instances.user = null;
+        Instances.displayName = null;
+        Instances.encounters = null;
+        Instances.abilityMap = null;
+        Instances.pc = null;
+        Instances.questLog = null;
+        Instances.abilitySnap = null;
+        Instances.enemySnap = null;
         goToLogin();
     }
 
     private void updateNameTag() {
+
         final TextView lia = (findViewById(R.id.textViewLia));
-        Instances.mDatabase.child("users").child(Instances.user.getUid()).child("displayName").addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getValue() == null) {
-                            goToDisplayNameSelect();
+        if (Instances.displayName == null) {
+            Instances.mDatabase.child("users").child(Instances.user.getUid()).child("displayName").addListenerForSingleValueEvent(
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange(final DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.getValue() == null) {
+                                goToDisplayNameSelect();
+                            }
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    lia.setText(String.format("%s %s", getString(R.string.lblLia), dataSnapshot.getValue()));
+                                    lia.setVisibility(View.VISIBLE);
+                                }
+                            });
                         }
-                        lia.setText(String.format("%s %s", getString(R.string.lblLia), dataSnapshot.getValue()));
-                        lia.setVisibility(View.VISIBLE);
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
+                        }
                     }
+            );
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    lia.setText(String.format("%s %s", getString(R.string.lblLia), Instances.displayName));
+                    lia.setVisibility(View.VISIBLE);
                 }
-        );
+            });
+        }
     }
 }

@@ -6,21 +6,25 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.textroll.classes.Instances;
 import com.textroll.textroll.R;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class TownMenuActivity extends AppCompatActivity {
 
     Timer timerUpdate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_town_menu);
         Instances.pc.refresh();
+        ArrayList<String> quests = Instances.questLog.getAvailableQuests(Instances.pc);
     }
 
     protected void onResume() {
@@ -31,7 +35,7 @@ public class TownMenuActivity extends AppCompatActivity {
             public void run() {
                 updateData();
             }
-        }, 0, 25);
+        }, 0, 100);
     }
 
     private void updateData() {
@@ -39,34 +43,24 @@ public class TownMenuActivity extends AppCompatActivity {
                 new Runnable() {
                     @Override
                     public void run() {
-                        Button btn = findViewById(R.id.buttonFight);
+                        ViewFlipper flipper = findViewById(R.id.viewFlipperTown);
                         if (Instances.encounters == null) {
-                            btn.setClickable(false);
-                            btn.setAlpha(.5f);
-                            btn.setText(R.string.lblLoadEncChain);
+                            if (Instances.pc.getCurrentQuestKey() != null) {
+                                flipper.setDisplayedChild(0);
+                            } else {
+                                flipper.setDisplayedChild(3);
+                            }
                         } else if (!Instances.encounters.hasCurrentEncounter()) {
-                            btn.setClickable(false);
-                            btn.setAlpha(.5f);
-                            btn.setText(R.string.lblNoFight);
-                            timerUpdate.cancel();
+                            flipper.setDisplayedChild(2);
                         } else {
-                            btn.setClickable(true);
-                            btn.setAlpha(1f);
-                            btn.setText(R.string.lblFight);
-                            btn.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    combatActivity(view);
-                                }
-                            });
-                            timerUpdate.cancel();
+                            flipper.setDisplayedChild(1);
                         }
                     }
                 });
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         timerUpdate.cancel();
         super.onBackPressed();
         mainMenuActivity(null);
@@ -78,7 +72,7 @@ public class TownMenuActivity extends AppCompatActivity {
         Toast.makeText(this, "Saving character...", Toast.LENGTH_SHORT).show();
     }
 
-    public void combatActivity(View view){
+    public void combatActivity(View view) {
         timerUpdate.cancel();
         Intent intent = new Intent(this, CombatActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -86,7 +80,7 @@ public class TownMenuActivity extends AppCompatActivity {
         finish();
     }
 
-    public void mainMenuActivity(View view){
+    public void mainMenuActivity(View view) {
         timerUpdate.cancel();
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -100,5 +94,20 @@ public class TownMenuActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
+    }
+
+    public void questSelectActivity(View view) {
+        timerUpdate.cancel();
+        Intent intent = new Intent(this, QuestSelectActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    public void confirmEncounterChainComplete(View view) {
+        Instances.encounters = null;
+        Instances.pc.setCurrentQuestKey(null);
+        Instances.pc.setCurrentQuestEncounterId(0);
+        ((ViewFlipper) (findViewById(R.id.viewFlipperTown))).setDisplayedChild(3);
     }
 }

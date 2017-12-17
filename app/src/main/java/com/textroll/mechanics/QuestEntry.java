@@ -9,4 +9,12 @@ import java.io.Serializable;
 public class QuestEntry implements Serializable {
     public String key;
     public boolean completed;
+
+    public QuestEntry() {
+    }
+
+    public QuestEntry(String key, boolean completed) {
+        this.key = key;
+        this.completed = completed;
+    }
 }

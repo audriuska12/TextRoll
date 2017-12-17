@@ -26,4 +26,5 @@ public class Instances {
     public static DataSnapshot enemySnap;
     public static QuestLog questLog;
     public static AbilityMap abilityMap;
+    public static String displayName;
 }

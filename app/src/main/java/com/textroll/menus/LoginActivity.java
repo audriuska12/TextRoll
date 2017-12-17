@@ -37,7 +37,9 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Instances.user = mAuth.getCurrentUser();
-                            setResult(RESULT_OK);
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
                             finish();
                         } else {
                             FirebaseException e = (FirebaseException) task.getException();
@@ -57,7 +59,9 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Instances.user = mAuth.getCurrentUser();
-                            setResult(RESULT_OK);
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
                             finish();
                         } else {
                             FirebaseException e = (FirebaseException) task.getException();

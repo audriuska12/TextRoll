@@ -100,7 +100,6 @@ public class TurnManager implements Runnable {
                 log(String.format("Gained %d character points and %d gold!\n", Instances.encounters.getCurrentEncounter().getRewardCP(), Instances.encounters.getCurrentEncounter().getRewardG()));
                 Instances.pc.addCharacterPoints(Instances.encounters.getCurrentEncounter().getRewardCP());
                 Instances.pc.addGold(Instances.encounters.getCurrentEncounter().getRewardG());
-                Instances.encounters.next();
                 combat.win();
             } else {
                 log("You lose... \n");
@@ -119,12 +118,14 @@ public class TurnManager implements Runnable {
     }
 
     private void checkForDeaths() {
+        ArrayList<Actor> deadActors = new ArrayList<>();
         for (Actor actor : actors) {
             if (actor.isDead()) {
-                actors.remove(actor);
+                deadActors.add(actor);
                 processDeath(actor);
             }
         }
+        actors.removeAll(deadActors);
     }
 
     public boolean fightOngoing() {

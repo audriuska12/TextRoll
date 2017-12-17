@@ -58,17 +58,22 @@ public class CharSelectActivity extends AppCompatActivity {
     public void playWithSelected(View view) {
         Spinner charSelectSpinner = findViewById(R.id.spinnerCharacterSelect);
         Instances.pc = (Player) charSelectSpinner.getSelectedItem();
-        Instances.mDatabase.child("encounterChains").child("Intro").addListenerForSingleValueEvent(new ValueEventListener() {
+        if (Instances.pc.getCurrentQuestKey() != null) {
+            Instances.mDatabase.child("encounterChains").child(Instances.pc.getCurrentQuestKey()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Instances.encounters = new EncounterChain(dataSnapshot);
+                for (int i = 0; i < Instances.pc.getCurrentQuestEncounterId(); i++) {
+                    Instances.encounters.next();
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+            });
+        }
         Intent intent = new Intent(getApplicationContext(), TownMenuActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
@@ -142,15 +147,3 @@ public class CharSelectActivity extends AppCompatActivity {
     }
 }
 
-class AbilityArrayAdapter<T extends Ability> extends ArrayAdapter {
-    public AbilityArrayAdapter(@NonNull Context context, int resource, List<T> abilities) {
-        super(context, resource, abilities);
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        TextView view = (TextView) super.getView(position, convertView, parent);
-        view.setText(((ActiveAbility) getItem(position)).getStatName());
-        return view;
-    }
-}

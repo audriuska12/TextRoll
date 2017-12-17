@@ -19,6 +19,7 @@ import com.textroll.mechanics.Actor;
 import com.textroll.mechanics.Action;
 import com.textroll.mechanics.ActorUIContainer;
 import com.textroll.mechanics.Enemy;
+import com.textroll.mechanics.QuestEntry;
 import com.textroll.textroll.R;
 
 import java.util.ArrayList;
@@ -86,7 +87,7 @@ public class CombatActivity extends AppCompatActivity {
 
     public void goClick(View view) {
         pc.setNextAction((Action) actionSelect.getSelectedItem());
-        synchronized(Instances.turnManager){
+        synchronized (Instances.turnManager) {
             Instances.turnManager.notify();
         }
     }
@@ -111,7 +112,12 @@ public class CombatActivity extends AppCompatActivity {
         try {
             Instances.encounters.getCurrentEncounter().reset();
         } catch (IndexOutOfBoundsException e) {
-            Instances.pc.getQuests().get(Instances.encounters.getKey()).completed = true;
+            if (Instances.pc.getQuests().get(Instances.encounters.getKey()) == null) {
+                Instances.pc.getQuests().put(Instances.encounters.getKey(), new QuestEntry(Instances.encounters.getKey(), true) {
+                });
+            } else {
+                Instances.pc.getQuests().get(Instances.encounters.getKey()).completed = true;
+            }
         }
         Intent intent = new Intent(this, TownMenuActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -185,6 +191,8 @@ public class CombatActivity extends AppCompatActivity {
     }
 
     public void win() {
+        Instances.encounters.next();
+        Instances.pc.setCurrentQuestEncounterId(Instances.pc.getCurrentQuestEncounterId() + 1);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -225,10 +233,10 @@ public class CombatActivity extends AppCompatActivity {
         }
     }
 
-    private class ActionSelectListener implements Spinner.OnItemSelectedListener{
+    private class ActionSelectListener implements Spinner.OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            Button btn = (Button)findViewById(R.id.buttonGo);
+            Button btn = (Button) findViewById(R.id.buttonGo);
             Action action = ((Action) (adapterView.getSelectedItem()));
             if (action.isAvailable() && action.validForTarget(Instances.pc, target)) {
                 action.setTarget(target);
@@ -242,7 +250,7 @@ public class CombatActivity extends AppCompatActivity {
 
         @Override
         public void onNothingSelected(AdapterView<?> adapterView) {
-            Button btn = (Button)findViewById(R.id.buttonGo);
+            Button btn = (Button) findViewById(R.id.buttonGo);
             btn.setClickable(false);
             btn.setAlpha(.5f);
         }

@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Timer;
 
 public class CharEditActivity extends AppCompatActivity {
     private Player modified;
@@ -173,6 +174,7 @@ public class CharEditActivity extends AppCompatActivity {
                             if (modified.getCharacterPoints() >= node.getBaseCost() + selectedAbility.getCurrentRank() * node.getCostPerRank()) {
                                 modified.setCharacterPoints(modified.getCharacterPoints() - (node.getBaseCost() + selectedAbility.getCurrentRank() * node.getCostPerRank()));
                                 selectedAbility.setCurrentRank(selectedAbility.getCurrentRank() + 1);
+                                ((TextView) (findViewById((R.id.textViewCharEditCostVal)))).setText(String.valueOf(node.getBaseCost() + selectedAbility.getCurrentRank() * node.getCostPerRank()));
                                 updateViews();
                             } else {
                                 Toast.makeText(getApplicationContext(), "Not enough points!", Toast.LENGTH_SHORT).show();
@@ -193,7 +195,7 @@ public class CharEditActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ((TextView) (findViewById(R.id.textViewCharEditDescVal))).setText(Instances.abilityMap.getAbilities().get(adapterView.getItemAtPosition(i).getClass().getSimpleName()).getDescription());
-                ((ViewSwitcher) (findViewById(R.id.viewSwitcherCharEditPU))).setDisplayedChild(0);
+                ((ViewSwitcher) (findViewById(R.id.viewSwitcherCharEditPU))).setDisplayedChild(2);
                 selectedAbility = (Ability) adapterView.getItemAtPosition(i);
                 AbilityNode node = Instances.abilityMap.getAbilities().get(selectedAbility.getClass().getSimpleName());
                 ((TextView) (findViewById((R.id.textViewCharEditCostVal)))).setText(String.valueOf(node.getBaseCost()));

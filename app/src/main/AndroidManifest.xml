@@ -61,6 +61,10 @@
             android:name="com.textroll.menus.CharEditActivity"
             android:parentActivityName="com.textroll.menus.TownMenuActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.textroll.menus.QuestSelectActivity"
+            android:parentActivityName="com.textroll.menus.TownMenuActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
