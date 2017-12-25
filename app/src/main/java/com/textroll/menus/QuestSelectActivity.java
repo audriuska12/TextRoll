@@ -33,7 +33,7 @@ public class QuestSelectActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        ArrayList<String> availableQuestKeys = Instances.questLog.getAvailableQuests(Instances.pc);
+        ArrayList<String> availableQuestKeys = Instances.questLog.getAvailableQuests();
         quests = new ArrayList<>();
         for (String key : availableQuestKeys) {
             quests.add(Instances.questLog.getQuests().get(key));
@@ -75,12 +75,15 @@ public class QuestSelectActivity extends AppCompatActivity {
     public void selectQuest(View view) {
         if (selected != null) {
             Instances.pc.setCurrentQuestKey(selected.getKey());
-            Instances.pc.setCurrentQuestEncounterId(0);
+            Instances.pc.setCurrentQuestEncounterId((Instances.pc.getQuests().get(selected.getKey()) == null) ? (0) : (Instances.pc.getQuests().get(selected.getKey()).encounter));
             Toast.makeText(this, "Loading quest from database...", Toast.LENGTH_SHORT).show();
             Instances.mDatabase.child("encounterChains").child(selected.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Instances.encounters = new EncounterChain(dataSnapshot);
+                    for (int i = 0; i < Instances.pc.getCurrentQuestEncounterId(); i++) {
+                        Instances.encounters.next();
+                    }
                     Toast.makeText(getApplicationContext(), "Quest loaded!", Toast.LENGTH_SHORT).show();
                     goToTown(null);
                 }

@@ -1,5 +1,7 @@
 package com.textroll.mechanics;
 
+import android.widget.Toast;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.textroll.classes.Instances;
@@ -36,6 +38,7 @@ public class Player extends Actor {
         for (DataSnapshot snapQuest : snapshot.child("log").getChildren()) {
             QuestEntry q = new QuestEntry();
             q.key = snapQuest.getKey();
+            q.encounter = (snapQuest.child("encounter").exists()) ? (Integer.valueOf((String) snapQuest.child("encounter").getValue())) : (0);
             q.completed = (Integer.valueOf((String) snapQuest.child("completed").getValue()) == 1);
             quests.put(q.key, q);
         }
@@ -75,6 +78,7 @@ public class Player extends Actor {
         for (Map.Entry<String, QuestEntry> qe : quests.entrySet()) {
             QuestEntry q = qe.getValue();
             DatabaseReference ref = Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(firebaseKey).child("log").child(q.key);
+            ref.child("encounter").setValue(String.valueOf(q.encounter));
             ref.child("completed").setValue(String.valueOf((q.completed) ? 1 : 0));
         }
         if (currentQuestKey == null) {

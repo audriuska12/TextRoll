@@ -30,4 +30,8 @@ public abstract class Action implements Serializable {
         }
         return targets;
     }
+
+    public int getThreat(Actor actor) {
+        return 0;
+    }
 }

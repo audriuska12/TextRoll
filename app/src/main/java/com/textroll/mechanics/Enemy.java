@@ -1,7 +1,8 @@
 package com.textroll.mechanics;
 
 import com.google.firebase.database.DataSnapshot;
-import com.textroll.classes.Instances;
+
+import java.util.List;
 
 public class Enemy extends Actor {
     public Enemy(String name){
@@ -24,7 +25,17 @@ public class Enemy extends Actor {
                 action = ac;
             }
         }
-        action.setTarget(action.getAvailableTargets().get(0));
+        List<Actor> targets = action.getAvailableTargets();
+        Actor target = targets.get(0);
+        int maxThreat = action.getThreat(target);
+        for (int i = 1; i < targets.size(); i++) {
+            int threat = action.getThreat(targets.get(i));
+            if (threat > maxThreat) {
+                target = targets.get(i);
+                maxThreat = threat;
+            }
+        }
+        action.setTarget(target);
         return action;
     }
 

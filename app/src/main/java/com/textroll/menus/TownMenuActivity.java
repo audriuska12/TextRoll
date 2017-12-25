@@ -24,7 +24,6 @@ public class TownMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_town_menu);
         Instances.pc.refresh();
-        ArrayList<String> quests = Instances.questLog.getAvailableQuests(Instances.pc);
     }
 
     protected void onResume() {
@@ -48,10 +47,8 @@ public class TownMenuActivity extends AppCompatActivity {
                             if (Instances.pc.getCurrentQuestKey() != null) {
                                 flipper.setDisplayedChild(0);
                             } else {
-                                flipper.setDisplayedChild(3);
+                                flipper.setDisplayedChild(2);
                             }
-                        } else if (!Instances.encounters.hasCurrentEncounter()) {
-                            flipper.setDisplayedChild(2);
                         } else {
                             flipper.setDisplayedChild(1);
                         }
@@ -104,10 +101,19 @@ public class TownMenuActivity extends AppCompatActivity {
         finish();
     }
 
-    public void confirmEncounterChainComplete(View view) {
-        Instances.encounters = null;
-        Instances.pc.setCurrentQuestKey(null);
-        Instances.pc.setCurrentQuestEncounterId(0);
-        ((ViewFlipper) (findViewById(R.id.viewFlipperTown))).setDisplayedChild(3);
+    public void goToInventory(View view) {
+        timerUpdate.cancel();
+        Intent intent = new Intent(this, InventoryActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    public void goToShop(View view) {
+        timerUpdate.cancel();
+        Intent intent = new Intent(this, ShopActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 }

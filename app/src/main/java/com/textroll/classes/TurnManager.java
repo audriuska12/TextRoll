@@ -28,6 +28,7 @@ public class TurnManager implements Runnable {
     public void processDeath(Actor c) {
         log(String.format("%s dies!\n", c.getName()));
         combat.processDeath(c);
+        actors.remove(c);
     }
 
     public void run() {
@@ -48,7 +49,6 @@ public class TurnManager implements Runnable {
                 }
             });
             current.startTurn();
-            checkForDeaths();
             combat.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -74,7 +74,6 @@ public class TurnManager implements Runnable {
             Action action = current.takeAction();
             if (action != null) {
                 action.execute();
-                checkForDeaths();
                 combat.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -84,7 +83,6 @@ public class TurnManager implements Runnable {
                 if (current.isDead()) continue;
                 current.endTurn();
                 current.setEnergy(0);
-                checkForDeaths();
                 combat.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -96,13 +94,8 @@ public class TurnManager implements Runnable {
         }
         if (!isKilled) {
             if (playerIsAlive()) {
-                log("You win! \n");
-                log(String.format("Gained %d character points and %d gold!\n", Instances.encounters.getCurrentEncounter().getRewardCP(), Instances.encounters.getCurrentEncounter().getRewardG()));
-                Instances.pc.addCharacterPoints(Instances.encounters.getCurrentEncounter().getRewardCP());
-                Instances.pc.addGold(Instances.encounters.getCurrentEncounter().getRewardG());
                 combat.win();
             } else {
-                log("You lose... \n");
                 combat.lose();
             }
         }
@@ -117,16 +110,6 @@ public class TurnManager implements Runnable {
         });
     }
 
-    private void checkForDeaths() {
-        ArrayList<Actor> deadActors = new ArrayList<>();
-        for (Actor actor : actors) {
-            if (actor.isDead()) {
-                deadActors.add(actor);
-                processDeath(actor);
-            }
-        }
-        actors.removeAll(deadActors);
-    }
 
     public boolean fightOngoing() {
         return (!isKilled && playerIsAlive() && anyEnemiesAlive());

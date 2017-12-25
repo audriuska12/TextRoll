@@ -22,7 +22,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Timer;
 
 public class CharEditActivity extends AppCompatActivity {
     private Player modified;
@@ -88,6 +87,12 @@ public class CharEditActivity extends AppCompatActivity {
         ((ListView) findViewById(R.id.listViewCharEditAbilitiesPc)).setAdapter(abilitiesPc);
         AbilityArrayAdapter<Ability> abilitiesAv = new AbilityArrayAdapter<>(CharEditActivity.this, android.R.layout.simple_list_item_1, Instances.abilityMap.getAvailableAbilities(modified));
         ((ListView) findViewById(R.id.listViewCharEditAbilitiesAvailable)).setAdapter(abilitiesAv);
+        if (selectedAbility == null) {
+            findViewById(R.id.constraintLayoutCharEditAbilityInfo).setVisibility(View.INVISIBLE);
+            ((TextView) findViewById(R.id.textViewCharEditCostVal)).setText("");
+            ((TextView) findViewById(R.id.textViewCharEditDescVal)).setText("");
+            findViewById(R.id.viewSwitcherCharEditPU).setVisibility(View.INVISIBLE);
+        }
     }
 
     private void setListeners() {
@@ -187,6 +192,7 @@ public class CharEditActivity extends AppCompatActivity {
                     upgradeButton.setClickable(false);
                     upgradeButton.setAlpha(0.5f);
                 }
+                findViewById(R.id.viewSwitcherCharEditPU).setVisibility(View.VISIBLE);
                 findViewById(R.id.constraintLayoutCharEditAbilityInfo).setVisibility(View.VISIBLE);
             }
         });
@@ -195,7 +201,7 @@ public class CharEditActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ((TextView) (findViewById(R.id.textViewCharEditDescVal))).setText(Instances.abilityMap.getAbilities().get(adapterView.getItemAtPosition(i).getClass().getSimpleName()).getDescription());
-                ((ViewSwitcher) (findViewById(R.id.viewSwitcherCharEditPU))).setDisplayedChild(2);
+                ((ViewSwitcher) (findViewById(R.id.viewSwitcherCharEditPU))).setDisplayedChild(0);
                 selectedAbility = (Ability) adapterView.getItemAtPosition(i);
                 AbilityNode node = Instances.abilityMap.getAbilities().get(selectedAbility.getClass().getSimpleName());
                 ((TextView) (findViewById((R.id.textViewCharEditCostVal)))).setText(String.valueOf(node.getBaseCost()));
@@ -207,6 +213,8 @@ public class CharEditActivity extends AppCompatActivity {
                         if (modified.getCharacterPoints() >= node.getBaseCost()) {
                             modified.addAbility(selectedAbility);
                             modified.setCharacterPoints(modified.getCharacterPoints() - node.getBaseCost());
+                            ((ViewSwitcher) (findViewById(R.id.viewSwitcherCharEditPU))).setDisplayedChild(1);
+                            selectedAbility = null;
                             findViewById(R.id.constraintLayoutCharEditAbilityInfo).setVisibility(View.VISIBLE);
                             updateViews();
                         } else {
@@ -214,6 +222,7 @@ public class CharEditActivity extends AppCompatActivity {
                         }
                     }
                 });
+                findViewById(R.id.viewSwitcherCharEditPU).setVisibility(View.VISIBLE);
                 findViewById(R.id.constraintLayoutCharEditAbilityInfo).setVisibility(View.VISIBLE);
             }
         });

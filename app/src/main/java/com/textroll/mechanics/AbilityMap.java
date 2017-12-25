@@ -68,12 +68,10 @@ public class AbilityMap {
     }
 
     private void recursiveAbilityCheck(ArrayList<String> strings, String key) {
-        if (strings.contains(key)) {
-            strings.remove(key);
-        } else {
+        if (!strings.contains(key)) {
             strings.add(key);
             for (AbilityNode next : abilities.get(key).getNext()) {
-                recursiveAbilityCheck(strings, next.key);
+                if (next.isForPlayers()) recursiveAbilityCheck(strings, next.key);
             }
         }
     }

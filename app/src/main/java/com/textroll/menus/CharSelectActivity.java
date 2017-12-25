@@ -22,6 +22,7 @@ import com.textroll.classes.Instances;
 import com.textroll.mechanics.Ability;
 import com.textroll.mechanics.ActiveAbility;
 import com.textroll.mechanics.EncounterChain;
+import com.textroll.mechanics.Item;
 import com.textroll.mechanics.Player;
 import com.textroll.textroll.R;
 
@@ -60,18 +61,18 @@ public class CharSelectActivity extends AppCompatActivity {
         Instances.pc = (Player) charSelectSpinner.getSelectedItem();
         if (Instances.pc.getCurrentQuestKey() != null) {
             Instances.mDatabase.child("encounterChains").child(Instances.pc.getCurrentQuestKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Instances.encounters = new EncounterChain(dataSnapshot);
-                for (int i = 0; i < Instances.pc.getCurrentQuestEncounterId(); i++) {
-                    Instances.encounters.next();
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Instances.encounters = new EncounterChain(dataSnapshot);
+                    for (int i = 0; i < Instances.pc.getCurrentQuestEncounterId(); i++) {
+                        Instances.encounters.next();
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
+                }
             });
         }
         Intent intent = new Intent(getApplicationContext(), TownMenuActivity.class);
@@ -80,15 +81,17 @@ public class CharSelectActivity extends AppCompatActivity {
     }
 
     public void deleteSelectedCharacter(View view) {
-        new AlertDialog.Builder(this).setTitle("Are you sure?").setMessage("This can't be undone!").setIcon(android.R.drawable.ic_dialog_alert).setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Spinner charSelect = findViewById(R.id.spinnerCharacterSelect);
-                ((Player) (charSelect).getSelectedItem()).deleteFromDatabase();
-                updateCharacterDisplay(null);
-                populateCharacterSpinner();
-            }
-        }).setNegativeButton(android.R.string.no, null).show();
+        final Spinner charSelect = findViewById(R.id.spinnerCharacterSelect);
+        if ((charSelect).getSelectedItem() != null) {
+            new AlertDialog.Builder(this).setTitle("Are you sure?").setMessage("This can't be undone!").setIcon(android.R.drawable.ic_dialog_alert).setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    ((Player) (charSelect).getSelectedItem()).deleteFromDatabase();
+                    updateCharacterDisplay(null);
+                    populateCharacterSpinner();
+                }
+            }).setNegativeButton(android.R.string.no, null).show();
+        }
     }
 
     private void populateCharacterSpinner() {
@@ -142,6 +145,10 @@ public class CharSelectActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.textViewCharSelectGoldVal)).setText(String.valueOf(character.getGold()));
             AbilityArrayAdapter<ActiveAbility> adapterActives = new AbilityArrayAdapter<ActiveAbility>(CharSelectActivity.this, android.R.layout.simple_list_item_1, character.getAbilities());
             ((ListView) (findViewById(R.id.listViewCharSelectActives))).setAdapter(adapterActives);
+            ArrayList characterEquippedItems = new ArrayList();
+            characterEquippedItems.addAll(character.getEquippedItems().values());
+            ArrayAdapter<Item> adapterEquippedItems = new ArrayAdapter<Item>(CharSelectActivity.this, android.R.layout.simple_list_item_1, characterEquippedItems);
+            ((ListView) (findViewById(R.id.listViewCharSelectEquipped))).setAdapter(adapterEquippedItems);
             findViewById(R.id.linearLayoutCharSelectOuter).setVisibility(View.VISIBLE);
         }
     }

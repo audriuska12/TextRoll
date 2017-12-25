@@ -58,6 +58,7 @@ public class AttributeContainer implements Serializable {
         this.endurance.setBase(Integer.valueOf((String) snap.child("end").getValue()));
         this.intelligence.setBase(Integer.valueOf((String) snap.child("int").getValue()));
         this.magic.setBase(Integer.valueOf((String) snap.child("mag").getValue()));
+        this.getMaxHealth().setBase((snapshot.child("hp").exists()) ? Integer.valueOf((String) snap.child("hp").getValue()) : 0);
     }
 
     public void recordToFirebase(DatabaseReference attributes) {
@@ -66,5 +67,6 @@ public class AttributeContainer implements Serializable {
         attributes.child("end").setValue(String.valueOf(this.endurance.getBaseValue()));
         attributes.child("int").setValue(String.valueOf(this.intelligence.getBaseValue()));
         attributes.child("mag").setValue(String.valueOf(this.magic.getBaseValue()));
+        attributes.child("hp").setValue(String.valueOf(this.getMaxHealth().getBaseValue()));
     }
 }

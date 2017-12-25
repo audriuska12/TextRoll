@@ -1,11 +1,10 @@
 package com.textroll.classes.abilities.active;
 
+import com.textroll.classes.effects.BerserkEffect;
 import com.textroll.mechanics.Action;
 import com.textroll.mechanics.ActiveAbility;
 import com.textroll.mechanics.Actor;
 import com.textroll.mechanics.Cooldown;
-import com.textroll.mechanics.Effect;
-import com.textroll.classes.Instances;
 
 public class Berserk extends ActiveAbility {
     public Berserk(Actor actor, int maxRank, int currentRank) {
@@ -81,39 +80,3 @@ class BerserkAction extends Action implements Cooldown{
     }
 }
 
-class BerserkEffect extends Effect{
-
-    Actor actor;
-    int duration;
-    int power;
-
-    public BerserkEffect(int power, int duration) {
-        this.duration = duration;
-        this.power = power;
-    }
-    @Override
-    public void apply(Actor target) {
-        actor = target;
-        actor.getAttributes().getStrength().modifyBonus(power);
-        actor.getEffects().add(this);
-        Instances.turnManager.log(String.format("%s enrages for %d turns and gains %d strength!\n", actor.getName(), duration, power));
-    }
-
-    @Override
-    public void remove() {
-        actor.getAttributes().getStrength().modifyBonus(-power);
-        actor.getEffects().remove(this);
-        Instances.turnManager.log(String.format("%s stops raging.\n", actor.getName()));
-    }
-
-    @Override
-    public void onTurnStart() {
-
-    }
-
-    @Override
-    public void onTurnEnd() {
-        duration--;
-        if (duration == 0) remove();
-    }
-}

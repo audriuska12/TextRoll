@@ -3,6 +3,7 @@ package com.textroll.classes.abilities.active;
 import com.textroll.mechanics.Action;
 import com.textroll.mechanics.ActiveAbility;
 import com.textroll.mechanics.Actor;
+import com.textroll.mechanics.AttributeContainer;
 import com.textroll.mechanics.Enemy;
 import com.textroll.classes.Instances;
 import com.textroll.mechanics.Player;
@@ -32,8 +33,7 @@ class BasicAttackAction extends Action{
 
     public void execute() {
         int dmgDealt = user.getAttributes().getStrength().getEffectiveValue();
-        target.takeDamage(dmgDealt);
-        Instances.turnManager.log(String.format("%s dealt %d damage to %s! \n", user.getName(), dmgDealt, target.getName()));
+        target.takeDamage(dmgDealt, user);
     }
 
     @Override
@@ -50,6 +50,12 @@ class BasicAttackAction extends Action{
     public int getPriority() {
         return user.getAttributes().getStrength().getEffectiveValue();
     }
+
+    @Override
+    public int getThreat(Actor actor) {
+        return actor.getThreat();
+    }
+
     @Override
     public String toString(){
         return "Basic Attack";

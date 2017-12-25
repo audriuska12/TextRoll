@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,6 +20,7 @@ import com.textroll.mechanics.Actor;
 import com.textroll.mechanics.Action;
 import com.textroll.mechanics.ActorUIContainer;
 import com.textroll.mechanics.Enemy;
+import com.textroll.mechanics.Item;
 import com.textroll.mechanics.QuestEntry;
 import com.textroll.textroll.R;
 
@@ -109,15 +111,13 @@ public class CombatActivity extends AppCompatActivity {
     public void goToTown(View view) {
         turnManager.kill();
         pc.refresh();
-        try {
+        pc.setUi(null);
+        if (Instances.encounters.hasCurrentEncounter()) {
             Instances.encounters.getCurrentEncounter().reset();
-        } catch (IndexOutOfBoundsException e) {
-            if (Instances.pc.getQuests().get(Instances.encounters.getKey()) == null) {
-                Instances.pc.getQuests().put(Instances.encounters.getKey(), new QuestEntry(Instances.encounters.getKey(), true) {
-                });
-            } else {
-                Instances.pc.getQuests().get(Instances.encounters.getKey()).completed = true;
-            }
+        } else {
+            Instances.encounters = null;
+            Instances.pc.setCurrentQuestEncounterId(0);
+            Instances.pc.setCurrentQuestKey(null);
         }
         Intent intent = new Intent(this, TownMenuActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -162,7 +162,7 @@ public class CombatActivity extends AppCompatActivity {
     private void addCharacterDisplay(LinearLayout layout, Actor actor) {
         actor.setUi(new ActorUIContainer());
         RelativeLayout group = new RelativeLayout(this);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         group.setLayoutParams(params);
         Button targetButton = new Button(this);
         int buttonId = ++idCounter;
@@ -184,6 +184,15 @@ public class CombatActivity extends AppCompatActivity {
         healthBar.setLayoutParams(params2);
         actor.getUi().setHealthBar(healthBar);
         group.addView(healthBar, params2);
+        RelativeLayout.LayoutParams params3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        TextView nameView = new TextView(this, null);
+        nameView.setId(++idCounter);
+        params3.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        nameView.setLayoutParams(params3);
+        nameView.setText(actor.getName());
+        actor.getUi().setName(nameView);
+        group.addView(nameView);
         actor.getUi().setLayout(group);
         group.setId(++idCounter);
         actor.getUi().setId(group.getId());
@@ -191,11 +200,24 @@ public class CombatActivity extends AppCompatActivity {
     }
 
     public void win() {
-        Instances.encounters.next();
-        Instances.pc.setCurrentQuestEncounterId(Instances.pc.getCurrentQuestEncounterId() + 1);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                log("You win! \n");
+                log(String.format("Gained %d character points and %d gold!\n", Instances.encounters.getCurrentEncounter().getRewardCP(), Instances.encounters.getCurrentEncounter().getRewardG()));
+                Instances.pc.addCharacterPoints(Instances.encounters.getCurrentEncounter().getRewardCP());
+                Instances.pc.addGold(Instances.encounters.getCurrentEncounter().getRewardG());
+                ArrayList<Item> items = Instances.encounters.getCurrentEncounter().getRewardItems();
+                if (items.size() > 0) {
+                    log("Loot:\n");
+                    for (Item item : items) {
+                        log(String.format("%s\n", item.getName()));
+                        Instances.pc.getInventory().add(item);
+                    }
+                }
+                Instances.encounters.next();
+                Instances.pc.getQuests().put(Instances.encounters.getKey(), new QuestEntry(Instances.encounters.getKey(), (Instances.encounters.hasCurrentEncounter() ? Instances.encounters.getCurrentEncounterId() : 0), (Instances.pc.getQuests().get(Instances.encounters.getKey()) != null && Instances.pc.getQuests().get(Instances.encounters.getKey()).completed) || !Instances.encounters.hasCurrentEncounter()));
+                Instances.pc.setCurrentQuestEncounterId(Instances.pc.getCurrentQuestEncounterId() + 1);
                 ((Button) findViewById(R.id.buttonEndCombat)).setText(R.string.lblVictory);
             }
         });
@@ -205,6 +227,7 @@ public class CombatActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                log("You lose... \n");
                 ((Button) findViewById(R.id.buttonEndCombat)).setText(R.string.lblDefeat);
             }
         });

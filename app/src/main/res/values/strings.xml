@@ -7,7 +7,7 @@
     <string name="lblGo">Go</string>
     <string name="lblFlee">Flee</string>
     <string name="lblFight">Fight</string>
-    <string name="lblNoFight">Encounter chain complete!</string>
+    <string name="lblNoFight">No quest selected!</string>
     <string name="lblLogin">Login</string>
     <string name="lblRegister">Register</string>
     <string name="lblLia">Logged in as:</string>
@@ -46,4 +46,12 @@
     <string name="lblPurchase">Purchase</string>
     <string name="lblUpgrade">Upgrade</string>
     <string name="lblSelectQuest">Select Quest</string>
+    <string name="lblEquipped">Equipped</string>
+    <string name="lblEquip">Equip</string>
+    <string name="lblUnequip">Unequip</string>
+    <string name="lblBackpack">Backpack</string>
+    <string name="lblShop">Shop</string>
+    <string name="lblPrice">Price</string>
+    <string name="lblBuy">Buy</string>
+    <string name="lblSell">Sell</string>
 </resources>

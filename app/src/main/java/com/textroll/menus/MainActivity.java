@@ -50,8 +50,9 @@ public class MainActivity extends AppCompatActivity {
     private void verifyAuth() {
         if (Instances.user == null) {
             goToLogin();
+        } else {
+            updateNameTag();
         }
-        updateNameTag();
     }
 
 
@@ -74,6 +75,32 @@ public class MainActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Instances.abilitySnap = dataSnapshot;
                     Instances.abilityMap = new AbilityMap(Instances.abilitySnap, "Idle");
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+        if (Instances.itemSnap == null) {
+            Instances.mDatabase.child("items").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Instances.itemSnap = dataSnapshot;
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+        if (Instances.shopSnap == null) {
+            Instances.mDatabase.child("shop").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Instances.shopSnap = dataSnapshot;
                 }
 
                 @Override
@@ -122,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
         Instances.questLog = null;
         Instances.abilitySnap = null;
         Instances.enemySnap = null;
+        Instances.itemSnap = null;
+        Instances.shopSnap = null;
         goToLogin();
     }
 

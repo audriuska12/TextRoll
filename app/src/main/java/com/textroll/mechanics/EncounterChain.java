@@ -92,4 +92,8 @@ public class EncounterChain {
     public void setKey(String key) {
         this.key = key;
     }
+
+    public int getCurrentEncounterId() {
+        return currentEncounter;
+    }
 }

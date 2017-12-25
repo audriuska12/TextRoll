@@ -3,6 +3,7 @@ package com.textroll.mechanics;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.io.Serializable;
 
@@ -11,6 +12,15 @@ public class ActorUIContainer {
     ProgressBar healthBar;
     Button button;
     int id;
+    TextView name;
+
+    public TextView getName() {
+        return name;
+    }
+
+    public void setName(TextView name) {
+        this.name = name;
+    }
 
     public RelativeLayout getLayout() {
         return layout;

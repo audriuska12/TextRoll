@@ -36,6 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:onClick="goToInventory"
         android:text="@string/lblInventory"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -45,12 +46,12 @@
         android:id="@+id/buttonCharacterMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:onClick="charEditActivity"
         android:text="@string/lblCharMenu"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonInventory" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonShop" />
 
     <ViewFlipper
         android:id="@+id/viewFlipperTown"
@@ -95,25 +96,39 @@
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/buttonTownEncComplete"
+                android:id="@+id/buttonTownNoQuest"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:alpha="0.5"
+                android:clickable="false"
                 android:gravity="center"
-                android:onClick="confirmEncounterChainComplete"
                 android:text="@string/lblNoFight" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <Button
-                android:id="@+id/buttonQuestSelect"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:onClick="questSelectActivity"
-                android:text="@string/lblSelectQuest" />
-        </LinearLayout>
     </ViewFlipper>
+
+    <Button
+        android:id="@+id/buttonQuestSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:onClick="questSelectActivity"
+        android:text="@string/lblSelectQuest"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSave"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonShop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="goToShop"
+        android:text="@string/lblShop"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonInventory" />
 </android.support.constraint.ConstraintLayout>

@@ -27,7 +27,7 @@ public class DerivedAttribute implements Serializable {
         this.baseValue = baseValue;
     }
 
-    public int ModifyBase(int change){
+    public int modifyBase(int change) {
         baseValue = Math.min(baseValue+change, 0);
         return baseValue;
     }

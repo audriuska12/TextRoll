@@ -9,13 +9,16 @@ public class Encounter {
     private ArrayList<Enemy> enemies;
     private int rewardCP;
     private int rewardG;
+    private ArrayList<Item> rewardItems;
 
     public Encounter() {
         this.enemies = new ArrayList<>();
+        rewardItems = new ArrayList<>();
     }
 
     public Encounter(ArrayList<Enemy> enemies) {
         this.enemies = enemies;
+        rewardItems = new ArrayList<>();
     }
 
     public Encounter(DataSnapshot snapshot) {
@@ -24,6 +27,9 @@ public class Encounter {
         this.rewardG = Integer.valueOf((String) snapshot.child("rewardG").getValue());
         for (DataSnapshot enemy : snapshot.child("enemies").getChildren()) {
             enemies.add(new Enemy(Instances.enemySnap.child(String.valueOf(enemy.getValue()))));
+        }
+        for (DataSnapshot item : snapshot.child("rewardItems").getChildren()) {
+            rewardItems.add(new Item(Instances.itemSnap.child((String) item.getValue())));
         }
     }
 
@@ -51,5 +57,13 @@ public class Encounter {
 
     public void setRewardG(int rewardGold) {
         this.rewardG = rewardGold;
+    }
+
+    public ArrayList<Item> getRewardItems() {
+        return rewardItems;
+    }
+
+    public void setRewardItems(ArrayList<Item> rewardItems) {
+        this.rewardItems = rewardItems;
     }
 }

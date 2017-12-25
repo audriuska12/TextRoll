@@ -24,7 +24,9 @@ public class Instances {
     public static DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     public static DataSnapshot abilitySnap;
     public static DataSnapshot enemySnap;
+    public static DataSnapshot itemSnap;
     public static QuestLog questLog;
     public static AbilityMap abilityMap;
     public static String displayName;
+    public static DataSnapshot shopSnap;
 }

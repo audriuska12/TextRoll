@@ -16,6 +16,7 @@ import com.textroll.classes.Instances;
 import com.textroll.mechanics.AttributeContainer;
 import com.textroll.mechanics.EncounterChain;
 import com.textroll.mechanics.Player;
+import com.textroll.mechanics.QuestEntry;
 import com.textroll.textroll.R;
 
 public class ChargenActivity extends AppCompatActivity {
@@ -222,6 +223,9 @@ public class ChargenActivity extends AppCompatActivity {
             attributes.getEndurance().setBase(end);
             attributes.getIntelligence().setBase(intl);
             attributes.getMagic().setBase(mag);
+            Instances.pc.getQuests().put("Intro", new QuestEntry("Intro", 0, false));
+            Instances.pc.setCurrentQuestKey("Intro");
+            Instances.pc.setCurrentQuestEncounterId(0);
             Instances.mDatabase.child("encounterChains").child("Intro").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

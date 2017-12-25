@@ -28,15 +28,17 @@ public class QuestLog {
         this.quests = quests;
     }
 
-    public ArrayList<String> getAvailableQuests(Player player) {
+    public ArrayList<String> getAvailableQuests() {
         ArrayList<String> questKeys = new ArrayList<>();
-        for (Map.Entry<String, QuestEntry> quest : player.getQuests().entrySet()) {
+        for (Map.Entry<String, QuestEntry> quest : Instances.pc.getQuests().entrySet()) {
             String questName = quest.getValue().key;
             recursiveQuestCheck(questKeys, questName);
         }
-        for (Map.Entry<String, QuestEntry> quest : player.getQuests().entrySet()) {
+        for (Map.Entry<String, QuestEntry> quest : Instances.pc.getQuests().entrySet()) {
             String questName = quest.getValue().key;
-            if (!quests.get(questName).isRepeatable()) questKeys.remove(questName);
+            if (quest.getValue().completed && !quests.get(questName).isRepeatable()) {
+                questKeys.remove(questName);
+            }
         }
         return questKeys;
     }
@@ -57,12 +59,12 @@ public class QuestLog {
     }
 
     private void recursiveQuestCheck(ArrayList<String> strings, String key) {
-        if (strings.contains(key) && !quests.get(key).isRepeatable()) {
-            strings.remove(key);
-        } else {
+        if (!strings.contains(key)) {
             strings.add(key);
-            for (QuestNode next : quests.get(key).getNext()) {
-                recursiveQuestCheck(strings, next.key);
+            if (Instances.pc.getQuests().get(key) != null && Instances.pc.getQuests().get(key).completed) {
+                for (QuestNode next : quests.get(key).getNext()) {
+                    recursiveQuestCheck(strings, next.key);
+                }
             }
         }
     }

@@ -6,9 +6,11 @@ import com.textroll.classes.Instances;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class Actor implements Serializable {
 
+    public ArrayList<ItemEffect> itemEffects;
     protected ArrayList<ActiveAbility> abilities;
     protected ArrayList<Action> actions;
     protected ArrayList<Action> availableActions;
@@ -19,6 +21,9 @@ public abstract class Actor implements Serializable {
     protected String name;
     protected String firebaseKey;
     protected int energy = 0;
+    protected transient int threat = 0;
+    protected HashMap<Item.itemType, Item> equippedItems;
+    protected ArrayList<Item> inventory;
 
     public Actor(String name) {
         this.setAttributes(new AttributeContainer());
@@ -28,6 +33,9 @@ public abstract class Actor implements Serializable {
         this.effects = new ArrayList<>();
         this.setName(name);
         this.setUi(new ActorUIContainer());
+        this.inventory = new ArrayList<>();
+        this.equippedItems = new HashMap<>();
+        this.itemEffects = new ArrayList<>();
         this.refresh();
     }
 
@@ -36,7 +44,36 @@ public abstract class Actor implements Serializable {
         this.firebaseKey = snapshot.getKey();
         attributes.getFromSnapshot(snapshot);
         AbilityDao.getFromSnapshot(this, snapshot);
+        InventoryDao.getFromSnapshot(this, snapshot.child("inventory"));
         this.refresh();
+    }
+
+    public int getThreat() {
+        return threat;
+    }
+
+    public void setThreat(int threat) {
+        this.threat = threat;
+    }
+
+    public void modifyThreat(int threat) {
+        this.threat += threat;
+    }
+
+    public HashMap<Item.itemType, Item> getEquippedItems() {
+        return equippedItems;
+    }
+
+    public void setEquippedItems(HashMap<Item.itemType, Item> equippedItems) {
+        this.equippedItems = equippedItems;
+    }
+
+    public ArrayList<Item> getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(ArrayList<Item> inventory) {
+        this.inventory = inventory;
     }
 
     public int getEnergy() {
@@ -67,8 +104,24 @@ public abstract class Actor implements Serializable {
         DatabaseReference ref = Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(firebaseKey);
         attributes.recordToFirebase(ref.child("attributes"));
         AbilityDao.recordToFirebase(this, ref.child("abilities"));
+        InventoryDao.recordToFirebase(this, ref.child("inventory"));
     }
 
+    public void equipItem(Item item) {
+        Item.itemType type = item.getType();
+        if (equippedItems.get(type) != null) {
+            unequipItem(equippedItems.get(type));
+        }
+        this.equippedItems.put(type, item);
+        inventory.remove(item);
+        item.onEquip(this);
+    }
+
+    public void unequipItem(Item item) {
+        item.onUnequip(this);
+        this.equippedItems.remove(item.getType());
+        this.inventory.add(item);
+    }
     public ArrayList<Action> getAvailableActions() {
         return availableActions;
     }
@@ -168,12 +221,50 @@ public abstract class Actor implements Serializable {
         }
         currentHealth = getMaximumHealth();
         energy = 0;
+        threat = 0;
     }
 
-    public void takeDamage(int damage) {
+    public void takeDamage(int damage, Actor source) {
+        for (Effect e : effects) {
+            damage = e.onTakeDamage(damage, source);
+        }
+        for (ItemEffect e : itemEffects) {
+            damage = e.onTakeDamage(damage, source);
+        }
         if (damage > 0) {
             currentHealth -= damage;
+            Instances.turnManager.log(String.format("%s dealt %d damage to %s! \n", source.getName(), damage, getName()));
         }
+        if (currentHealth <= 0) {
+            onDying();
+        }
+    }
+
+    private void onDying() {
+        boolean stillDying = true;
+        for (Effect e : effects) {
+            stillDying = e.onDying();
+            if (!stillDying) break;
+        }
+        if (stillDying) {
+            for (ItemEffect e : itemEffects) {
+                stillDying = e.onDying();
+                if (!stillDying) break;
+            }
+        }
+        if (stillDying) {
+            die();
+        }
+    }
+
+    private void die() {
+        for (Effect e : effects) {
+            e.onDeath();
+        }
+        for (Effect e : itemEffects) {
+            e.onDeath();
+        }
+        Instances.turnManager.processDeath(this);
     }
 
     public abstract Action takeAction();
@@ -192,6 +283,9 @@ public abstract class Actor implements Serializable {
     }
 
     public void startTurn() {
+        for (Effect e : itemEffects) {
+            e.onTurnStart();
+        }
         for (Effect e : effects) {
             e.onTurnStart();
         }
@@ -203,6 +297,9 @@ public abstract class Actor implements Serializable {
     }
 
     public void endTurn() {
+        for (Effect e : itemEffects) {
+            e.onTurnEnd();
+        }
         for (Effect e : effects) {
             e.onTurnEnd();
         }
@@ -211,5 +308,9 @@ public abstract class Actor implements Serializable {
     @Override
     public String toString() {
         return this.name;
+    }
+
+    public void heal(int healing) {
+        if (healing > 0) currentHealth = Math.min(getMaximumHealth(), currentHealth + healing);
     }
 }

@@ -31,45 +31,53 @@ public class LoginActivity extends AppCompatActivity {
     public void login(View view) {
         String email = ((TextView) findViewById(R.id.boxEmail)).getText().toString();
         String password = ((TextView) findViewById(R.id.boxPassword)).getText().toString();
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Instances.user = mAuth.getCurrentUser();
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            FirebaseException e = (FirebaseException) task.getException();
-                            Toast.makeText(LoginActivity.this, "Failed Login: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            setResult(RESULT_CANCELED);
+        if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
+            Toast.makeText(LoginActivity.this, "Must enter username and password", Toast.LENGTH_SHORT).show();
+        } else {
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Instances.user = mAuth.getCurrentUser();
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                FirebaseException e = (FirebaseException) task.getException();
+                                Toast.makeText(LoginActivity.this, "Failed Login", Toast.LENGTH_SHORT).show();
+                                setResult(RESULT_CANCELED);
+                            }
                         }
-                    }
-                });
+                    });
+        }
     }
 
     public void register(View view) {
         String email = ((TextView) findViewById(R.id.boxEmail)).getText().toString();
         String password = ((TextView) findViewById(R.id.boxPassword)).getText().toString();
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Instances.user = mAuth.getCurrentUser();
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            FirebaseException e = (FirebaseException) task.getException();
-                            Toast.makeText(LoginActivity.this, "Failed Registration: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            setResult(RESULT_CANCELED);
+        if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
+            Toast.makeText(LoginActivity.this, "Must enter username and password", Toast.LENGTH_SHORT).show();
+        } else {
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Instances.user = mAuth.getCurrentUser();
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                FirebaseException e = (FirebaseException) task.getException();
+                                Toast.makeText(LoginActivity.this, "Failed Registration: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                setResult(RESULT_CANCELED);
+                            }
                         }
-                    }
-                });
+                    });
+        }
     }
 
     public void quit(View view) {

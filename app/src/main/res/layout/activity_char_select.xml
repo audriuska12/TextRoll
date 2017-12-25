@@ -202,13 +202,13 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/textViewInventory"
+                    android:id="@+id/textViewCharSelectEquipped"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/lblInventory" />
+                    android:text="@string/lblEquipped" />
 
                 <ListView
-                    android:id="@+id/listViewCharSelectInventory"
+                    android:id="@+id/listViewCharSelectEquipped"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.9" />
