@@ -8,22 +8,22 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.textroll.mechanics.Ability;
-import com.textroll.mechanics.ActiveAbility;
 
 import java.util.List;
 
-/**
- * Created by audri on 2017-12-17.
- */
-public class AbilityArrayAdapter<T extends Ability> extends ArrayAdapter {
-    public AbilityArrayAdapter(@NonNull Context context, int resource, List<T> abilities) {
+public class AbilityArrayAdapter extends ArrayAdapter {
+    AbilityArrayAdapter(@NonNull Context context, int resource, List<? extends Ability> abilities) {
         super(context, resource, abilities);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        Ability ability = (Ability) getItem(position);
         TextView view = (TextView) super.getView(position, convertView, parent);
-        view.setText(((ActiveAbility) getItem(position)).getStatName());
+        if (ability != null) {
+            view.setText(ability.getStatName());
+        }
         return view;
     }
 }

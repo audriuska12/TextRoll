@@ -1,12 +1,5 @@
 package com.textroll.mechanics;
 
-import com.google.firebase.database.DatabaseReference;
-import com.textroll.mechanics.Effect;
-
-/**
- * Created by audri on 2017-12-20.
- */
-
 public abstract class ItemEffect extends Effect {
 
     @Override
@@ -21,4 +14,14 @@ public abstract class ItemEffect extends Effect {
     }
 
     public abstract String getDescription();
+
+    void onStartOfCombat() {
+    }
+
+    void onEndOfCombat() {
+    }
+
+    public int onReceiveHealing(int healing, Actor source) {
+        return healing;
+    }
 }

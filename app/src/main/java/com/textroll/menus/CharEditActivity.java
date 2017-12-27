@@ -1,8 +1,8 @@
 package com.textroll.menus;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 public class CharEditActivity extends AppCompatActivity {
     private Player modified;
@@ -83,9 +84,12 @@ public class CharEditActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.textViewCharEditEndVal)).setText(String.valueOf(modified.getAttributes().getEndurance().getBaseValue()));
         ((TextView) findViewById(R.id.textViewCharEditIntVal)).setText(String.valueOf(modified.getAttributes().getIntelligence().getBaseValue()));
         ((TextView) findViewById(R.id.textViewCharEditMagVal)).setText(String.valueOf(modified.getAttributes().getMagic().getBaseValue()));
-        AbilityArrayAdapter abilitiesPc = new AbilityArrayAdapter(CharEditActivity.this, android.R.layout.simple_list_item_1, modified.getAbilities());
+        ArrayList<Ability> jointAbilities = new ArrayList<>();
+        jointAbilities.addAll(modified.getAbilities());
+        jointAbilities.addAll(modified.getPassives());
+        AbilityArrayAdapter abilitiesPc = new AbilityArrayAdapter(CharEditActivity.this, android.R.layout.simple_list_item_1, jointAbilities);
         ((ListView) findViewById(R.id.listViewCharEditAbilitiesPc)).setAdapter(abilitiesPc);
-        AbilityArrayAdapter<Ability> abilitiesAv = new AbilityArrayAdapter<>(CharEditActivity.this, android.R.layout.simple_list_item_1, Instances.abilityMap.getAvailableAbilities(modified));
+        AbilityArrayAdapter abilitiesAv = new AbilityArrayAdapter(CharEditActivity.this, android.R.layout.simple_list_item_1, Instances.abilityMap.getAvailableAbilities(modified));
         ((ListView) findViewById(R.id.listViewCharEditAbilitiesAvailable)).setAdapter(abilitiesAv);
         if (selectedAbility == null) {
             findViewById(R.id.constraintLayoutCharEditAbilityInfo).setVisibility(View.INVISIBLE);

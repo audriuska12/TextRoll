@@ -9,6 +9,15 @@ import java.util.List;
 public abstract class Action implements Serializable {
     protected Actor user;
     protected Actor target;
+
+    public Actor getUser() {
+        return user;
+    }
+
+    public Actor getTarget() {
+        return target;
+    }
+
     public void setTarget(Actor target){
         this.target = target;
     }
@@ -20,7 +29,7 @@ public abstract class Action implements Serializable {
 
     public abstract int getPriority();
 
-    public List<Actor> getAvailableTargets() {
+    List<Actor> getAvailableTargets() {
         ArrayList<Actor> targets = new ArrayList<>();
         ArrayList<Actor> actors = new ArrayList<>();
         actors.add(Instances.pc);

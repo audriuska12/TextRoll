@@ -1,14 +1,13 @@
 package com.textroll.mechanics;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
 
 import java.io.Serializable;
 
 public abstract class Effect implements Serializable {
     protected Actor actor;
 
-    public Effect() {
+    protected Effect() {
     }
 
     public Effect(DataSnapshot snapshot) {
@@ -17,24 +16,36 @@ public abstract class Effect implements Serializable {
     public void apply(Actor target) {
         actor = target;
         actor.effects.add(this);
+        onApply();
+    }
+
+    void onApply() {
     }
 
     public void remove() {
+        onRemove();
         actor.effects.remove(this);
         this.actor = null;
+    }
+
+    void onRemove() {
     }
     public abstract void onTurnStart();
 
     public abstract void onTurnEnd();
 
-    public int onTakeDamage(int damage, Actor source) {
+    int onTakeDamage(int damage, Actor source) {
         return damage;
     }
 
-    public boolean onDying() {
+    boolean onDying() {
         return true;
     }
 
-    public void onDeath() {
+    void onDeath() {
+    }
+
+    public int onReceiveHealing(int healing, Actor source) {
+        return healing;
     }
 }

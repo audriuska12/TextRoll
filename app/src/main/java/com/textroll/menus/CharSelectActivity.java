@@ -1,14 +1,11 @@
 package com.textroll.menus;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -19,15 +16,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.textroll.classes.Instances;
-import com.textroll.mechanics.Ability;
-import com.textroll.mechanics.ActiveAbility;
 import com.textroll.mechanics.EncounterChain;
 import com.textroll.mechanics.Item;
 import com.textroll.mechanics.Player;
 import com.textroll.textroll.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CharSelectActivity extends AppCompatActivity {
 
@@ -104,6 +98,7 @@ public class CharSelectActivity extends AppCompatActivity {
                     try {
                         characters.add(new Player(snapshot));
                     } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
                 }
@@ -120,7 +115,7 @@ public class CharSelectActivity extends AppCompatActivity {
                         updateCharacterDisplay(null);
                     }
                 });
-                ArrayAdapter<Player> arrayAdapter = new ArrayAdapter<Player>(CharSelectActivity.this, android.R.layout.simple_spinner_item, characters);
+                ArrayAdapter<Player> arrayAdapter = new ArrayAdapter<>(CharSelectActivity.this, android.R.layout.simple_spinner_item, characters);
                 arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
                 charSelectSpinner.setAdapter(arrayAdapter);
             }
@@ -143,8 +138,10 @@ public class CharSelectActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.textViewCharSelectValMag)).setText(String.valueOf(character.getAttributes().getMagic().getBaseValue()));
             ((TextView) findViewById(R.id.textViewCharSelectCPVal)).setText(String.valueOf(character.getCharacterPoints()));
             ((TextView) findViewById(R.id.textViewCharSelectGoldVal)).setText(String.valueOf(character.getGold()));
-            AbilityArrayAdapter<ActiveAbility> adapterActives = new AbilityArrayAdapter<ActiveAbility>(CharSelectActivity.this, android.R.layout.simple_list_item_1, character.getAbilities());
+            AbilityArrayAdapter adapterActives = new AbilityArrayAdapter(CharSelectActivity.this, android.R.layout.simple_list_item_1, character.getAbilities());
             ((ListView) (findViewById(R.id.listViewCharSelectActives))).setAdapter(adapterActives);
+            AbilityArrayAdapter adapterPassives = new AbilityArrayAdapter(CharSelectActivity.this, android.R.layout.simple_list_item_1, character.getPassives());
+            ((ListView) (findViewById(R.id.listViewCharSelectPassives))).setAdapter(adapterPassives);
             ArrayList characterEquippedItems = new ArrayList();
             characterEquippedItems.addAll(character.getEquippedItems().values());
             ArrayAdapter<Item> adapterEquippedItems = new ArrayAdapter<Item>(CharSelectActivity.this, android.R.layout.simple_list_item_1, characterEquippedItems);

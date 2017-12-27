@@ -3,9 +3,7 @@ package com.textroll.classes.abilities.active;
 import com.textroll.mechanics.Action;
 import com.textroll.mechanics.ActiveAbility;
 import com.textroll.mechanics.Actor;
-import com.textroll.mechanics.AttributeContainer;
 import com.textroll.mechanics.Enemy;
-import com.textroll.classes.Instances;
 import com.textroll.mechanics.Player;
 
 public class BasicAttack extends ActiveAbility {
@@ -16,7 +14,7 @@ public class BasicAttack extends ActiveAbility {
     }
 
     public String getFirebaseName() {
-        return "Basic Attack";
+        return "BasicAttack";
     }
 
     @Override
@@ -27,7 +25,7 @@ public class BasicAttack extends ActiveAbility {
 
 class BasicAttackAction extends Action{
 
-    public BasicAttackAction(Actor actor){
+    BasicAttackAction(Actor actor) {
         this.user = actor;
     }
 

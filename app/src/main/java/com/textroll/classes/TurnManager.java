@@ -32,6 +32,9 @@ public class TurnManager implements Runnable {
     }
 
     public void run() {
+        for (Actor a : actors) {
+            a.startCombat();
+        }
         while (!isKilled && fightOngoing()) {
             int maxEnergy = 0;
             for (int i = 0; i < actors.size(); i++) {
@@ -73,6 +76,7 @@ public class TurnManager implements Runnable {
             }
             Action action = current.takeAction();
             if (action != null) {
+                log(String.format("%s uses %s on %s.\n", current, action, action.getTarget()));
                 action.execute();
                 combat.runOnUiThread(new Runnable() {
                     @Override
@@ -93,6 +97,9 @@ public class TurnManager implements Runnable {
 
         }
         if (!isKilled) {
+            for (Actor a : actors) {
+                a.endCombat();
+            }
             if (playerIsAlive()) {
                 combat.win();
             } else {
@@ -111,15 +118,15 @@ public class TurnManager implements Runnable {
     }
 
 
-    public boolean fightOngoing() {
+    private boolean fightOngoing() {
         return (!isKilled && playerIsAlive() && anyEnemiesAlive());
     }
 
-    public boolean playerIsAlive() {
+    private boolean playerIsAlive() {
         return !Instances.pc.isDead();
     }
 
-    public boolean anyEnemiesAlive() {
+    private boolean anyEnemiesAlive() {
         for (Enemy e : Instances.enemies) {
             if (!e.isDead()) return true;
         }

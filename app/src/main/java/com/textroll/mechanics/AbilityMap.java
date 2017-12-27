@@ -5,14 +5,9 @@ import com.google.firebase.database.DataSnapshot;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-
-/**
- * Created by audri on 2017-12-16.
- */
 
 public class AbilityMap {
-    HashMap<String, AbilityNode> abilities;
+    private HashMap<String, AbilityNode> abilities;
 
     public AbilityMap(DataSnapshot snapshot, String startPoint) {
         abilities = new HashMap<>();
@@ -54,14 +49,28 @@ public class AbilityMap {
             String className = active.getClass().getSimpleName();
             classNames.remove(className);
         }
+        for (PassiveAbility passive : player.getPassives()) {
+            String className = passive.getClass().getSimpleName();
+            recursiveAbilityCheck(classNames, className);
+        }
+        for (PassiveAbility passive : player.getPassives()) {
+            String className = passive.getClass().getSimpleName();
+            classNames.remove(className);
+        }
         ArrayList<Ability> abl = new ArrayList<>();
         for (String name : classNames) {
             try {
                 Class cl = Class.forName("com.textroll.classes.abilities.active." + name);
                 Constructor c = cl.getConstructor(Actor.class, int.class, int.class);
                 abl.add((Ability) c.newInstance(player, abilities.get(name).getMaxRank(), 1));
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception e1) {
+                try {
+                    Class cl = Class.forName("com.textroll.classes.abilities.passive." + name);
+                    Constructor c = cl.getConstructor(Actor.class, int.class, int.class);
+                    abl.add((Ability) c.newInstance(player, abilities.get(name).getMaxRank(), 1));
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                }
             }
         }
         return abl;
