@@ -1,6 +1,7 @@
 package com.textroll.mechanics;
 
 import com.google.firebase.database.DataSnapshot;
+import com.textroll.classes.actions.StunnedAction;
 
 import java.util.List;
 
@@ -15,6 +16,9 @@ public class Enemy extends Actor {
     }
     @Override
     public Action takeAction() {
+        if (stunCounter > 0) {
+            return new StunnedAction(this);
+        }
         updateAvailableActions();
         Action action = actions.get(0);
         int maxPriority = -1;

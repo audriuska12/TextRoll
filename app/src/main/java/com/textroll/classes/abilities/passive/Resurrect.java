@@ -1,5 +1,7 @@
 package com.textroll.classes.abilities.passive;
 
+import android.annotation.SuppressLint;
+
 import com.textroll.classes.Instances;
 import com.textroll.mechanics.Actor;
 import com.textroll.mechanics.Cooldown;
@@ -15,9 +17,9 @@ public class Resurrect extends PassiveAbility implements Cooldown {
     @Override
     public boolean onDying() {
         if (cooldown == 0) {
+            cooldown = 20 - 2 * currentRank;
             Instances.turnManager.log(String.format("%s revives.\n", actor));
             actor.heal((actor.getMaximumHealth() / 5) * currentRank, actor);
-            cooldown = 20 - 2 * currentRank;
             return actor.getCurrentHealth() <= 0;
         } else return true;
     }
@@ -30,6 +32,12 @@ public class Resurrect extends PassiveAbility implements Cooldown {
     @Override
     public String getStatName() {
         return "Resurrect";
+    }
+
+    @SuppressLint("DefaultLocale")
+    @Override
+    public String getDescription() {
+        return String.format("Recover %d% of your maximum health upon taking lethal damage.", getCurrentRank() * 20);
     }
 
     @Override

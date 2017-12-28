@@ -30,6 +30,7 @@ public class CharSelectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_char_select);
         populateCharacterSpinner();
+        updateCharacterDisplay(null);
     }
 
     @Override
@@ -130,6 +131,10 @@ public class CharSelectActivity extends AppCompatActivity {
     private void updateCharacterDisplay(Player character) {
         if (character == null) {
             findViewById(R.id.linearLayoutCharSelectOuter).setVisibility(View.INVISIBLE);
+            findViewById(R.id.buttonCharSelectDelete).setAlpha(0.5f);
+            findViewById(R.id.buttonPlayWithSelected).setAlpha(0.5f);
+            findViewById(R.id.buttonCharSelectDelete).setClickable(false);
+            findViewById(R.id.buttonPlayWithSelected).setClickable(false);
         } else {
             ((TextView) findViewById(R.id.textViewCharSelectValStr)).setText(String.valueOf(character.getAttributes().getStrength().getBaseValue()));
             ((TextView) findViewById(R.id.textViewCharSelectValSpd)).setText(String.valueOf(character.getAttributes().getSpeed().getBaseValue()));
@@ -147,6 +152,10 @@ public class CharSelectActivity extends AppCompatActivity {
             ArrayAdapter<Item> adapterEquippedItems = new ArrayAdapter<Item>(CharSelectActivity.this, android.R.layout.simple_list_item_1, characterEquippedItems);
             ((ListView) (findViewById(R.id.listViewCharSelectEquipped))).setAdapter(adapterEquippedItems);
             findViewById(R.id.linearLayoutCharSelectOuter).setVisibility(View.VISIBLE);
+            findViewById(R.id.buttonCharSelectDelete).setAlpha(1);
+            findViewById(R.id.buttonPlayWithSelected).setAlpha(1);
+            findViewById(R.id.buttonCharSelectDelete).setClickable(true);
+            findViewById(R.id.buttonPlayWithSelected).setClickable(true);
         }
     }
 }

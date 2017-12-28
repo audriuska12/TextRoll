@@ -1,15 +1,12 @@
 package com.textroll.mechanics;
 
-import android.widget.Toast;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.textroll.classes.Instances;
 import com.textroll.classes.abilities.active.BasicAttack;
 import com.textroll.classes.abilities.active.Idle;
+import com.textroll.classes.actions.StunnedAction;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -92,6 +89,9 @@ public class Player extends Actor {
 
     @Override
     public Action takeAction() {
+        if (stunCounter > 0) {
+            return new StunnedAction(this);
+        }
         Action action = nextAction;
         nextAction = null;
         return action;

@@ -25,6 +25,7 @@ public abstract class Actor implements Serializable {
     protected String firebaseKey;
     protected int energy = 0;
     protected transient int threat = 0;
+    protected transient int stunCounter = 0;
     protected HashMap<Item.itemType, Item> equippedItems;
     protected ArrayList<Item> inventory;
 
@@ -50,6 +51,34 @@ public abstract class Actor implements Serializable {
         AbilityDao.getFromSnapshot(this, snapshot);
         InventoryDao.getFromSnapshot(this, snapshot.child("inventory"));
         this.refresh();
+    }
+
+    public int getStunCounter() {
+        return stunCounter;
+    }
+
+    public void setStunCounter(int stunCounter) {
+        this.stunCounter = stunCounter;
+    }
+
+    public void addStun() {
+        if (stunCounter == 0) {
+            Instances.turnManager.log(String.format("%s is stunned!\n", name));
+        }
+        stunCounter++;
+    }
+
+    public void removeStun() {
+        if (stunCounter > 0) {
+            stunCounter--;
+            if (stunCounter == 0) {
+                Instances.turnManager.log(String.format("%s is no longer stunned.\n", name));
+            }
+        }
+    }
+
+    public boolean isStunned() {
+        return stunCounter > 0;
     }
 
     public ArrayList<ItemEffect> getItemEffects() {
@@ -250,14 +279,14 @@ public abstract class Actor implements Serializable {
 
     @SuppressLint("DefaultLocale")
     public void takeDamage(int damage, Actor source) {
-        for (PassiveAbility p : passives) {
-            damage = p.onTakeDamage(damage, source);
+        for (int i = passives.size() - 1; i >= 0; i--) {
+            damage = passives.get(i).onTakeDamage(damage, source);
         }
-        for (ItemEffect e : itemEffects) {
-            damage = e.onTakeDamage(damage, source);
+        for (int i = itemEffects.size() - 1; i >= 0; i--) {
+            damage = itemEffects.get(i).onTakeDamage(damage, source);
         }
-        for (Effect e : effects) {
-            damage = e.onTakeDamage(damage, source);
+        for (int i = effects.size() - 1; i >= 0; i--) {
+            damage = effects.get(i).onTakeDamage(damage, source);
         }
         if (damage > 0) {
             currentHealth -= damage;
@@ -270,19 +299,19 @@ public abstract class Actor implements Serializable {
 
     private void onDying() {
         boolean stillDying = true;
-        for (PassiveAbility p : passives) {
-            stillDying = p.onDying();
+        for (int i = passives.size() - 1; i >= 0; i--) {
+            stillDying = passives.get(i).onDying();
             if (!stillDying) break;
         }
         if (stillDying) {
-            for (ItemEffect e : itemEffects) {
-                stillDying = e.onDying();
+            for (int i = itemEffects.size() - 1; i >= 0; i--) {
+                stillDying = itemEffects.get(i).onDying();
                 if (!stillDying) break;
             }
         }
         if (stillDying) {
-            for (Effect e : effects) {
-                stillDying = e.onDying();
+            for (int i = effects.size() - 1; i >= 0; i--) {
+                stillDying = effects.get(i).onDying();
                 if (!stillDying) break;
             }
         }
@@ -292,14 +321,14 @@ public abstract class Actor implements Serializable {
     }
 
     private void die() {
-        for (PassiveAbility p : passives) {
-            p.onDeath();
+        for (int i = passives.size() - 1; i >= 0; i--) {
+            passives.get(i).onDeath();
         }
-        for (ItemEffect e : itemEffects) {
-            e.onDeath();
+        for (int i = itemEffects.size() - 1; i >= 0; i--) {
+            itemEffects.get(i).onDeath();
         }
-        for (Effect e : effects) {
-            e.onDeath();
+        for (int i = effects.size() - 1; i >= 0; i--) {
+            effects.get(i).onDeath();
         }
         Instances.turnManager.processDeath(this);
     }
@@ -317,35 +346,35 @@ public abstract class Actor implements Serializable {
     }
 
     public void startCombat() {
-        for (PassiveAbility p : passives) {
-            p.onStartOfCombat();
+        for (int i = passives.size() - 1; i >= 0; i--) {
+            passives.get(i).onStartOfCombat();
         }
-        for (ItemEffect e : itemEffects) {
-            e.onStartOfCombat();
+        for (int i = itemEffects.size() - 1; i >= 0; i--) {
+            itemEffects.get(i).onStartOfCombat();
         }
     }
 
     public void endCombat() {
-        for (PassiveAbility p : passives) {
-            p.onEndOfCombat();
+        for (int i = passives.size() - 1; i >= 0; i--) {
+            passives.get(i).onEndOfCombat();
         }
-        for (ItemEffect e : itemEffects) {
-            e.onEndOfCombat();
+        for (int i = itemEffects.size() - 1; i >= 0; i--) {
+            itemEffects.get(i).onEndOfCombat();
         }
     }
 
     public void startTurn() {
-        for (PassiveAbility p : passives) {
-            p.onTurnStart();
-            if (p instanceof Cooldown) {
-                ((Cooldown) p).coolDown();
+        for (int i = passives.size() - 1; i >= 0; i--) {
+            passives.get(i).onTurnStart();
+            if (passives.get(i) instanceof Cooldown) {
+                ((Cooldown) passives.get(i)).coolDown();
             }
         }
-        for (Effect e : itemEffects) {
-            e.onTurnStart();
+        for (int i = itemEffects.size() - 1; i >= 0; i--) {
+            itemEffects.get(i).onTurnStart();
         }
-        for (Effect e : effects) {
-            e.onTurnStart();
+        for (int i = effects.size() - 1; i >= 0; i--) {
+            effects.get(i).onTurnStart();
         }
         for (Action a : actions) {
             if (a instanceof Cooldown) {
@@ -355,14 +384,14 @@ public abstract class Actor implements Serializable {
     }
 
     public void endTurn() {
-        for (PassiveAbility p : passives) {
-            p.onTurnEnd();
+        for (int i = passives.size() - 1; i >= 0; i--) {
+            passives.get(i).onTurnEnd();
         }
-        for (Effect e : itemEffects) {
-            e.onTurnEnd();
+        for (int i = itemEffects.size() - 1; i >= 0; i--) {
+            itemEffects.get(i).onTurnEnd();
         }
-        for (Effect e : effects) {
-            e.onTurnEnd();
+        for (int i = effects.size() - 1; i >= 0; i--) {
+            effects.get(i).onTurnEnd();
         }
     }
 
@@ -373,14 +402,14 @@ public abstract class Actor implements Serializable {
 
     @SuppressLint("DefaultLocale")
     public void heal(int healing, Actor source) {
-        for (PassiveAbility p : passives) {
-            healing = p.onReceiveHealing(healing, source);
+        for (int i = passives.size() - 1; i >= 0; i--) {
+            healing = passives.get(i).onReceiveHealing(healing, source);
         }
-        for (ItemEffect e : itemEffects) {
-            healing = e.onReceiveHealing(healing, source);
+        for (int i = itemEffects.size() - 1; i >= 0; i--) {
+            healing = itemEffects.get(i).onReceiveHealing(healing, source);
         }
-        for (Effect e : effects) {
-            healing = e.onReceiveHealing(healing, source);
+        for (int i = effects.size() - 1; i >= 0; i--) {
+            healing = effects.get(i).onReceiveHealing(healing, source);
         }
         if (healing > 0) {
             currentHealth = Math.min(currentHealth + healing, getMaximumHealth());

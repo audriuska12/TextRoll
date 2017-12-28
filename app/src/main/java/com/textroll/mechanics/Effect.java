@@ -19,7 +19,7 @@ public abstract class Effect implements Serializable {
         onApply();
     }
 
-    void onApply() {
+    protected void onApply() {
     }
 
     public void remove() {
@@ -28,7 +28,7 @@ public abstract class Effect implements Serializable {
         this.actor = null;
     }
 
-    void onRemove() {
+    protected void onRemove() {
     }
     public abstract void onTurnStart();
 

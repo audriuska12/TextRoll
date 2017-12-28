@@ -3,7 +3,6 @@ package com.textroll.mechanics;
 import com.google.firebase.database.DataSnapshot;
 import com.textroll.classes.Instances;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +31,7 @@ public class QuestLog {
         ArrayList<String> questKeys = new ArrayList<>();
         for (Map.Entry<String, QuestEntry> quest : Instances.pc.getQuests().entrySet()) {
             String questName = quest.getValue().key;
-            recursiveQuestCheck(questKeys, questName);
+            questCheck(questKeys, questName);
         }
         for (Map.Entry<String, QuestEntry> quest : Instances.pc.getQuests().entrySet()) {
             String questName = quest.getValue().key;
@@ -58,14 +57,15 @@ public class QuestLog {
         }
     }
 
-    private void recursiveQuestCheck(ArrayList<String> strings, String key) {
+    private void questCheck(ArrayList<String> strings, String key) {
         if (!strings.contains(key)) {
             strings.add(key);
-            if (Instances.pc.getQuests().get(key) != null && Instances.pc.getQuests().get(key).completed) {
-                for (QuestNode next : quests.get(key).getNext()) {
-                    recursiveQuestCheck(strings, next.key);
-                }
+        }
+        if (Instances.pc.getQuests().get(key) != null && Instances.pc.getQuests().get(key).completed) {
+            for (QuestNode next : quests.get(key).getNext()) {
+                if (!strings.contains(next.key)) strings.add(next.key);
             }
         }
+
     }
 }

@@ -27,8 +27,7 @@ public class AbilityMap {
         int maxRank = Integer.valueOf((String) (snapshot.child(key).child("maxRank")).getValue());
         int baseCost = Integer.valueOf((String) (snapshot.child(key).child("baseCost")).getValue());
         int costPerRank = Integer.valueOf((String) (snapshot.child(key).child("costPerRank")).getValue());
-        String description = (String) (snapshot.child(key).child("description")).getValue();
-        abilities.put(key, new AbilityNode(this, key, forPlayers, maxRank, baseCost, costPerRank, description));
+        abilities.put(key, new AbilityNode(this, key, forPlayers, maxRank, baseCost, costPerRank));
         for (DataSnapshot snap : snapshot.child(key).child("unlockedAbilities").getChildren()) {
             String next = (String) snap.getValue();
             if (!abilities.containsKey(next)) {
@@ -43,15 +42,15 @@ public class AbilityMap {
         ArrayList<String> classNames = new ArrayList<>();
         for (ActiveAbility active : player.getAbilities()) {
             String className = active.getClass().getSimpleName();
-            recursiveAbilityCheck(classNames, className);
+            abilityCheck(classNames, className);
+        }
+        for (PassiveAbility passive : player.getPassives()) {
+            String className = passive.getClass().getSimpleName();
+            abilityCheck(classNames, className);
         }
         for (ActiveAbility active : player.getAbilities()) {
             String className = active.getClass().getSimpleName();
             classNames.remove(className);
-        }
-        for (PassiveAbility passive : player.getPassives()) {
-            String className = passive.getClass().getSimpleName();
-            recursiveAbilityCheck(classNames, className);
         }
         for (PassiveAbility passive : player.getPassives()) {
             String className = passive.getClass().getSimpleName();
@@ -76,12 +75,13 @@ public class AbilityMap {
         return abl;
     }
 
-    private void recursiveAbilityCheck(ArrayList<String> strings, String key) {
+    private void abilityCheck(ArrayList<String> strings, String key) {
         if (!strings.contains(key)) {
             strings.add(key);
-            for (AbilityNode next : abilities.get(key).getNext()) {
-                if (next.isForPlayers()) recursiveAbilityCheck(strings, next.key);
-            }
         }
+        for (AbilityNode next : abilities.get(key).getNext()) {
+            if (next.isForPlayers() && !strings.contains(next.key)) strings.add(next.key);
+        }
+
     }
 }

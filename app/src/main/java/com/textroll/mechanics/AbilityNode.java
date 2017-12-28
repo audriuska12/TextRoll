@@ -15,15 +15,13 @@ public class AbilityNode {
     int costPerRank;
     boolean forPlayers = false;
     int maxRank;
-    String description;
 
-    public AbilityNode(AbilityMap map, String key, boolean forPlayers, int maxRank, int baseCost, int costPerRank, String description) {
+    public AbilityNode(AbilityMap map, String key, boolean forPlayers, int maxRank, int baseCost, int costPerRank) {
         this.map = map;
         this.key = key;
         this.baseCost = baseCost;
         this.costPerRank = costPerRank;
         this.maxRank = maxRank;
-        this.description = description;
         this.forPlayers = forPlayers;
         this.previous = new ArrayList<>();
         this.next = new ArrayList<>();
@@ -59,14 +57,6 @@ public class AbilityNode {
 
     public void setMaxRank(int maxRank) {
         this.maxRank = maxRank;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public ArrayList<AbilityNode> getPrevious() {

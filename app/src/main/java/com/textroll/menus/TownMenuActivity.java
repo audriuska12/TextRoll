@@ -1,17 +1,15 @@
 package com.textroll.menus;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.textroll.classes.Instances;
 import com.textroll.textroll.R;
 
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -44,7 +42,7 @@ public class TownMenuActivity extends AppCompatActivity {
                     public void run() {
                         ViewFlipper flipper = findViewById(R.id.viewFlipperTown);
                         if (Instances.encounters == null) {
-                            if (Instances.pc.getCurrentQuestKey() != null) {
+                            if (Instances.pc != null && Instances.pc.getCurrentQuestKey() != null) {
                                 flipper.setDisplayedChild(0);
                             } else {
                                 flipper.setDisplayedChild(2);

@@ -1,5 +1,6 @@
 package com.textroll.classes;
 
+import com.textroll.classes.actions.StunnedAction;
 import com.textroll.mechanics.Action;
 import com.textroll.mechanics.Actor;
 import com.textroll.mechanics.Enemy;
@@ -67,16 +68,20 @@ public class TurnManager implements Runnable {
                         combat.refreshViews();
                     }
                 });
-                synchronized (this) {
-                    try {
-                        wait();
-                    } catch (InterruptedException ignored) {
+                if (!current.isStunned()) {
+                    synchronized (this) {
+                        try {
+                            wait();
+                        } catch (InterruptedException ignored) {
+                        }
                     }
                 }
             }
             Action action = current.takeAction();
             if (action != null) {
-                log(String.format("%s uses %s on %s.\n", current, action, action.getTarget()));
+                if (!(action instanceof StunnedAction)) {
+                    log(String.format("%s uses %s on %s.\n", current, action, action.getTarget()));
+                }
                 action.execute();
                 combat.runOnUiThread(new Runnable() {
                     @Override

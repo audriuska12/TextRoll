@@ -1,5 +1,7 @@
 package com.textroll.classes.abilities.active;
 
+import android.annotation.SuppressLint;
+
 import com.textroll.classes.effects.BerserkEffect;
 import com.textroll.mechanics.Action;
 import com.textroll.mechanics.ActiveAbility;
@@ -17,9 +19,16 @@ public class Berserk extends ActiveAbility {
         return "Berserk";
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public String getStatName() {
         return String.format("Berserk (%d/%d)", getCurrentRank(), getMaximumRank());
+    }
+
+    @SuppressLint("DefaultLocale")
+    @Override
+    public String getDescription() {
+        return String.format("Gain %d STR for %d turns", 5 * getCurrentRank(), getCurrentRank() / 2 + 2);
     }
 }
 
@@ -71,12 +80,13 @@ class BerserkAction extends Action implements Cooldown{
         } else return 1;
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public String toString(){
         if(cooldown > 0){
             return String.format("Berserk (%d)", cooldown);
         } else
-        return "Berserk";
+            return "Berserk";
     }
 }
 

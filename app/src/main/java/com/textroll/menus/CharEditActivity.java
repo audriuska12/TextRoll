@@ -58,12 +58,6 @@ public class CharEditActivity extends AppCompatActivity {
         goToTown(null);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        finish();
-    }
-
     public void goToTown(View view) {
         Intent intent = new Intent(this, TownMenuActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -96,6 +90,8 @@ public class CharEditActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.textViewCharEditCostVal)).setText("");
             ((TextView) findViewById(R.id.textViewCharEditDescVal)).setText("");
             findViewById(R.id.viewSwitcherCharEditPU).setVisibility(View.INVISIBLE);
+        } else {
+            ((TextView) (findViewById(R.id.textViewCharEditDescVal))).setText(selectedAbility.getDescription());
         }
     }
 
@@ -169,9 +165,9 @@ public class CharEditActivity extends AppCompatActivity {
         ((ListView) (findViewById(R.id.listViewCharEditAbilitiesPc))).setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ((TextView) (findViewById(R.id.textViewCharEditDescVal))).setText(Instances.abilityMap.getAbilities().get(adapterView.getItemAtPosition(i).getClass().getSimpleName()).getDescription());
                 ((ViewSwitcher) (findViewById(R.id.viewSwitcherCharEditPU))).setDisplayedChild(1);
                 selectedAbility = (Ability) adapterView.getItemAtPosition(i);
+                ((TextView) (findViewById(R.id.textViewCharEditDescVal))).setText(selectedAbility.getDescription());
                 AbilityNode node = Instances.abilityMap.getAbilities().get(selectedAbility.getClass().getSimpleName());
                 ((TextView) (findViewById((R.id.textViewCharEditCostVal)))).setText(String.valueOf(node.getBaseCost() + selectedAbility.getCurrentRank() * node.getCostPerRank()));
                 Button upgradeButton = findViewById(R.id.buttonCharEditUpgrade);
@@ -204,9 +200,9 @@ public class CharEditActivity extends AppCompatActivity {
         ((ListView) (findViewById(R.id.listViewCharEditAbilitiesAvailable))).setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ((TextView) (findViewById(R.id.textViewCharEditDescVal))).setText(Instances.abilityMap.getAbilities().get(adapterView.getItemAtPosition(i).getClass().getSimpleName()).getDescription());
                 ((ViewSwitcher) (findViewById(R.id.viewSwitcherCharEditPU))).setDisplayedChild(0);
                 selectedAbility = (Ability) adapterView.getItemAtPosition(i);
+                ((TextView) (findViewById(R.id.textViewCharEditDescVal))).setText(selectedAbility.getDescription());
                 AbilityNode node = Instances.abilityMap.getAbilities().get(selectedAbility.getClass().getSimpleName());
                 ((TextView) (findViewById((R.id.textViewCharEditCostVal)))).setText(String.valueOf(node.getBaseCost()));
                 Button purchaseButton = findViewById(R.id.buttonCharEditPurchase);

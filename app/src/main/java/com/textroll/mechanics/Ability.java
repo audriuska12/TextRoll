@@ -16,4 +16,6 @@ public interface Ability {
     String getFirebaseName();
 
     String getStatName();
+
+    String getDescription();
 }

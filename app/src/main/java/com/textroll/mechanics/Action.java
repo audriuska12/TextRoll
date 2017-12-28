@@ -29,7 +29,7 @@ public abstract class Action implements Serializable {
 
     public abstract int getPriority();
 
-    List<Actor> getAvailableTargets() {
+    protected List<Actor> getAvailableTargets() {
         ArrayList<Actor> targets = new ArrayList<>();
         ArrayList<Actor> actors = new ArrayList<>();
         actors.add(Instances.pc);
@@ -41,6 +41,6 @@ public abstract class Action implements Serializable {
     }
 
     public int getThreat(Actor actor) {
-        return 0;
+        return actor.getThreat();
     }
 }

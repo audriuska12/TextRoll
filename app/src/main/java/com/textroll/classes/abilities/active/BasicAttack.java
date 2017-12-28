@@ -21,6 +21,11 @@ public class BasicAttack extends ActiveAbility {
     public String getStatName() {
         return "Basic Attack";
     }
+
+    @Override
+    public String getDescription() {
+        return String.format("Attack your enemy, dealing %d damage", actor.getAttributes().getStrength().getEffectiveValue());
+    }
 }
 
 class BasicAttackAction extends Action{

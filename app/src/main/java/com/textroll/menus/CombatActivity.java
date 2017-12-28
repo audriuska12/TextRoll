@@ -1,10 +1,9 @@
 package com.textroll.menus;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,9 +14,10 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.textroll.classes.*;
-import com.textroll.mechanics.Actor;
+import com.textroll.classes.Instances;
+import com.textroll.classes.TurnManager;
 import com.textroll.mechanics.Action;
+import com.textroll.mechanics.Actor;
 import com.textroll.mechanics.ActorUIContainer;
 import com.textroll.mechanics.Enemy;
 import com.textroll.mechanics.Item;
@@ -26,9 +26,9 @@ import com.textroll.textroll.R;
 
 import java.util.ArrayList;
 
+import static com.textroll.classes.Instances.enemies;
 import static com.textroll.classes.Instances.pc;
 import static com.textroll.classes.Instances.turnManager;
-import static com.textroll.classes.Instances.enemies;
 
 
 public class CombatActivity extends AppCompatActivity {
@@ -51,12 +51,12 @@ public class CombatActivity extends AppCompatActivity {
         for (Enemy e : enemies) {
             addCharacterDisplay((LinearLayout) findViewById(R.id.linearLayoutEnemies), e);
         }
-        combatLog = (TextView) findViewById(R.id.combatLog);
+        combatLog = findViewById(R.id.combatLog);
         combatLog.setMovementMethod(new ScrollingMovementMethod());
         characters = new ArrayList();
         characters.add(pc);
         characters.addAll(enemies);
-        actionSelect = (Spinner) findViewById(R.id.spinnerActionSelect);
+        actionSelect = findViewById(R.id.spinnerActionSelect);
         actionSelect.setOnItemSelectedListener(new ActionSelectListener());
         refreshViews();
         deselectTarget();
@@ -76,8 +76,12 @@ public class CombatActivity extends AppCompatActivity {
                 Instances.pc.updateAvailableActions();
                 ArrayList<Action> actions = new ArrayList<>();
                 for (Action a : Instances.pc.getActions()) {
-                    if (a.validForTarget(Instances.pc, target)) {
-                        actions.add(a);
+                    try {
+                        if (a.validForTarget(Instances.pc, target)) {
+                            actions.add(a);
+                        }
+                    } catch (NullPointerException e) {
+
                     }
                 }
                 ArrayAdapter<Action> adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, actions);
@@ -96,14 +100,14 @@ public class CombatActivity extends AppCompatActivity {
 
     public void selectTarget(Actor newTarget) {
         target = newTarget;
-        Button btn = (Button) findViewById(R.id.buttonGo);
+        Button btn = findViewById(R.id.buttonGo);
         btn.setClickable(true);
         btn.setAlpha(1f);
     }
 
     public void deselectTarget() {
         target = null;
-        Button btn = (Button) findViewById(R.id.buttonGo);
+        Button btn = findViewById(R.id.buttonGo);
         btn.setClickable(false);
         btn.setAlpha(0.5f);
     }
@@ -150,10 +154,14 @@ public class CombatActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LinearLayout layout = (LinearLayout) (findViewById(c.getUi().getId()).getParent());
-                layout.removeView(findViewById(c.getUi().getId()));
-                buttons.remove(c.getUi().getButton());
-                characters.remove(c);
+                try {
+                    LinearLayout layout = (LinearLayout) (findViewById(c.getUi().getId()).getParent());
+                    layout.removeView(findViewById(c.getUi().getId()));
+                    buttons.remove(c.getUi().getButton());
+                    characters.remove(c);
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
             }
         })
         ;
@@ -259,7 +267,7 @@ public class CombatActivity extends AppCompatActivity {
     private class ActionSelectListener implements Spinner.OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            Button btn = (Button) findViewById(R.id.buttonGo);
+            Button btn = findViewById(R.id.buttonGo);
             Action action = ((Action) (adapterView.getSelectedItem()));
             if (action.isAvailable() && action.validForTarget(Instances.pc, target)) {
                 action.setTarget(target);
@@ -273,7 +281,7 @@ public class CombatActivity extends AppCompatActivity {
 
         @Override
         public void onNothingSelected(AdapterView<?> adapterView) {
-            Button btn = (Button) findViewById(R.id.buttonGo);
+            Button btn = findViewById(R.id.buttonGo);
             btn.setClickable(false);
             btn.setAlpha(.5f);
         }

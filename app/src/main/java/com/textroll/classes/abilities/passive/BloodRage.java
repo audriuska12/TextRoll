@@ -44,5 +44,10 @@ public class BloodRage extends PassiveAbility {
         return String.format("Blood Rage (%d/%d)", currentRank, maxRank);
     }
 
+    @Override
+    public String getDescription() {
+        return String.format("Gain %d STR until the end of your turn when you take damage.", getCurrentRank());
+    }
+
 
 }

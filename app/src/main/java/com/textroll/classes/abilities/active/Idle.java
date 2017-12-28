@@ -20,6 +20,11 @@ public class Idle extends ActiveAbility {
     public String getStatName() {
         return "Idle";
     }
+
+    @Override
+    public String getDescription() {
+        return "Do nothing this turn.";
+    }
 }
 
 class IdleAction extends Action {
