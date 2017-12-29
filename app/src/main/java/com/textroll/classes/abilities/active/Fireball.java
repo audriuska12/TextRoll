@@ -2,15 +2,11 @@ package com.textroll.classes.abilities.active;
 
 import android.annotation.SuppressLint;
 
+import com.textroll.classes.effects.FireballEffect;
 import com.textroll.mechanics.Action;
 import com.textroll.mechanics.ActiveAbility;
 import com.textroll.mechanics.Actor;
 import com.textroll.mechanics.Cooldown;
-import com.textroll.mechanics.Effect;
-
-/**
- * Created by audri on 2017-12-28.
- */
 
 public class Fireball extends ActiveAbility {
 
@@ -33,7 +29,7 @@ public class Fireball extends ActiveAbility {
     @SuppressLint("DefaultLocale")
     @Override
     public String getDescription() {
-        return String.format("Deal %d damage to all enemies, as well as igniting target enemy, stunning them for %d turns and dealing %d damage per turn.", (actor.getAttributes().getMagic().getEffectiveValue() * (2 + getCurrentRank())) / 5, 1 + getCurrentRank() / 5, actor.getAttributes().getMagic().getEffectiveValue() / 3);
+        return String.format("Deal %d damage to all enemies, as well as igniting target enemy, stunning them for %d turn(s) and dealing %d damage per turn.\nCooldown: %d", (actor.getAttributes().getMagic().getEffectiveValue() * (2 + getCurrentRank())) / 5, 1 + getCurrentRank() / 5, actor.getAttributes().getMagic().getEffectiveValue() / 3, 5);
     }
 }
 
@@ -50,14 +46,12 @@ class FireballAction extends Action implements Cooldown {
     @Override
     public void execute() {
         int damageDealt = (user.getAttributes().getMagic().getEffectiveValue() * (2 + ability.getCurrentRank())) / 5;
+        FireballEffect effect = new FireballEffect(user, 1 + ability.getCurrentRank() / 5, user.getAttributes().getMagic().getEffectiveValue() / 3);
+        effect.apply(target);
         for (Actor a : getAvailableTargets()) {
             a.takeDamage(damageDealt, user);
-            if (a == target) {
-                FireballEffect effect = new FireballEffect(user, 1 + ability.getCurrentRank() / 5, user.getAttributes().getMagic().getEffectiveValue() / 3);
-                effect.apply(a);
-            }
         }
-        cooldown = 5;
+        setRemainingCooldown(5);
     }
 
     @Override
@@ -103,36 +97,3 @@ class FireballAction extends Action implements Cooldown {
     }
 }
 
-class FireballEffect extends Effect {
-
-    Actor user;
-    int duration;
-    int magnitude;
-
-    public FireballEffect(Actor user, int duration, int magnitude) {
-        this.user = user;
-        this.duration = duration;
-        this.magnitude = magnitude;
-    }
-
-    @Override
-    protected void onApply() {
-        actor.addStun();
-    }
-
-    @Override
-    protected void onRemove() {
-        actor.removeStun();
-    }
-
-    @Override
-    public void onTurnStart() {
-    }
-
-    @Override
-    public void onTurnEnd() {
-        actor.takeDamage(magnitude, user);
-        duration--;
-        if (duration <= 0) remove();
-    }
-}

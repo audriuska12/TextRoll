@@ -48,4 +48,16 @@ public abstract class Effect implements Serializable {
     public int onReceiveHealing(int healing, Actor source) {
         return healing;
     }
+
+    public void beforeAttacking(Actor target) {
+    }
+
+    public void afterAttacking(Actor target) {
+    }
+
+    public void beforeAttacked(Actor attacker) {
+    }
+
+    public void afterAttacked(Actor attacker) {
+    }
 }

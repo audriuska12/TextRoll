@@ -28,6 +28,8 @@ public abstract class Actor implements Serializable {
     protected transient int stunCounter = 0;
     protected HashMap<Item.itemType, Item> equippedItems;
     protected ArrayList<Item> inventory;
+    protected transient boolean dead = false;
+    protected transient boolean dying = false;
 
     public Actor(String name) {
         this.setAttributes(new AttributeContainer());
@@ -172,6 +174,16 @@ public abstract class Actor implements Serializable {
         this.inventory.add(item);
     }
 
+    public boolean hasEffect(Class<? extends Effect> effect) {
+        for (Effect e : effects) {
+            if (e.getClass().equals(effect)) return true;
+        }
+        for (ItemEffect e : itemEffects) {
+            if (e.getClass().equals(effect)) return true;
+        }
+        return false;
+    }
+
     public ArrayList<Action> getAvailableActions() {
         return availableActions;
     }
@@ -260,7 +272,7 @@ public abstract class Actor implements Serializable {
     }
 
     public boolean isDead() {
-        return currentHealth <= 0;
+        return dead;
     }
 
     public void refresh() {
@@ -272,6 +284,11 @@ public abstract class Actor implements Serializable {
                 ((Cooldown) a).setRemainingCooldown(0);
             }
         }
+        for (PassiveAbility p : passives) {
+            if (p instanceof Cooldown) {
+                ((Cooldown) p).setRemainingCooldown(0);
+            }
+        }
         currentHealth = getMaximumHealth();
         energy = 0;
         threat = 0;
@@ -279,14 +296,18 @@ public abstract class Actor implements Serializable {
 
     @SuppressLint("DefaultLocale")
     public void takeDamage(int damage, Actor source) {
+        if (damage <= 0) return;
         for (int i = passives.size() - 1; i >= 0; i--) {
             damage = passives.get(i).onTakeDamage(damage, source);
+            if (damage <= 0) return;
         }
         for (int i = itemEffects.size() - 1; i >= 0; i--) {
             damage = itemEffects.get(i).onTakeDamage(damage, source);
+            if (damage <= 0) return;
         }
         for (int i = effects.size() - 1; i >= 0; i--) {
             damage = effects.get(i).onTakeDamage(damage, source);
+            if (damage <= 0) return;
         }
         if (damage > 0) {
             currentHealth -= damage;
@@ -298,29 +319,28 @@ public abstract class Actor implements Serializable {
     }
 
     private void onDying() {
-        boolean stillDying = true;
+        if (dying) return;
+        dying = true;
         for (int i = passives.size() - 1; i >= 0; i--) {
-            stillDying = passives.get(i).onDying();
-            if (!stillDying) break;
+            dying = passives.get(i).onDying();
+            if (!dying) return;
         }
-        if (stillDying) {
-            for (int i = itemEffects.size() - 1; i >= 0; i--) {
-                stillDying = itemEffects.get(i).onDying();
-                if (!stillDying) break;
-            }
+        for (int i = itemEffects.size() - 1; i >= 0; i--) {
+            dying = itemEffects.get(i).onDying();
+            if (!dying) return;
         }
-        if (stillDying) {
-            for (int i = effects.size() - 1; i >= 0; i--) {
-                stillDying = effects.get(i).onDying();
-                if (!stillDying) break;
-            }
+        for (int i = effects.size() - 1; i >= 0; i--) {
+            dying = effects.get(i).onDying();
+            if (!dying) return;
         }
-        if (stillDying) {
+        if (dying) {
             die();
         }
     }
 
     private void die() {
+        dead = true;
+        dying = false;
         for (int i = passives.size() - 1; i >= 0; i--) {
             passives.get(i).onDeath();
         }
@@ -402,14 +422,18 @@ public abstract class Actor implements Serializable {
 
     @SuppressLint("DefaultLocale")
     public void heal(int healing, Actor source) {
+        if (healing <= 0) return;
         for (int i = passives.size() - 1; i >= 0; i--) {
             healing = passives.get(i).onReceiveHealing(healing, source);
+            if (healing <= 0) return;
         }
         for (int i = itemEffects.size() - 1; i >= 0; i--) {
             healing = itemEffects.get(i).onReceiveHealing(healing, source);
+            if (healing <= 0) return;
         }
         for (int i = effects.size() - 1; i >= 0; i--) {
             healing = effects.get(i).onReceiveHealing(healing, source);
+            if (healing <= 0) return;
         }
         if (healing > 0) {
             currentHealth = Math.min(currentHealth + healing, getMaximumHealth());
@@ -417,6 +441,54 @@ public abstract class Actor implements Serializable {
         }
         if (currentHealth <= 0) {
             onDying();
+        }
+    }
+
+    public void beforeAttacking(Actor target) {
+        for (int i = passives.size() - 1; i >= 0; i--) {
+            passives.get(i).beforeAttacking(target);
+        }
+        for (int i = itemEffects.size() - 1; i >= 0; i--) {
+            itemEffects.get(i).beforeAttacking(target);
+        }
+        for (int i = effects.size() - 1; i >= 0; i--) {
+            effects.get(i).beforeAttacking(target);
+        }
+    }
+
+    public void afterAttacking(Actor target) {
+        for (int i = passives.size() - 1; i >= 0; i--) {
+            passives.get(i).afterAttacking(target);
+        }
+        for (int i = itemEffects.size() - 1; i >= 0; i--) {
+            itemEffects.get(i).afterAttacking(target);
+        }
+        for (int i = effects.size() - 1; i >= 0; i--) {
+            effects.get(i).afterAttacking(target);
+        }
+    }
+
+    public void beforeAttacked(Actor attacker) {
+        for (int i = passives.size() - 1; i >= 0; i--) {
+            passives.get(i).beforeAttacked(attacker);
+        }
+        for (int i = itemEffects.size() - 1; i >= 0; i--) {
+            itemEffects.get(i).beforeAttacked(attacker);
+        }
+        for (int i = effects.size() - 1; i >= 0; i--) {
+            effects.get(i).beforeAttacked(attacker);
+        }
+    }
+
+    public void afterAttacked(Actor attacker) {
+        for (int i = passives.size() - 1; i >= 0; i--) {
+            passives.get(i).afterAttacked(attacker);
+        }
+        for (int i = itemEffects.size() - 1; i >= 0; i--) {
+            itemEffects.get(i).afterAttacked(attacker);
+        }
+        for (int i = effects.size() - 1; i >= 0; i--) {
+            effects.get(i).afterAttacked(attacker);
         }
     }
 }

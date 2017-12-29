@@ -66,6 +66,13 @@ public class CombatActivity extends AppCompatActivity {
 
     public void PlayerTurnStart() {
         populateActionSpinner();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                findViewById(R.id.buttonGo).setClickable(false);
+                findViewById(R.id.buttonGo).setAlpha(0.5f);
+            }
+        });
     }
 
     public void populateActionSpinner() {
@@ -96,6 +103,8 @@ public class CombatActivity extends AppCompatActivity {
         synchronized (Instances.turnManager) {
             Instances.turnManager.notify();
         }
+        findViewById(R.id.buttonGo).setClickable(false);
+        findViewById(R.id.buttonGo).setAlpha(0.5f);
     }
 
     public void selectTarget(Actor newTarget) {
@@ -136,8 +145,12 @@ public class CombatActivity extends AppCompatActivity {
 
     public void refreshViews() {
         for (Actor c : characters) {
-            c.getUi().getHealthBar().setMax(c.getMaximumHealth());
-            c.getUi().getHealthBar().setProgress(c.getCurrentHealth());
+            try {
+                c.getUi().getHealthBar().setMax(c.getMaximumHealth());
+                c.getUi().getHealthBar().setProgress(c.getCurrentHealth());
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -9,7 +9,6 @@ import java.util.List;
 public abstract class Action implements Serializable {
     protected Actor user;
     protected Actor target;
-
     public Actor getUser() {
         return user;
     }
@@ -32,8 +31,7 @@ public abstract class Action implements Serializable {
     protected List<Actor> getAvailableTargets() {
         ArrayList<Actor> targets = new ArrayList<>();
         ArrayList<Actor> actors = new ArrayList<>();
-        actors.add(Instances.pc);
-        actors.addAll(Instances.enemies);
+        actors.addAll(Instances.turnManager.getActors());
         for (Actor t : actors) {
             if (validForTarget(user, t)) targets.add(t);
         }

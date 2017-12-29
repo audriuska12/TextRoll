@@ -37,6 +37,11 @@ public class TurnManager implements Runnable {
             a.startCombat();
         }
         while (!isKilled && fightOngoing()) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             int maxEnergy = 0;
             for (int i = 0; i < actors.size(); i++) {
                 Actor tmp = actors.get(i);
@@ -138,4 +143,7 @@ public class TurnManager implements Runnable {
         return false;
     }
 
+    public ArrayList<Actor> getActors() {
+        return actors;
+    }
 }

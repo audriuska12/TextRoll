@@ -73,4 +73,16 @@ public abstract class PassiveAbility implements Ability, Serializable {
     public int getMaximumRank() {
         return maxRank;
     }
+
+    public void beforeAttacking(Actor target) {
+    }
+
+    public void afterAttacking(Actor target) {
+    }
+
+    public void beforeAttacked(Actor attacker) {
+    }
+
+    public void afterAttacked(Actor attacker) {
+    }
 }

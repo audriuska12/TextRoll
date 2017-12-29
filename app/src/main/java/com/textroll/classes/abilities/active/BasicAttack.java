@@ -35,8 +35,15 @@ class BasicAttackAction extends Action{
     }
 
     public void execute() {
+        user.beforeAttacking(target);
+        if (user.isDead() || target.isDead()) return;
+        target.beforeAttacked(user);
+        if (user.isDead() || target.isDead()) return;
         int dmgDealt = user.getAttributes().getStrength().getEffectiveValue();
         target.takeDamage(dmgDealt, user);
+        target.afterAttacked(user);
+        if (user.isDead()) return;
+        user.afterAttacking(target);
     }
 
     @Override

@@ -28,7 +28,7 @@ public class Berserk extends ActiveAbility {
     @SuppressLint("DefaultLocale")
     @Override
     public String getDescription() {
-        return String.format("Gain %d STR for %d turns", 5 * getCurrentRank(), getCurrentRank() / 2 + 2);
+        return String.format("Gain %d STR for %d turns.\nCooldown: %d", 5 * getCurrentRank(), getCurrentRank() / 2 + 2, 4);
     }
 }
 
