@@ -43,9 +43,17 @@ class BerserkAction extends Action implements Cooldown{
     }
     @Override
     public void execute() {
+        user.beforeCasting(user);
+        if (user.isDead()) return;
+        if (!user.beforeSpellHit(user)) return;
+        if (user.isDead()) return;
         BerserkEffect effect = new BerserkEffect(5 * ability.getCurrentRank(), ability.getCurrentRank() / 2 + 2);
         effect.apply(user);
         setRemainingCooldown(4);
+        if (user.isDead()) return;
+        user.afterSpellHit(user);
+        if (user.isDead()) return;
+        user.afterCasting(user);
     }
 
     @Override

@@ -43,4 +43,9 @@ public class BerserkEffect extends Effect {
         duration--;
         if (duration == 0) remove();
     }
+
+    @Override
+    public String toString() {
+        return "Berserk";
+    }
 }

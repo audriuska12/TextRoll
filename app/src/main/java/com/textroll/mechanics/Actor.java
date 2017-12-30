@@ -276,8 +276,8 @@ public abstract class Actor implements Serializable {
     }
 
     public void refresh() {
-        for (Effect e : effects) {
-            e.remove();
+        for (int i = effects.size() - 1; i >= 0; i--) {
+            effects.get(i).remove();
         }
         for (Action a : actions) {
             if (a instanceof Cooldown) {
@@ -290,6 +290,8 @@ public abstract class Actor implements Serializable {
             }
         }
         currentHealth = getMaximumHealth();
+        dead = false;
+        dying = false;
         energy = 0;
         threat = 0;
     }
@@ -468,16 +470,17 @@ public abstract class Actor implements Serializable {
         }
     }
 
-    public void beforeAttacked(Actor attacker) {
+    public boolean beforeAttacked(Actor attacker) {
         for (int i = passives.size() - 1; i >= 0; i--) {
-            passives.get(i).beforeAttacked(attacker);
+            if (!passives.get(i).beforeAttacked(attacker)) return false;
         }
         for (int i = itemEffects.size() - 1; i >= 0; i--) {
-            itemEffects.get(i).beforeAttacked(attacker);
+            if (!itemEffects.get(i).beforeAttacked(attacker)) return false;
         }
         for (int i = effects.size() - 1; i >= 0; i--) {
-            effects.get(i).beforeAttacked(attacker);
+            if (!effects.get(i).beforeAttacked(attacker)) return false;
         }
+        return true;
     }
 
     public void afterAttacked(Actor attacker) {
@@ -489,6 +492,55 @@ public abstract class Actor implements Serializable {
         }
         for (int i = effects.size() - 1; i >= 0; i--) {
             effects.get(i).afterAttacked(attacker);
+        }
+    }
+
+    public void beforeCasting(Actor target) {
+        for (int i = passives.size() - 1; i >= 0; i--) {
+            passives.get(i).beforeCasting(target);
+        }
+        for (int i = itemEffects.size() - 1; i >= 0; i--) {
+            itemEffects.get(i).beforeCasting(target);
+        }
+        for (int i = effects.size() - 1; i >= 0; i--) {
+            effects.get(i).beforeCasting(target);
+        }
+    }
+
+    public void afterCasting(Actor target) {
+        for (int i = passives.size() - 1; i >= 0; i--) {
+            passives.get(i).afterCasting(target);
+        }
+        for (int i = itemEffects.size() - 1; i >= 0; i--) {
+            itemEffects.get(i).afterCasting(target);
+        }
+        for (int i = effects.size() - 1; i >= 0; i--) {
+            effects.get(i).afterCasting(target);
+        }
+    }
+
+    public boolean beforeSpellHit(Actor attacker) {
+        for (int i = passives.size() - 1; i >= 0; i--) {
+            if (!passives.get(i).beforeSpellHit(attacker)) return false;
+        }
+        for (int i = itemEffects.size() - 1; i >= 0; i--) {
+            if (!itemEffects.get(i).beforeSpellHit(attacker)) return false;
+        }
+        for (int i = effects.size() - 1; i >= 0; i--) {
+            if (!effects.get(i).beforeSpellHit(attacker)) return false;
+        }
+        return true;
+    }
+
+    public void afterSpellHit(Actor attacker) {
+        for (int i = passives.size() - 1; i >= 0; i--) {
+            passives.get(i).afterSpellHit(attacker);
+        }
+        for (int i = itemEffects.size() - 1; i >= 0; i--) {
+            itemEffects.get(i).afterSpellHit(attacker);
+        }
+        for (int i = effects.size() - 1; i >= 0; i--) {
+            effects.get(i).afterSpellHit(attacker);
         }
     }
 }

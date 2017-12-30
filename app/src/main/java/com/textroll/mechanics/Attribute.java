@@ -32,7 +32,7 @@ public class Attribute implements Serializable {
     }
 
     public double modifyMultiplier(double change){
-        multiplier = Math.min(multiplier+change, 0);
+        multiplier = Math.max(multiplier + change, 0);
         return multiplier;
     }
 

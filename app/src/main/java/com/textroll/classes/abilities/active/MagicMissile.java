@@ -1,5 +1,7 @@
 package com.textroll.classes.abilities.active;
 
+import android.annotation.SuppressLint;
+
 import com.textroll.mechanics.Action;
 import com.textroll.mechanics.ActiveAbility;
 import com.textroll.mechanics.Actor;
@@ -24,6 +26,7 @@ public class MagicMissile extends ActiveAbility {
         return "Magic Missile";
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public String getDescription() {
         return String.format("Deal %d damage to a single enemy", actor.getAttributes().getMagic().getEffectiveValue());
@@ -37,8 +40,13 @@ class MagicMissileAction extends Action {
 
     @Override
     public void execute() {
+        user.beforeCasting(target);
+        if (!target.beforeSpellHit(user)) return;
         int damageDealt = user.getAttributes().getMagic().getEffectiveValue();
         target.takeDamage(damageDealt, user);
+        target.afterSpellHit(user);
+        if (user.isDead()) return;
+        user.afterCasting(target);
     }
 
     @Override

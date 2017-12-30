@@ -45,13 +45,20 @@ class FireballAction extends Action implements Cooldown {
 
     @Override
     public void execute() {
+        user.beforeCasting(target);
+        if (user.isDead()) return;
         int damageDealt = (user.getAttributes().getMagic().getEffectiveValue() * (2 + ability.getCurrentRank())) / 5;
-        FireballEffect effect = new FireballEffect(user, 1 + ability.getCurrentRank() / 5, user.getAttributes().getMagic().getEffectiveValue() / 3);
-        effect.apply(target);
+        if (target.beforeSpellHit(user)) {
+            FireballEffect effect = new FireballEffect(user, 1 + ability.getCurrentRank() / 5, user.getAttributes().getMagic().getEffectiveValue() / 3);
+            effect.apply(target);
+        }
         for (Actor a : getAvailableTargets()) {
             a.takeDamage(damageDealt, user);
+            a.afterSpellHit(user);
         }
         setRemainingCooldown(5);
+        if (user.isDead()) return;
+        user.afterCasting(user);
     }
 
     @Override

@@ -31,4 +31,9 @@ public class ItemRegenerationEffect extends ItemEffect {
     public String getDescription() {
         return String.format("Regeneration %d", magnitude);
     }
+
+    @Override
+    public String toString() {
+        return "Item Regeneration";
+    }
 }

@@ -80,9 +80,23 @@ public abstract class PassiveAbility implements Ability, Serializable {
     public void afterAttacking(Actor target) {
     }
 
-    public void beforeAttacked(Actor attacker) {
+    public boolean beforeAttacked(Actor attacker) {
+        return true;
     }
 
     public void afterAttacked(Actor attacker) {
+    }
+
+    public void beforeCasting(Actor target) {
+    }
+
+    public void afterCasting(Actor target) {
+    }
+
+    public boolean beforeSpellHit(Actor attacker) {
+        return true;
+    }
+
+    public void afterSpellHit(Actor attacker) {
     }
 }

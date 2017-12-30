@@ -1,5 +1,6 @@
 package com.textroll.classes;
 
+import com.textroll.classes.actions.IdleAction;
 import com.textroll.classes.actions.StunnedAction;
 import com.textroll.mechanics.Action;
 import com.textroll.mechanics.Actor;
@@ -84,8 +85,12 @@ public class TurnManager implements Runnable {
             }
             Action action = current.takeAction();
             if (action != null) {
-                if (!(action instanceof StunnedAction)) {
-                    log(String.format("%s uses %s on %s.\n", current, action, action.getTarget()));
+                if (!(action instanceof StunnedAction || action instanceof IdleAction)) {
+                    if (action.getUser() == action.getTarget()) {
+                        log(String.format("%s uses %s.\n", current, action));
+                    } else {
+                        log(String.format("%s uses %s on %s.\n", current, action, action.getTarget()));
+                    }
                 }
                 action.execute();
                 combat.runOnUiThread(new Runnable() {

@@ -61,7 +61,7 @@ class VipersBiteAction extends Action implements Cooldown {
     public void execute() {
         user.beforeAttacking(target);
         if (user.isDead() || target.isDead()) return;
-        target.beforeAttacked(user);
+        if (!target.beforeAttacked(user)) return;
         if (user.isDead() || target.isDead()) return;
         int damageDealt = user.getAttributes().getStrength().getEffectiveValue() / 2;
         target.takeDamage(damageDealt, user);

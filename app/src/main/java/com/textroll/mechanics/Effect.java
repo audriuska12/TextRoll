@@ -1,6 +1,7 @@
 package com.textroll.mechanics;
 
 import com.google.firebase.database.DataSnapshot;
+import com.textroll.classes.Instances;
 
 import java.io.Serializable;
 
@@ -24,25 +25,29 @@ public abstract class Effect implements Serializable {
 
     public void remove() {
         onRemove();
+        Instances.turnManager.log(String.format("%s ends on %s.\n", this.toString(), actor));
         actor.effects.remove(this);
         this.actor = null;
     }
 
     protected void onRemove() {
     }
-    public abstract void onTurnStart();
 
-    public abstract void onTurnEnd();
+    public void onTurnStart() {
+    }
 
-    int onTakeDamage(int damage, Actor source) {
+    public void onTurnEnd() {
+    }
+
+    public int onTakeDamage(int damage, Actor source) {
         return damage;
     }
 
-    boolean onDying() {
+    public boolean onDying() {
         return true;
     }
 
-    void onDeath() {
+    public void onDeath() {
     }
 
     public int onReceiveHealing(int healing, Actor source) {
@@ -55,9 +60,23 @@ public abstract class Effect implements Serializable {
     public void afterAttacking(Actor target) {
     }
 
-    public void beforeAttacked(Actor attacker) {
+    public boolean beforeAttacked(Actor attacker) {
+        return true;
     }
 
     public void afterAttacked(Actor attacker) {
+    }
+
+    public void beforeCasting(Actor target) {
+    }
+
+    public void afterCasting(Actor target) {
+    }
+
+    public boolean beforeSpellHit(Actor attacker) {
+        return true;
+    }
+
+    public void afterSpellHit(Actor attacker) {
     }
 }

@@ -51,7 +51,7 @@ class WidowsStingAction extends Action implements Cooldown {
     public void execute() {
         user.beforeAttacking(target);
         if (user.isDead() || target.isDead()) return;
-        target.beforeAttacked(user);
+        if (!target.beforeAttacked(user)) return;
         if (user.isDead() || target.isDead()) return;
         if (target.hasEffect(VipersBiteEffect.class)) {
             int damageDealt = (user.getAttributes().getStrength().getEffectiveValue() * ability.getCurrentRank()) / 5 + ((user.getAttributes().getSpeed().getEffectiveValue() + user.getAttributes().getIntelligence().getEffectiveValue()) * (2 + ability.getCurrentRank())) / 4;

@@ -27,4 +27,9 @@ public class VipersBiteEffect extends Effect {
         duration--;
         if (duration <= 0) remove();
     }
+
+    @Override
+    public String toString() {
+        return "Viper's Bite";
+    }
 }
