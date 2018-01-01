@@ -28,9 +28,6 @@ public class MainActivity extends AppCompatActivity {
         if (getIntent().getBooleanExtra("Exit", false)) {
             finish();
         } else {
-            Instances.mDatabase.keepSynced(true);
-            mAuth = FirebaseAuth.getInstance();
-            Instances.user = mAuth.getCurrentUser();
             setContentView(R.layout.activity_main);
         }
     }
@@ -38,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Instances.mDatabase.keepSynced(true);
+        mAuth = FirebaseAuth.getInstance();
+        Instances.user = mAuth.getCurrentUser();
         verifyAuth();
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {

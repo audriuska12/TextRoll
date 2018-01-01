@@ -289,6 +289,9 @@ public abstract class Actor implements Serializable {
                 ((Cooldown) p).setRemainingCooldown(0);
             }
         }
+        for (ItemEffect e : itemEffects) {
+            e.refresh();
+        }
         currentHealth = getMaximumHealth();
         dead = false;
         dying = false;
@@ -437,8 +440,9 @@ public abstract class Actor implements Serializable {
             healing = effects.get(i).onReceiveHealing(healing, source);
             if (healing <= 0) return;
         }
+        healing = Math.min(healing, getMaximumHealth() - getCurrentHealth());
         if (healing > 0) {
-            currentHealth = Math.min(currentHealth + healing, getMaximumHealth());
+            currentHealth += healing;
             Instances.turnManager.log(String.format("%s recovers %d health. \n", getName(), healing));
         }
         if (currentHealth <= 0) {

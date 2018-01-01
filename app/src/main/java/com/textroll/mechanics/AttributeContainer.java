@@ -53,12 +53,16 @@ public class AttributeContainer implements Serializable {
 
     public void getFromSnapshot(DataSnapshot snapshot) {
         DataSnapshot snap = snapshot.child("attributes");
-        this.strength.setBase(Integer.valueOf((String) snap.child("str").getValue()));
+        try {
+            this.strength.setBase(Integer.valueOf((String) snap.child("str").getValue()));
         this.speed.setBase(Integer.valueOf((String) snap.child("spd").getValue()));
         this.endurance.setBase(Integer.valueOf((String) snap.child("end").getValue()));
         this.intelligence.setBase(Integer.valueOf((String) snap.child("int").getValue()));
         this.magic.setBase(Integer.valueOf((String) snap.child("mag").getValue()));
-        this.getMaxHealth().setBase((snapshot.child("hp").exists()) ? Integer.valueOf((String) snap.child("hp").getValue()) : 0);
+            this.getMaxHealth().setBase((snapshot.child("hp").exists()) ? Integer.valueOf((String) snap.child("hp").getValue()) : 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void recordToFirebase(DatabaseReference attributes) {
