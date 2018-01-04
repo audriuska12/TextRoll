@@ -80,7 +80,7 @@ class VipersBiteAction extends Action implements Cooldown {
 
     @Override
     public boolean validForTarget(Actor actor, Actor target) {
-        return (!actor.getClass().equals(target.getClass()));
+        return actor.getFaction() != target.getFaction();
     }
 
     @Override

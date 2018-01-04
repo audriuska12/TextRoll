@@ -23,6 +23,9 @@ public class ItemEffectAbaddonsCloak extends ItemEffect {
 
     @Override
     public void onTurnStart() {
+        if (remaining < magnitude) {
+            Instances.turnManager.log(String.format("%s's Abaddon's Cloak recharges.\n", actor.getName()));
+        }
         remaining = magnitude;
     }
 
@@ -34,13 +37,14 @@ public class ItemEffectAbaddonsCloak extends ItemEffect {
     @SuppressLint("DefaultLocale")
     @Override
     public int onTakeDamage(int damage, Actor source) {
+        if (remaining == 0) return damage;
         if (damage <= remaining) {
             remaining -= damage;
-            Instances.turnManager.log(String.format("%s's Abaddon's Cloak blocks %d damage.\n", actor.getName(), damage));
+            Instances.turnManager.log(String.format("%s's Abaddon's Cloak blocks %d damage. %d remaining.\n", actor.getName(), damage, remaining));
             return 0;
         } else {
             damage -= remaining;
-            Instances.turnManager.log(String.format("%s's Abaddon's Cloak blocks %d damage.\n", actor.getName(), remaining));
+            Instances.turnManager.log(String.format("%s's Abaddon's Cloak blocks %d damage and is drained.\n", actor.getName(), remaining));
             remaining = 0;
             return damage;
         }

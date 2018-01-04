@@ -29,22 +29,22 @@ public abstract class PassiveAbility implements Ability, Serializable {
         return true;
     }
 
-    void onDeath() {
+    public void onDeath() {
     }
 
-    void onStartOfCombat() {
+    public void onStartOfCombat() {
     }
 
-    void onTurnStart() {
+    public void onTurnStart() {
     }
 
     public void onTurnEnd() {
     }
 
-    void onEndOfCombat() {
+    public void onEndOfCombat() {
     }
 
-    int onReceiveHealing(int healing, Actor source) {
+    public int onReceiveHealing(int healing, Actor source) {
         return healing;
     }
 
@@ -98,5 +98,9 @@ public abstract class PassiveAbility implements Ability, Serializable {
     }
 
     public void afterSpellHit(Actor attacker) {
+    }
+
+    public void refresh() {
+
     }
 }

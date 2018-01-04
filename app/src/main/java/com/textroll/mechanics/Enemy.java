@@ -43,5 +43,10 @@ public class Enemy extends Actor {
         return action;
     }
 
+    @Override
+    public Faction getFaction() {
+        return Faction.ENEMY;
+    }
+
 }
 

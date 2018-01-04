@@ -9,10 +9,6 @@ import com.textroll.mechanics.ActiveAbility;
 import com.textroll.mechanics.Actor;
 import com.textroll.mechanics.Cooldown;
 
-/**
- * Created by audri on 2017-12-29.
- */
-
 public class WidowsSting extends ActiveAbility {
     public WidowsSting(Actor actor, int maxRank, int currentRank) {
         super(actor, maxRank, currentRank);
@@ -75,7 +71,7 @@ class WidowsStingAction extends Action implements Cooldown {
 
     @Override
     public boolean validForTarget(Actor actor, Actor target) {
-        return (!actor.getClass().equals(target.getClass()));
+        return actor.getFaction() != target.getFaction();
     }
 
     @Override

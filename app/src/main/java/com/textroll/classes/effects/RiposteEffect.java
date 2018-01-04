@@ -12,7 +12,7 @@ public class RiposteEffect extends Effect {
 
     @Override
     public boolean beforeAttacked(Actor attacker) {
-        if ((actor.getClass().equals(attacker.getClass()))) return true;
+        if (actor.getFaction() == attacker.getFaction()) return true;
         attacker.takeDamage(magnitude, actor);
         remove();
         return false;
@@ -20,7 +20,7 @@ public class RiposteEffect extends Effect {
 
     @Override
     public boolean beforeSpellHit(Actor attacker) {
-        if ((actor.getClass().equals(attacker.getClass()))) return true;
+        if (actor.getFaction() == attacker.getFaction()) return true;
         attacker.takeDamage(magnitude, actor);
         remove();
         return false;

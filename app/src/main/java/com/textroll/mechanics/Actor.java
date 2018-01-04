@@ -30,7 +30,6 @@ public abstract class Actor implements Serializable {
     protected ArrayList<Item> inventory;
     protected transient boolean dead = false;
     protected transient boolean dying = false;
-
     public Actor(String name) {
         this.setAttributes(new AttributeContainer());
         this.abilities = new ArrayList<>();
@@ -288,6 +287,7 @@ public abstract class Actor implements Serializable {
             if (p instanceof Cooldown) {
                 ((Cooldown) p).setRemainingCooldown(0);
             }
+            p.refresh();
         }
         for (ItemEffect e : itemEffects) {
             e.refresh();
@@ -420,6 +420,8 @@ public abstract class Actor implements Serializable {
         }
     }
 
+    public abstract Faction getFaction();
+
     @Override
     public String toString() {
         return this.name;
@@ -547,4 +549,6 @@ public abstract class Actor implements Serializable {
             effects.get(i).afterSpellHit(attacker);
         }
     }
+
+    public enum Faction {PLAYER, ENEMY}
 }

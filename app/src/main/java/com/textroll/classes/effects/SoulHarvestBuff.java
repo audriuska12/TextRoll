@@ -20,9 +20,9 @@ public class SoulHarvestBuff extends Effect {
 
     @Override
     public void onRemove() {
-        actor.getAttributes().getStrength().modifyBonus(magnitude);
-        actor.getAttributes().getIntelligence().modifyBonus(magnitude);
-        actor.getAttributes().getSpeed().modifyBonus(magnitude);
-        actor.getAttributes().getMagic().modifyBonus(magnitude);
+        actor.getAttributes().getStrength().modifyBonus(-magnitude);
+        actor.getAttributes().getIntelligence().modifyBonus(-magnitude);
+        actor.getAttributes().getSpeed().modifyBonus(-magnitude);
+        actor.getAttributes().getMagic().modifyBonus(-magnitude);
     }
 }

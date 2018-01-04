@@ -1,10 +1,10 @@
 package com.textroll.classes.abilities.active;
 
+import android.annotation.SuppressLint;
+
 import com.textroll.mechanics.Action;
 import com.textroll.mechanics.ActiveAbility;
 import com.textroll.mechanics.Actor;
-import com.textroll.mechanics.Enemy;
-import com.textroll.mechanics.Player;
 
 public class BasicAttack extends ActiveAbility {
 
@@ -22,9 +22,10 @@ public class BasicAttack extends ActiveAbility {
         return "Basic Attack";
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public String getDescription() {
-        return String.format("Attack your enemy, dealing %d damage", actor.getAttributes().getStrength().getEffectiveValue());
+        return String.format("Attack your enemy, dealing %d damage.", actor.getAttributes().getStrength().getEffectiveValue());
     }
 }
 
@@ -53,7 +54,7 @@ class BasicAttackAction extends Action{
 
     @Override
     public boolean validForTarget(Actor actor, Actor target) {
-        return((actor instanceof Player && target instanceof Enemy)||(actor instanceof Enemy && target instanceof Player));
+        return (actor.getFaction() != target.getFaction());
     }
 
     @Override

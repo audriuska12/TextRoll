@@ -35,6 +35,16 @@ public class VenomsteelBlades extends PassiveAbility {
         }
     }
 
+    @Override
+    public void onEndOfCombat() {
+        counter = 0;
+    }
+
+    @Override
+    public void refresh() {
+        counter = 0;
+    }
+
     @SuppressLint("DefaultLocale")
     @Override
     public String getDescription() {

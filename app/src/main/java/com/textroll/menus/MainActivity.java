@@ -15,9 +15,6 @@ import com.textroll.mechanics.AbilityMap;
 import com.textroll.mechanics.QuestLog;
 import com.textroll.textroll.R;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -39,13 +36,6 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         Instances.user = mAuth.getCurrentUser();
         verifyAuth();
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                verifyAuth();
-            }
-        }, 100);
     }
 
     private void verifyAuth() {

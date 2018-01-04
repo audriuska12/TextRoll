@@ -63,7 +63,7 @@ class SteelWhirlwindAction extends Action implements Cooldown {
 
     @Override
     public boolean validForTarget(Actor actor, Actor target) {
-        return (!actor.getClass().equals(target.getClass()));
+        return actor.getFaction() != target.getFaction();
     }
 
     @Override
@@ -87,6 +87,7 @@ class SteelWhirlwindAction extends Action implements Cooldown {
         if (cooldown > 0) cooldown--;
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public String toString() {
         if (cooldown > 0) {

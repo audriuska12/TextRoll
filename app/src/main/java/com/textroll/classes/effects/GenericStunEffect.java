@@ -32,6 +32,13 @@ public class GenericStunEffect extends Effect {
     }
 
     @Override
+    public void remove() {
+        onRemove();
+        actor.getEffects().remove(this);
+        this.actor = null;
+    }
+
+    @Override
     public String toString() {
         return "Stun";
     }

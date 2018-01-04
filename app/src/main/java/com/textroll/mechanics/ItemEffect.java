@@ -15,10 +15,10 @@ public abstract class ItemEffect extends Effect {
 
     public abstract String getDescription();
 
-    void onStartOfCombat() {
+    public void onStartOfCombat() {
     }
 
-    void onEndOfCombat() {
+    public void onEndOfCombat() {
     }
 
     public int onReceiveHealing(int healing, Actor source) {

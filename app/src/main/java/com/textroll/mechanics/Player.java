@@ -97,6 +97,11 @@ public class Player extends Actor {
         return action;
     }
 
+    @Override
+    public Faction getFaction() {
+        return Faction.PLAYER;
+    }
+
     public void deleteFromDatabase() {
         Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(firebaseKey).setValue(null);
     }

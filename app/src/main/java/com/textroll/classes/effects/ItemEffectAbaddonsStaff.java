@@ -24,7 +24,7 @@ public class ItemEffectAbaddonsStaff extends ItemEffect {
         count++;
         if (count == period) {
             actor.getAttributes().getMagic().modifyBonus(magnitude);
-            Instances.turnManager.log(String.format("%s gains %d MAG for this spell from Abaddon's Cloak", actor.getName(), magnitude));
+            Instances.turnManager.log(String.format("%s gains %d MAG for this spell from Abaddon's Cloak\n", actor.getName(), magnitude));
         }
     }
 
@@ -34,6 +34,11 @@ public class ItemEffectAbaddonsStaff extends ItemEffect {
             actor.getAttributes().getMagic().modifyBonus(-magnitude);
             count = 0;
         }
+    }
+
+    @Override
+    public void onEndOfCombat() {
+        count = 0;
     }
 
     @SuppressLint("DefaultLocale")
