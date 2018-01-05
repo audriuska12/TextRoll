@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,8 +18,6 @@ import com.textroll.mechanics.QuestLog;
 import com.textroll.textroll.R;
 
 public class MainActivity extends AppCompatActivity {
-
-    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Instances.mDatabase.keepSynced(true);
-        mAuth = FirebaseAuth.getInstance();
-        Instances.user = mAuth.getCurrentUser();
+        Instances.mAuth = FirebaseAuth.getInstance();
+        Instances.user = Instances.mAuth.getCurrentUser();
         verifyAuth();
     }
 
@@ -148,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void logout(View view) {
-        mAuth.signOut();
+        Instances.mAuth.signOut();
         Instances.user = null;
         Instances.displayName = null;
         Instances.encounters = null;
@@ -185,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-
+                            Toast.makeText(getApplicationContext(), "Reading display name failed", Toast.LENGTH_SHORT).show();
                         }
                     }
             );

@@ -5,10 +5,6 @@ import com.google.firebase.database.DataSnapshot;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/**
- * Created by audri on 2017-12-20.
- */
-
 public class Item implements Serializable {
     private int strength;
     private int speed;

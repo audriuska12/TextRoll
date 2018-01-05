@@ -14,6 +14,17 @@ public class BloodRage extends PassiveAbility {
         super(actor, maxRank, currentRank);
     }
 
+    @Override
+    public void onEndOfCombat() {
+        actor.getAttributes().getStrength().modifyBonus(-getCurrentRank() * stacks);
+        stacks = 0;
+    }
+
+    @Override
+    public void refresh() {
+        actor.getAttributes().getStrength().modifyBonus(-getCurrentRank() * stacks);
+        stacks = 0;
+    }
     @SuppressLint("DefaultLocale")
     @Override
     public int onTakeDamage(int damageTaken, Actor source) {

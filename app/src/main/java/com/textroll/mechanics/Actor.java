@@ -317,6 +317,7 @@ public abstract class Actor implements Serializable {
         }
         if (damage > 0) {
             currentHealth -= damage;
+            if (source != this) source.modifyThreat(damage);
             Instances.turnManager.log(String.format("%s dealt %d damage to %s! \n", source.getName(), damage, getName()));
         }
         if (currentHealth <= 0) {
@@ -452,6 +453,7 @@ public abstract class Actor implements Serializable {
         healing = Math.min(healing, getMaximumHealth() - getCurrentHealth());
         if (healing > 0) {
             currentHealth += healing;
+            if (source != this) source.modifyThreat(2 * healing);
             Instances.turnManager.log(String.format("%s recovers %d health. \n", getName(), healing));
         }
         if (currentHealth <= 0) {

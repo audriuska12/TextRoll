@@ -3,6 +3,7 @@ package com.textroll.classes.effects;
 import android.annotation.SuppressLint;
 
 import com.google.firebase.database.DataSnapshot;
+import com.textroll.classes.Instances;
 import com.textroll.mechanics.Action;
 import com.textroll.mechanics.Actor;
 import com.textroll.mechanics.Cooldown;
@@ -17,6 +18,18 @@ public class ItemEffectAscalonsWrath extends ItemEffect {
         this.maxCooldown = Integer.valueOf((String) snapshot.child("cooldown").getValue());
         this.magnitude = Integer.valueOf((String) snapshot.child("magnitude").getValue());
         this.action = new AscalonsWrathAction(this, actor);
+    }
+
+    @Override
+    public void apply(Actor actor) {
+        super.apply(actor);
+        this.action = new AscalonsWrathAction(this, actor);
+    }
+
+    @Override
+    public void remove() {
+        super.remove();
+        actor.getItemEffects().remove(this);
     }
 
     public int getMaxCooldown() {
@@ -38,7 +51,7 @@ public class ItemEffectAscalonsWrath extends ItemEffect {
     @SuppressLint("DefaultLocale")
     @Override
     public String getDescription() {
-        return String.format("Active: Ascalon's Wrath\nDeal %d damage to target enemy and stun them.\nCooldown:%d", actor.getAttributes().getStrength().getEffectiveValue(), maxCooldown);
+        return String.format("Active: Ascalon's Wrath\nDeal %d damage to target enemy and stun them.\nCooldown:%d", ((actor != null) ? actor : Instances.pc).getAttributes().getStrength().getEffectiveValue(), maxCooldown);
     }
 
     @Override
@@ -96,6 +109,7 @@ class AscalonsWrathAction extends Action implements Cooldown {
         GenericStunEffect stun = new GenericStunEffect(1);
         stun.apply(target);
         target.afterAttacked(user);
+        setRemainingCooldown(effect.getMaxCooldown());
         if (user.isDead()) return;
         user.afterAttacking(target);
     }
