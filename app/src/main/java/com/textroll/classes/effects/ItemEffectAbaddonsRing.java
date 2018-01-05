@@ -20,6 +20,7 @@ public class ItemEffectAbaddonsRing extends ItemEffect {
 
     @Override
     public boolean onDying() {
+        if (used) return true;
         actor.heal(magnitude, actor);
         used = true;
         duration = durationMax;

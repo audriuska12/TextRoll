@@ -30,6 +30,7 @@ public abstract class Actor implements Serializable {
     protected ArrayList<Item> inventory;
     protected transient boolean dead = false;
     protected transient boolean dying = false;
+    protected Faction faction;
     public Actor(String name) {
         this.setAttributes(new AttributeContainer());
         this.abilities = new ArrayList<>();
@@ -343,7 +344,7 @@ public abstract class Actor implements Serializable {
         }
     }
 
-    private void die() {
+    public void die() {
         dead = true;
         dying = false;
         for (int i = passives.size() - 1; i >= 0; i--) {
@@ -420,7 +421,13 @@ public abstract class Actor implements Serializable {
         }
     }
 
-    public abstract Faction getFaction();
+    public Faction getFaction() {
+        return faction;
+    }
+
+    public void setFaction(Faction faction) {
+        this.faction = faction;
+    }
 
     @Override
     public String toString() {

@@ -4,7 +4,6 @@ import com.textroll.classes.actions.IdleAction;
 import com.textroll.classes.actions.StunnedAction;
 import com.textroll.mechanics.Action;
 import com.textroll.mechanics.Actor;
-import com.textroll.mechanics.Enemy;
 import com.textroll.menus.CombatActivity;
 
 import java.util.ArrayList;
@@ -23,6 +22,27 @@ public class TurnManager implements Runnable {
         this.current = this.actors.get(0);
     }
 
+    public void addCharacter(final Actor actor) {
+        this.actors.add(actor);
+        Runnable update = new Runnable() {
+            @Override
+            public void run() {
+                combat.addCharacter(actor);
+                synchronized (this) {
+                    this.notify();
+                }
+            }
+        };
+        synchronized (update) {
+            combat.runOnUiThread(update);
+            try {
+                update.wait();
+                log(String.format("%s joins the fight.\n", actor.getName()));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     public void kill() {
         isKilled = true;
     }
@@ -142,8 +162,10 @@ public class TurnManager implements Runnable {
     }
 
     private boolean anyEnemiesAlive() {
-        for (Enemy e : Instances.enemies) {
-            if (!e.isDead()) return true;
+        for (Actor a : actors) {
+            if (a.getFaction() == Actor.Faction.ENEMY && !a.isDead()) {
+                return true;
+            }
         }
         return false;
     }

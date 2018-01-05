@@ -7,10 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by audri on 2017-12-15.
- */
-
 public class QuestLog {
     HashMap<String, QuestNode> quests;
 
@@ -43,6 +39,8 @@ public class QuestLog {
     }
 
     private void recursiveNodeAdd(DataSnapshot snapshot, String key) {
+        int version = (snapshot.child("version").exists() ? Integer.valueOf((String) snapshot.child("version").getValue()) : 0);
+        if (version > Instances.version) return;
         boolean repeatable = (Integer.valueOf((String) (snapshot.child(key).child("repeatable")).getValue()) == 1);
         String name = (String) (snapshot.child(key).child("name").getValue());
         String description = (String) (snapshot.child(key).child("description").getValue());

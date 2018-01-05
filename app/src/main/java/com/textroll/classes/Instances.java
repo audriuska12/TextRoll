@@ -15,6 +15,7 @@ import java.util.Random;
 
 
 public class Instances {
+    public static int version = 1;
     public static Player pc;
     public static List<Enemy> enemies;
     public static Random rng = new Random();
@@ -29,4 +30,5 @@ public class Instances {
     public static AbilityMap abilityMap;
     public static String displayName;
     public static DataSnapshot shopSnap;
+    public static DataSnapshot summonSnap;
 }

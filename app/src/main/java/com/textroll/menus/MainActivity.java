@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -40,14 +41,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void verifyAuth() {
         if (Instances.user == null) {
-            goToLogin();
+            goToLogin(null);
+            ((ViewSwitcher) (findViewById(R.id.viewSwitcherMainMenuPlay))).setDisplayedChild(2);
         } else {
+            findViewById(R.id.buttonLogout).setVisibility(View.VISIBLE);
+            ((ViewSwitcher) (findViewById(R.id.viewSwitcherMainMenuPlay))).setDisplayedChild(1);
             updateNameTag();
         }
     }
 
 
-    public void goToLogin() {
+    public void goToLogin(View view) {
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
@@ -113,6 +117,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+        if (Instances.summonSnap == null) {
+            Instances.mDatabase.child("summons").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Instances.summonSnap = dataSnapshot;
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
         if (Instances.questLog == null) {
             Instances.mDatabase.child("encounterChains").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -142,7 +159,8 @@ public class MainActivity extends AppCompatActivity {
         Instances.enemySnap = null;
         Instances.itemSnap = null;
         Instances.shopSnap = null;
-        goToLogin();
+        findViewById(R.id.buttonLogout).setVisibility(View.INVISIBLE);
+        goToLogin(view);
     }
 
     private void updateNameTag() {

@@ -64,6 +64,14 @@ public class CombatActivity extends AppCompatActivity {
         new Thread(turnManager).start();
     }
 
+    public void addCharacter(Actor actor) {
+        if (actor.getFaction() == Actor.Faction.ENEMY) {
+            addCharacterDisplay((LinearLayout) findViewById(R.id.linearLayoutEnemies), actor);
+        } else {
+            addCharacterDisplay((LinearLayout) findViewById(R.id.linearLayoutParty), actor);
+        }
+        characters.add(actor);
+    }
     public void PlayerTurnStart() {
         populateActionSpinner();
         runOnUiThread(new Runnable() {

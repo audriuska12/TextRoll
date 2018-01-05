@@ -21,13 +21,13 @@ public class Heal extends ActiveAbility {
     @SuppressLint("DefaultLocale")
     @Override
     public String getStatName() {
-        return String.format("Heal (%d/%d", getCurrentRank(), getMaximumRank());
+        return String.format("Heal (%d/%d)", getCurrentRank(), getMaximumRank());
     }
 
     @SuppressLint("DefaultLocale")
     @Override
     public String getDescription() {
-        return String.format("Restore %d health to target ally.\nCooldown: %d", actor.getAttributes().getIntelligence().getEffectiveValue() + (actor.getAttributes().getMagic().getEffectiveValue() * 2 + getCurrentRank()) / 4, 4);
+        return String.format("Restore %d health to target ally.\nCooldown: %d", actor.getAttributes().getIntelligence().getEffectiveValue() + (actor.getAttributes().getMagic().getEffectiveValue() * (2 + getCurrentRank())) / 4, 4);
     }
 }
 
@@ -60,7 +60,7 @@ class HealAction extends Action implements Cooldown {
     public void execute() {
         user.beforeCasting(target);
         if (user.isDead() || target.isDead()) return;
-        int healing = user.getAttributes().getIntelligence().getEffectiveValue() + (user.getAttributes().getMagic().getEffectiveValue() * 2 + ability.getCurrentRank()) / 4;
+        int healing = user.getAttributes().getIntelligence().getEffectiveValue() + (user.getAttributes().getMagic().getEffectiveValue() * (2 + ability.getCurrentRank())) / 4;
         target.heal(healing, user);
         setRemainingCooldown(4);
         user.afterCasting(target);
@@ -83,6 +83,11 @@ class HealAction extends Action implements Cooldown {
                 return user.getAttributes().getMagic().getEffectiveValue() * 2;
         }
         return 1;
+    }
+
+    @Override
+    public int getThreat(Actor target) {
+        return target.getMaximumHealth() - target.getCurrentHealth();
     }
 
     @SuppressLint("DefaultLocale")

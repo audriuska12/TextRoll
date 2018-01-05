@@ -1,22 +1,34 @@
 package com.textroll.mechanics;
 
+
 import com.google.firebase.database.DataSnapshot;
 import com.textroll.classes.actions.StunnedAction;
+import com.textroll.classes.effects.CreatureSummonEffect;
 
 import java.util.List;
 
-public class Enemy extends Actor {
-    public Enemy(String name){
+public class SummonedCreature extends Actor {
+    private Actor summoner;
+    private CreatureSummonEffect effect;
+
+    public SummonedCreature(String name, Actor summoner, int duration, boolean terminating, Faction faction) {
         super(name);
         refresh();
-        this.faction = Faction.ENEMY;
+        this.summoner = summoner;
+        this.effect = new CreatureSummonEffect(this, duration, terminating);
+        effect.apply(summoner);
+        this.faction = faction;
     }
 
-    public Enemy(DataSnapshot snapshot) {
+    public SummonedCreature(DataSnapshot snapshot, Actor summoner, int duration, boolean terminating, Faction faction) {
         super(snapshot);
         refresh();
-        this.faction = Faction.ENEMY;
+        this.summoner = summoner;
+        this.effect = new CreatureSummonEffect(this, duration, terminating);
+        effect.apply(summoner);
+        this.faction = faction;
     }
+
     @Override
     public Action takeAction() {
         if (stunCounter > 0) {
@@ -46,5 +58,9 @@ public class Enemy extends Actor {
         return action;
     }
 
+    @Override
+    public void endTurn() {
+        super.endTurn();
+        effect.tickDuration();
+    }
 }
-
