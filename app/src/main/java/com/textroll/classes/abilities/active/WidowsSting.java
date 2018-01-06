@@ -29,7 +29,7 @@ public class WidowsSting extends ActiveAbility {
     @SuppressLint("DefaultLocale")
     @Override
     public String getDescription() {
-        return String.format("Deal %d damage to target enemy. Stun for %d turn(s) and deal %d bonus damage if the enemy is poisoned by Viper's Bite.\nCooldown:%d", ((actor.getAttributes().getStrength().getEffectiveValue() * getCurrentRank()) / 5), 1, ((actor.getAttributes().getSpeed().getEffectiveValue() + actor.getAttributes().getIntelligence().getEffectiveValue()) * (2 + getCurrentRank())) / 4, 6);
+        return String.format("Deal %d damage to target enemy. Stun for %d turn(s) and deal %d bonus damage if the enemy is poisoned by Viper's Bite.\nCooldown: %d", ((actor.getAttributes().getStrength().getEffectiveValue() * getCurrentRank()) / 5), 1, ((actor.getAttributes().getSpeed().getEffectiveValue() + actor.getAttributes().getIntelligence().getEffectiveValue()) * (2 + getCurrentRank())) / 4, 6);
     }
 }
 
@@ -38,7 +38,7 @@ class WidowsStingAction extends Action implements Cooldown {
     private ActiveAbility ability;
     private int cooldown = 0;
 
-    public WidowsStingAction(ActiveAbility ability, Actor actor) {
+    WidowsStingAction(ActiveAbility ability, Actor actor) {
         this.ability = ability;
         this.user = actor;
     }

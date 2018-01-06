@@ -28,7 +28,7 @@ public class Bash extends ActiveAbility {
     @SuppressLint("DefaultLocale")
     @Override
     public String getDescription() {
-        return String.format("Deal %d damage to an enemy and gain %d%% of your END as STR for your next attack", getCurrentRank() * (actor.getAttributes().getStrength().getEffectiveValue() + actor.getAttributes().getEndurance().getEffectiveValue()) / 2, 10 * getCurrentRank());
+        return String.format("Deal %d damage to an enemy and gain %d%% of your END as STR for your next attack.\nCooldown: %d", getCurrentRank() * (actor.getAttributes().getStrength().getEffectiveValue() + actor.getAttributes().getEndurance().getEffectiveValue()) / 2, 10 * getCurrentRank(), 6 - getCurrentRank() / 2);
     }
 }
 
@@ -85,5 +85,13 @@ class BashAction extends Action implements Cooldown {
     @Override
     public int getPriority() {
         return user.getAttributes().getStrength().getEffectiveValue() * 2 + 5;
+    }
+
+    @SuppressLint("DefaultLocale")
+    @Override
+    public String toString() {
+        if (cooldown > 0) {
+            return String.format("Bash (%d)", getRemainingCooldown());
+        } else return "Bash";
     }
 }

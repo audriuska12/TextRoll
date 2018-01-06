@@ -94,4 +94,12 @@ class SmashAction extends Action implements Cooldown {
     public int getThreat(Actor target) {
         return target.getThreat() + (target.isStunned() ? 0 : 5);
     }
+
+    @SuppressLint("DefaultLocale")
+    @Override
+    public String toString() {
+        if (cooldown > 0) {
+            return String.format("Smash (%d)", getRemainingCooldown());
+        } else return "Smash";
+    }
 }

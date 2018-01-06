@@ -28,7 +28,7 @@ public class WingGust extends ActiveAbility {
     @SuppressLint("DefaultLocale")
     @Override
     public String getDescription() {
-        return String.format("Deal %d damage to all enemies and stun them.\nCooldown:%d", ((actor.getAttributes().getStrength().getEffectiveValue() + actor.getAttributes().getEndurance().getEffectiveValue()) * (2 + getCurrentRank())) / 3, 5);
+        return String.format("Deal %d damage to all enemies and stun them.\nCooldown: %d", ((actor.getAttributes().getStrength().getEffectiveValue() + actor.getAttributes().getEndurance().getEffectiveValue()) * (2 + getCurrentRank())) / 3, 5);
     }
 }
 

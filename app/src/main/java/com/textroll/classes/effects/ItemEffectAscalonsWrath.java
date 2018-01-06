@@ -32,7 +32,7 @@ public class ItemEffectAscalonsWrath extends ItemEffect {
         actor.getItemEffects().remove(this);
     }
 
-    public int getMaxCooldown() {
+    int getMaxCooldown() {
         return maxCooldown;
     }
 
@@ -51,7 +51,7 @@ public class ItemEffectAscalonsWrath extends ItemEffect {
     @SuppressLint("DefaultLocale")
     @Override
     public String getDescription() {
-        return String.format("Active: Ascalon's Wrath\nDeal %d damage to target enemy and stun them.\nCooldown:%d", ((actor != null) ? actor : Instances.pc).getAttributes().getStrength().getEffectiveValue(), maxCooldown);
+        return String.format("Active: Ascalon's Wrath\nDeal %d damage to target enemy and stun them.\nCooldown: %d", ((actor != null) ? actor : Instances.pc).getAttributes().getStrength().getEffectiveValue(), maxCooldown);
     }
 
     @Override
@@ -78,7 +78,7 @@ class AscalonsWrathAction extends Action implements Cooldown {
     private ItemEffectAscalonsWrath effect;
     private int cooldown = 0;
 
-    public AscalonsWrathAction(ItemEffectAscalonsWrath effect, Actor actor) {
+    AscalonsWrathAction(ItemEffectAscalonsWrath effect, Actor actor) {
         this.effect = effect;
         this.user = actor;
     }

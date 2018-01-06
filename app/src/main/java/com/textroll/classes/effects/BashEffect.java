@@ -15,12 +15,16 @@ public class BashEffect extends Effect {
     @Override
     public void beforeAttacking(Actor target) {
         actor.getAttributes().getStrength().modifyBonus(magnitude);
+        attacking = true;
     }
 
     @Override
     public void afterAttacking(Actor target) {
-        actor.getAttributes().getStrength().modifyBonus(-magnitude);
-        remove();
+        if (attacking) {
+            attacking = false;
+            actor.getAttributes().getStrength().modifyBonus(-magnitude);
+            remove();
+        }
     }
 
     @Override

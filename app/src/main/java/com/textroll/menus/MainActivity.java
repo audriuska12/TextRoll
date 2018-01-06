@@ -42,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
         if (Instances.user == null) {
             goToLogin(null);
             ((ViewSwitcher) (findViewById(R.id.viewSwitcherMainMenuPlay))).setDisplayedChild(2);
+            findViewById(R.id.buttonLogout).setVisibility(View.INVISIBLE);
         } else {
             findViewById(R.id.buttonLogout).setVisibility(View.VISIBLE);
-            ((ViewSwitcher) (findViewById(R.id.viewSwitcherMainMenuPlay))).setDisplayedChild(1);
             updateNameTag();
         }
     }
@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
         Instances.enemySnap = null;
         Instances.itemSnap = null;
         Instances.shopSnap = null;
+        Instances.summonSnap = null;
         findViewById(R.id.buttonLogout).setVisibility(View.INVISIBLE);
         goToLogin(view);
     }
@@ -178,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
                                 public void run() {
                                     lia.setText(String.format("%s %s", getString(R.string.lblLia), dataSnapshot.getValue()));
                                     lia.setVisibility(View.VISIBLE);
+                                    ((ViewSwitcher) (findViewById(R.id.viewSwitcherMainMenuPlay))).setDisplayedChild(1);
                                 }
                             });
                         }
@@ -194,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {
                     lia.setText(String.format("%s %s", getString(R.string.lblLia), Instances.displayName));
                     lia.setVisibility(View.VISIBLE);
+                    ((ViewSwitcher) (findViewById(R.id.viewSwitcherMainMenuPlay))).setDisplayedChild(1);
                 }
             });
         }
