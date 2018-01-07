@@ -1,5 +1,6 @@
 package com.textroll.menus;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -71,13 +72,14 @@ public class CharEditActivity extends AppCompatActivity {
         Toast.makeText(this, "Saving character...", Toast.LENGTH_SHORT).show();
     }
 
+    @SuppressLint("DefaultLocale")
     private void updateViews() {
         ((TextView) findViewById(R.id.textViewCharEditCPVal)).setText(String.valueOf(modified.getCharacterPoints()));
-        ((TextView) findViewById(R.id.textViewCharEditStrVal)).setText(String.valueOf(modified.getAttributes().getStrength().getBaseValue()));
-        ((TextView) findViewById(R.id.textViewCharEditSpdVal)).setText(String.valueOf(modified.getAttributes().getSpeed().getBaseValue()));
-        ((TextView) findViewById(R.id.textViewCharEditEndVal)).setText(String.valueOf(modified.getAttributes().getEndurance().getBaseValue()));
-        ((TextView) findViewById(R.id.textViewCharEditIntVal)).setText(String.valueOf(modified.getAttributes().getIntelligence().getBaseValue()));
-        ((TextView) findViewById(R.id.textViewCharEditMagVal)).setText(String.valueOf(modified.getAttributes().getMagic().getBaseValue()));
+        ((TextView) findViewById(R.id.textViewCharEditStrVal)).setText(String.format("%d (%+d)", modified.getAttributes().getStrength().getBaseValue(), modified.getAttributes().getStrength().getEffectiveValue() - modified.getAttributes().getStrength().getBaseValue()));
+        ((TextView) findViewById(R.id.textViewCharEditSpdVal)).setText(String.format("%d (%+d)", modified.getAttributes().getSpeed().getBaseValue(), modified.getAttributes().getSpeed().getEffectiveValue() - modified.getAttributes().getSpeed().getBaseValue()));
+        ((TextView) findViewById(R.id.textViewCharEditEndVal)).setText(String.format("%d (%+d)", modified.getAttributes().getEndurance().getBaseValue(), modified.getAttributes().getEndurance().getEffectiveValue() - modified.getAttributes().getEndurance().getBaseValue()));
+        ((TextView) findViewById(R.id.textViewCharEditIntVal)).setText(String.format("%d (%+d)", modified.getAttributes().getIntelligence().getBaseValue(), modified.getAttributes().getIntelligence().getEffectiveValue() - modified.getAttributes().getIntelligence().getBaseValue()));
+        ((TextView) findViewById(R.id.textViewCharEditMagVal)).setText(String.format("%d (%+d)", modified.getAttributes().getMagic().getBaseValue(), modified.getAttributes().getMagic().getEffectiveValue() - modified.getAttributes().getMagic().getBaseValue()));
         ArrayList<Ability> jointAbilities = new ArrayList<>();
         jointAbilities.addAll(modified.getAbilities());
         jointAbilities.addAll(modified.getPassives());

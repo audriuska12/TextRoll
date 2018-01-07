@@ -23,6 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:onClick="saveCharacter"
         android:text="@string/lblSaveChar"
@@ -46,6 +47,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
+        android:baselineAligned="false"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/buttonCharSelectBack"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,9 +76,10 @@
 
                 <TextView
                     android:id="@+id/textViewCharEditStrVal"
-                    android:layout_width="36dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0" />
+                    android:layout_weight="0"
+                    android:maxLines="1" />
 
                 <Button
                     android:id="@+id/buttonCharEditStrInc"
@@ -86,7 +89,8 @@
                     android:background="@android:color/transparent"
                     android:minHeight="0dp"
                     android:minWidth="0dp"
-                    android:text="+" />
+                    android:text="+"
+                    tools:ignore="HardcodedText" />
             </LinearLayout>
 
             <LinearLayout
@@ -104,9 +108,10 @@
 
                 <TextView
                     android:id="@+id/textViewCharEditSpdVal"
-                    android:layout_width="36dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0" />
+                    android:layout_weight="0"
+                    android:maxLines="1" />
 
                 <Button
                     android:id="@+id/buttonCharEditSpdInc"
@@ -116,7 +121,8 @@
                     android:background="@android:color/transparent"
                     android:minHeight="0dp"
                     android:minWidth="0dp"
-                    android:text="+" />
+                    android:text="+"
+                    tools:ignore="HardcodedText" />
             </LinearLayout>
 
             <LinearLayout
@@ -134,9 +140,10 @@
 
                 <TextView
                     android:id="@+id/textViewCharEditEndVal"
-                    android:layout_width="36dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0" />
+                    android:layout_weight="0"
+                    android:maxLines="1" />
 
                 <Button
                     android:id="@+id/buttonCharEditEndInc"
@@ -146,7 +153,8 @@
                     android:background="@android:color/transparent"
                     android:minHeight="0dp"
                     android:minWidth="0dp"
-                    android:text="+" />
+                    android:text="+"
+                    tools:ignore="HardcodedText" />
             </LinearLayout>
 
             <LinearLayout
@@ -164,9 +172,10 @@
 
                 <TextView
                     android:id="@+id/textViewCharEditIntVal"
-                    android:layout_width="36dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0" />
+                    android:layout_weight="0"
+                    android:maxLines="1" />
 
                 <Button
                     android:id="@+id/buttonCharEditIntInc"
@@ -176,7 +185,8 @@
                     android:background="@android:color/transparent"
                     android:minHeight="0dp"
                     android:minWidth="0dp"
-                    android:text="+" />
+                    android:text="+"
+                    tools:ignore="HardcodedText" />
             </LinearLayout>
 
             <LinearLayout
@@ -194,9 +204,10 @@
 
                 <TextView
                     android:id="@+id/textViewCharEditMagVal"
-                    android:layout_width="36dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0" />
+                    android:layout_weight="0"
+                    android:maxLines="1" />
 
                 <Button
                     android:id="@+id/buttonCharEditMagInc"
@@ -206,7 +217,8 @@
                     android:background="@android:color/transparent"
                     android:minHeight="0dp"
                     android:minWidth="0dp"
-                    android:text="+" />
+                    android:text="+"
+                    tools:ignore="HardcodedText" />
             </LinearLayout>
 
             <android.support.constraint.ConstraintLayout
@@ -228,6 +240,7 @@
                     android:id="@+id/textViewCharEditCostVal"
                     android:layout_width="36dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginTop="16dp"
                     app:layout_constraintRight_toRightOf="parent"
@@ -312,7 +325,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
-                android:text="@string/lblActiveAbilities" />
+                android:text="@string/lblActiveAbilities"
+                tools:ignore="NestedWeights" />
 
             <ListView
                 android:id="@+id/listViewCharEditAbilitiesPc"
@@ -352,6 +366,7 @@
         android:id="@+id/textViewCharEditCPVal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintRight_toRightOf="parent"
