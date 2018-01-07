@@ -3,14 +3,14 @@ package com.textroll.mechanics;
 import java.util.ArrayList;
 
 public class QuestNode {
-    String name;
-    QuestLog log;
-    ArrayList<QuestNode> previous;
-    ArrayList<QuestNode> next;
-    String key;
-    boolean completed = false;
-    String description;
-    boolean repeatable;
+    private String name;
+    private QuestLog log;
+    private ArrayList<QuestNode> previous;
+    private ArrayList<QuestNode> next;
+    private String key;
+    private boolean completed = false;
+    private String description;
+    private boolean repeatable;
 
     public QuestNode(QuestLog log, String key, String name, String description, boolean repeatable) {
         this.log = log;

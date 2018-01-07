@@ -37,7 +37,6 @@ public class EncounterChain {
         this.encounters = encounters;
     }
 
-
     public Encounter getCurrentEncounter() {
         return encounters.get(currentEncounter);
     }

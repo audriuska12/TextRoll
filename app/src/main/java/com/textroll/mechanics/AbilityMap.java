@@ -32,8 +32,8 @@ public class AbilityMap {
             String next = (String) snap.getValue();
             if (!abilities.containsKey(next)) {
                 recursiveNodeAdd(snapshot, next);
-                abilities.get(next).previous.add(abilities.get(key));
-                abilities.get(key).next.add(abilities.get(next));
+                abilities.get(next).getPrevious().add(abilities.get(key));
+                abilities.get(key).getNext().add(abilities.get(next));
             }
         }
     }
@@ -80,7 +80,7 @@ public class AbilityMap {
             strings.add(key);
         }
         for (AbilityNode next : abilities.get(key).getNext()) {
-            if (next.isForPlayers() && !strings.contains(next.key)) strings.add(next.key);
+            if (next.isForPlayers() && !strings.contains(next.getKey())) strings.add(next.getKey());
         }
 
     }

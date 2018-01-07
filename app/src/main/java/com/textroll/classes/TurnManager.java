@@ -152,7 +152,6 @@ public class TurnManager implements Runnable {
         });
     }
 
-
     private boolean fightOngoing() {
         return (!isKilled && playerIsAlive() && anyEnemiesAlive());
     }

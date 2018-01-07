@@ -9,7 +9,6 @@ import java.lang.reflect.Constructor;
 
 class AbilityDao {
     static void getFromSnapshot(final Actor actor, DataSnapshot dataSnapshot) {
-
         for (DataSnapshot ability : dataSnapshot.child("abilities").getChildren()) {
             String name = (String) ability.child("class").getValue();
             int rank = Integer.valueOf((String) ability.child("rank").getValue());
@@ -24,7 +23,6 @@ class AbilityDao {
             }
         }
     }
-
 
     static void recordToFirebase(Actor actor, DatabaseReference abilitiesRef) {
         abilitiesRef.setValue(null, new AbilityCleanListener(actor, abilitiesRef));

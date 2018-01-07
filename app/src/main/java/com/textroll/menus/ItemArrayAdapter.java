@@ -7,16 +7,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.textroll.mechanics.ActiveAbility;
 import com.textroll.mechanics.Item;
 
 import java.util.List;
 
-/**
- * Created by audri on 2017-12-23.
- */
-
-class ItemArrayAdapter extends ArrayAdapter<Item> {
+public class ItemArrayAdapter extends ArrayAdapter<Item> {
     public ItemArrayAdapter(@NonNull Context context, int resource, List<Item> items) {
         super(context, resource, items);
     }

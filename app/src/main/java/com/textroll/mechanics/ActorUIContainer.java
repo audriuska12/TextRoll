@@ -5,14 +5,12 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.io.Serializable;
-
 public class ActorUIContainer {
-    RelativeLayout layout;
-    ProgressBar healthBar;
-    Button button;
-    int id;
-    TextView name;
+    private RelativeLayout layout;
+    private ProgressBar healthBar;
+    private Button button;
+    private int id;
+    private TextView name;
 
     public TextView getName() {
         return name;

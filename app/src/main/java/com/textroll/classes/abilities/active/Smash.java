@@ -65,8 +65,10 @@ class SmashAction extends Action implements Cooldown {
         if (user.isDead() || target.isDead()) return;
         int dmgDealt = user.getAttributes().getStrength().getEffectiveValue() + (user.hasEffect(BashEffect.class) ? user.getAttributes().getStrength().getEffectiveValue() * ability.getCurrentRank() : 0);
         target.takeDamage(dmgDealt, user);
-        GenericStunEffect stun = new GenericStunEffect(1);
-        stun.apply(target);
+        if (user.hasEffect(BashEffect.class)) {
+            GenericStunEffect stun = new GenericStunEffect(1);
+            stun.apply(target);
+        }
         target.afterAttacked(user);
         setRemainingCooldown(6);
         if (user.isDead()) return;

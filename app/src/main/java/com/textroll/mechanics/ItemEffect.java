@@ -21,10 +21,6 @@ public abstract class ItemEffect extends Effect {
     public void onEndOfCombat() {
     }
 
-    public int onReceiveHealing(int healing, Actor source) {
-        return healing;
-    }
-
     public void refresh() {
     }
 }

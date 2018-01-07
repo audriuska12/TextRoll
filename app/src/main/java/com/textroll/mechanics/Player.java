@@ -14,10 +14,11 @@ public class Player extends Actor {
 
     private Action nextAction;
     private int characterPoints;
-    private int gold = 0;
+    private int gold;
     private HashMap<String, QuestEntry> quests;
     private String currentQuestKey;
     private int currentQuestEncounterId;
+    private String firebaseKey;
 
     public Player(String name) {
         super(name);
@@ -29,6 +30,7 @@ public class Player extends Actor {
 
     public Player(DataSnapshot snapshot) {
         super(snapshot);
+        this.firebaseKey = snapshot.getKey();
         this.characterPoints = Integer.valueOf((String) (snapshot.child("CP").getValue()));
         this.gold = Integer.valueOf((String) (snapshot.child("gold")).getValue());
         this.quests = new HashMap<>();
@@ -41,6 +43,14 @@ public class Player extends Actor {
         }
         this.currentQuestKey = (snapshot.child("currentQuestKey").exists()) ? (String) snapshot.child("currentQuestKey").getValue() : null;
         this.currentQuestEncounterId = (snapshot.child("currentQuestEncounterId").exists()) ? Integer.valueOf((String) snapshot.child("currentQuestEncounterId").getValue()) : 0;
+    }
+
+    public String getFirebaseKey() {
+        return firebaseKey;
+    }
+
+    public void setFirebaseKey(String firebaseKey) {
+        this.firebaseKey = firebaseKey;
     }
 
     public int getCharacterPoints() {
@@ -67,16 +77,22 @@ public class Player extends Actor {
         this.nextAction = action;
     }
 
-    @Override
     public void saveToFirebase() {
-        super.saveToFirebase();
+        if (firebaseKey == null || firebaseKey.equals("")) {
+            firebaseKey = Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").push().getKey();
+        }
+        Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(firebaseKey).child("name").setValue(name);
+        DatabaseReference ref = Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(firebaseKey);
+        attributes.recordToFirebase(ref.child("attributes"));
+        AbilityDao.recordToFirebase(this, ref.child("abilities"));
+        InventoryDao.recordToFirebase(this, ref.child("inventory"));
         Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(firebaseKey).child("CP").setValue(String.valueOf(this.characterPoints));
         Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(firebaseKey).child("gold").setValue(String.valueOf(this.gold));
         for (Map.Entry<String, QuestEntry> qe : quests.entrySet()) {
             QuestEntry q = qe.getValue();
-            DatabaseReference ref = Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(firebaseKey).child("log").child(q.key);
-            ref.child("encounter").setValue(String.valueOf(q.encounter));
-            ref.child("completed").setValue(String.valueOf((q.completed) ? 1 : 0));
+            DatabaseReference refQ = Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(firebaseKey).child("log").child(q.key);
+            refQ.child("encounter").setValue(String.valueOf(q.encounter));
+            refQ.child("completed").setValue(String.valueOf((q.completed) ? 1 : 0));
         }
         if (currentQuestKey == null) {
             Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(firebaseKey).child("currentQuestKey").setValue(null);

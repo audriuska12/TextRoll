@@ -49,8 +49,8 @@ public class QuestLog {
             String next = (String) snap.getValue();
             if (!quests.containsKey(next)) {
                 recursiveNodeAdd(snapshot, next);
-                quests.get(next).previous.add(quests.get(key));
-                quests.get(key).next.add(quests.get(next));
+                quests.get(next).getPrevious().add(quests.get(key));
+                quests.get(key).getNext().add(quests.get(next));
             }
         }
     }
@@ -61,7 +61,7 @@ public class QuestLog {
         }
         if (Instances.pc.getQuests().get(key) != null && Instances.pc.getQuests().get(key).completed) {
             for (QuestNode next : quests.get(key).getNext()) {
-                if (!strings.contains(next.key)) strings.add(next.key);
+                if (!strings.contains(next.getKey())) strings.add(next.getKey());
             }
         }
 

@@ -2,19 +2,15 @@ package com.textroll.mechanics;
 
 import java.util.ArrayList;
 
-/**
- * Created by audri on 2017-12-16.
- */
-
 public class AbilityNode {
-    AbilityMap map;
-    ArrayList<AbilityNode> previous;
-    ArrayList<AbilityNode> next;
-    String key;
-    int baseCost;
-    int costPerRank;
-    boolean forPlayers = false;
-    int maxRank;
+    private AbilityMap map;
+    private ArrayList<AbilityNode> previous;
+    private ArrayList<AbilityNode> next;
+    private String key;
+    private int baseCost;
+    private int costPerRank;
+    private boolean forPlayers;
+    private int maxRank;
 
     public AbilityNode(AbilityMap map, String key, boolean forPlayers, int maxRank, int baseCost, int costPerRank) {
         this.map = map;

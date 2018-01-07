@@ -8,10 +8,6 @@ import java.util.ArrayList;
 import java.util.Map;
 
 
-/**
- * Created by audri on 2017-12-20.
- */
-
 class InventoryDao {
     public static void getFromSnapshot(Actor actor, DataSnapshot snapshot) {
         for (DataSnapshot equippedItem : snapshot.child("equipped").getChildren()) {

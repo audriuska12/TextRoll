@@ -3,7 +3,6 @@ package com.textroll.mechanics;
 import android.annotation.SuppressLint;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
 import com.textroll.classes.Instances;
 
 import java.io.Serializable;
@@ -22,7 +21,6 @@ public abstract class Actor implements Serializable {
     protected ArrayList<Effect> effects;
     protected transient ActorUIContainer ui;
     protected String name;
-    protected String firebaseKey;
     protected int energy = 0;
     protected transient int threat = 0;
     protected transient int stunCounter = 0;
@@ -48,7 +46,6 @@ public abstract class Actor implements Serializable {
 
     public Actor(DataSnapshot snapshot) {
         this((String) snapshot.child("name").getValue());
-        this.firebaseKey = snapshot.getKey();
         attributes.getFromSnapshot(snapshot);
         AbilityDao.getFromSnapshot(this, snapshot);
         InventoryDao.getFromSnapshot(this, snapshot.child("inventory"));
@@ -137,25 +134,6 @@ public abstract class Actor implements Serializable {
 
     public void addEnergy(int energy) {
         this.energy += energy;
-    }
-
-    public String getFirebaseKey() {
-        return firebaseKey;
-    }
-
-    public void setFirebaseKey(String firebaseKey) {
-        this.firebaseKey = firebaseKey;
-    }
-
-    public void saveToFirebase() {
-        if (firebaseKey == null || firebaseKey.equals("")) {
-            firebaseKey = Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").push().getKey();
-        }
-        Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(firebaseKey).child("name").setValue(name);
-        DatabaseReference ref = Instances.mDatabase.child("users").child(Instances.user.getUid()).child("characters").child(firebaseKey);
-        attributes.recordToFirebase(ref.child("attributes"));
-        AbilityDao.recordToFirebase(this, ref.child("abilities"));
-        InventoryDao.recordToFirebase(this, ref.child("inventory"));
     }
 
     public void equipItem(Item item) {

@@ -29,6 +29,22 @@ public class SummonedCreature extends Actor {
         this.faction = faction;
     }
 
+    public Actor getSummoner() {
+        return summoner;
+    }
+
+    public void setSummoner(Actor summoner) {
+        this.summoner = summoner;
+    }
+
+    public CreatureSummonEffect getEffect() {
+        return effect;
+    }
+
+    public void setEffect(CreatureSummonEffect effect) {
+        this.effect = effect;
+    }
+
     @Override
     public Action takeAction() {
         if (stunCounter > 0) {
